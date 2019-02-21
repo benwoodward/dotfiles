@@ -1,0 +1,17 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.config/nvim:
+        path: .config/nvim
+
+- shell:
+    - ["git submodule update --init --recursive", Installing/updating submodules]
+    - ["git submodule foreach git pull origin master", Updating submodule contents]
+    - ["date > ~/.dotfiles_update", Logging last update]
+    - vim +'PlugInstall --sync' +qa
+
