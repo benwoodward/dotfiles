@@ -17,7 +17,7 @@ Plug 'git@github.com:junegunn/vim-easy-align.git'
 Plug 'git@github.com:stephpy/vim-yaml.git'
 Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
 Plug 'git@github.com:ervandew/supertab.git'
-Plug 'git@github.com:airblade/vim-gitgutter.git'
+" Plug 'git@github.com:airblade/vim-gitgutter.git' " Disabled due to lag
 Plug 'git@github.com:elzr/vim-json.git'
 Plug 'git@github.com:bronson/vim-trailing-whitespace.git'
 Plug 'git@github.com:scrooloose/nerdtree.git'
@@ -35,10 +35,10 @@ Plug 'https://github.com/mattn/gist-vim'
 Plug 'https://github.com/adelarsq/vim-matchit'
 Plug 'gfontenot/vim-xcode'
 Plug 'mileszs/ack.vim'
-Plug 'itchyny/lightline.vim'
+" Plug 'itchyny/lightline.vim' " Disabled due to lag
 Plug 'christoomey/vim-tmux-runner'
 " Plug 'jerrymarino/SwiftPlayground.vim'
-Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
+" Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
 Plug 'w0rp/ale'
 Plug 'dikiaap/minimalist'
 Plug 'othree/yajs.vim'
@@ -233,7 +233,6 @@ set directory^=~/.vim/_temp//      " where to put swap files.
 ""
 set tags+=gems.tags
 set tags+=tags
-set statusline+=%{gutentags#statusline()}
 
 " g] <- show multiple
 " http://stackoverflow.com/a/33629584
@@ -559,4 +558,26 @@ nnoremap j gj
 nnoremap gk k
 nnoremap gj j
 
+" MatchParen.vim causes lag.
+"
+" FUNCTIONS SORTED ON SELF TIME
+" count  total (s)   self (s)  function
+" 21              0.007059  <SNR>79_Highlight_Matching_Pair()
+"
+" https://stackoverflow.com/a/47361068
+"
+" Disable parentheses matching depends on system. This way we should address all cases (?)
+set noshowmatch
+" NoMatchParen " This doesnt work as it belongs to a plugin, which is only loaded _after_ all files are.
+" Trying disable MatchParen after loading all plugins
+"
+function! g:FuckThatMatchParen ()
+    if exists(":NoMatchParen")
+        :NoMatchParen
+    endif
+endfunction
 
+augroup plugin_initialize
+    autocmd!
+    autocmd VimEnter * call FuckThatMatchParen()
+augroup END
