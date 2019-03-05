@@ -2,57 +2,58 @@
 " - Comment, and group all Plugins with configs and by type
 " - Group settings/configs, functions, mappings etc.
 " - Divide sections with " ================ Section: Name ===========================
+" - Why do L and H no longer go to the absolute top or bottom of window
+"   anylonger? scrolloff setting?
 
 call plug#begin()
 
-Plug 'git@github.com:ap/vim-css-color.git'
-Plug 'git@github.com:tpope/vim-abolish.git'
-Plug 'git@github.com:Raimondi/delimitMate.git'
-Plug 'git@github.com:AndrewRadev/splitjoin.vim.git'
-Plug 'git@github.com:tpope/vim-bundler.git'
-Plug 'git@github.com:mattn/emmet-vim.git'
-Plug 'git@github.com:tpope/vim-rails.git'
-Plug 'git@github.com:tyru/open-browser.vim.git'
-Plug 'git@github.com:junegunn/vim-easy-align.git'
-Plug 'git@github.com:stephpy/vim-yaml.git'
-Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
-Plug 'git@github.com:ervandew/supertab.git'
+" Plug 'git@github.com:ap/vim-css-color.git' " Disabled due to create_matches() lagging
+" Plug 'git@github.com:tpope/vim-abolish.git' " Disabled because I never use it
+Plug 'git@github.com:Raimondi/delimitMate.git' " Auto-closes quotes, even when you don't want to!
+Plug 'git@github.com:AndrewRadev/splitjoin.vim.git' " Switches between a single-line statement and a multi-line one
+" Plug 'git@github.com:tpope/vim-bundler.git' " Disabled because I never use
+Plug 'git@github.com:mattn/emmet-vim.git' " Emmet for Vim, make HTML without going mad
+Plug 'git@github.com:tpope/vim-rails.git' " Rails shortcuts
+" Plug 'git@github.com:tyru/open-browser.vim.git' " Disabled because replaced with vim-search-me
+Plug 'git@github.com:junegunn/vim-easy-align.git' " Alignment plugin with smart key bindings
+Plug 'git@github.com:stephpy/vim-yaml.git' " YAML hightlighting
+Plug 'git@github.com:ctrlpvim/ctrlp.vim.git' " Fuzzy search files, ctags and more
+" Plug 'git@github.com:ervandew/supertab.git' " Don't use it
 " Plug 'git@github.com:airblade/vim-gitgutter.git' " Disabled due to lag
-Plug 'git@github.com:elzr/vim-json.git'
-Plug 'git@github.com:bronson/vim-trailing-whitespace.git'
-Plug 'git@github.com:scrooloose/nerdtree.git'
-Plug 'git@github.com:scrooloose/nerdcommenter.git'
-Plug 'git@github.com:tpope/vim-fugitive.git'
-Plug 'git@github.com:Chun-Yang/vim-action-ag.git'
-Plug 'git@github.com:tpope/vim-surround.git'
-Plug 'git@github.com:terryma/vim-multiple-cursors.git'
-Plug 'git@github.com:ludovicchabant/vim-gutentags.git'
-Plug 'git@github.com:keith/swift.vim.git'
-Plug 'git@github.com:kana/vim-textobj-user.git'
-Plug 'git@github.com:vim-ruby/vim-ruby.git'
-Plug 'git@github.com:henrik/vim-reveal-in-finder.git'
-Plug 'https://github.com/mattn/gist-vim'
-Plug 'https://github.com/adelarsq/vim-matchit'
-Plug 'gfontenot/vim-xcode'
-Plug 'mileszs/ack.vim'
+Plug 'git@github.com:elzr/vim-json.git' " JSON highlighter
+Plug 'git@github.com:bronson/vim-trailing-whitespace.git' " Hightligts trailing whitespace characters in red
+Plug 'git@github.com:scrooloose/nerdtree.git' " File browser in sidebar
+Plug 'git@github.com:scrooloose/nerdcommenter.git' " Toggle comments
+Plug 'git@github.com:tpope/vim-fugitive.git' " Github commands
+" Plug 'git@github.com:Chun-Yang/vim-action-ag.git' " Outdated / no longer use
+Plug 'git@github.com:tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
+Plug 'git@github.com:terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
+Plug 'git@github.com:ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
+Plug 'git@github.com:keith/swift.vim.git' " Swift syntax highlighting
+Plug 'git@github.com:vim-ruby/vim-ruby.git' " Ruby syntax highlighting
+Plug 'git@github.com:henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
+Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
+" Plug 'https://github.com/adelarsq/vim-matchit' " Outdated / no longer use
+Plug 'gfontenot/vim-xcode' " Create and build XCode projects without using the dreaded XCode
+Plug 'mileszs/ack.vim' " Search files, configured to work with ripgrep
 " Plug 'itchyny/lightline.vim' " Disabled due to lag
-Plug 'christoomey/vim-tmux-runner'
-" Plug 'jerrymarino/SwiftPlayground.vim'
+" Plug 'christoomey/vim-tmux-runner' " Disabled because I don't use it
+" Plug 'jerrymarino/SwiftPlayground.vim' " Disabled because it's broken / don't use it 
 " Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
-Plug 'w0rp/ale'
-Plug 'dikiaap/minimalist'
-Plug 'othree/yajs.vim'
-Plug 'mhartington/oceanic-next'
-Plug 'othree/html5.vim'
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'tpope/vim-repeat'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'elixir-editors/vim-elixir'
-Plug 'mhinz/vim-startify'
-Plug 'farmergreg/vim-lastplace'
-Plug 'ruanyl/vim-gh-line'
-Plug 'voldikss/vim-searchme'
-Plug 'tpope/vim-rhubarb'
+Plug 'w0rp/ale' " Async linting
+" Plug 'dikiaap/minimalist' " Don't use it
+Plug 'othree/yajs.vim' " Most up to date JS highlighter, works well with React
+Plug 'mhartington/oceanic-next' " Best dark colorscheme
+Plug 'othree/html5.vim' " html5 syntax highlighting
+" Plug 'HerringtonDarkholme/yats.vim' " Don't use it
+" Plug 'tpope/vim-repeat' " Don't use it
+Plug 'maxmellon/vim-jsx-pretty' " Jsx syntax highlighting
+Plug 'elixir-editors/vim-elixir' " Elixir syntax highlighting
+Plug 'mhinz/vim-startify' " Startup screen for Vim
+Plug 'farmergreg/vim-lastplace' " Open file at last place edited
+Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
+Plug 'voldikss/vim-searchme' " Search under cursor with options
+" Plug 'tpope/vim-rhubarb'
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -118,7 +119,7 @@ set title
 set titlestring=VIM:\ %-25.55F\ %a%r%m titlelen=70
 
 " Show line and column number
-set ruler
+" set ruler
 
 " These two enable syntax highlighting
 set nocompatible
@@ -149,13 +150,6 @@ endif
 
 " highlight the current line
 set cursorline
-set colorcolumn=80
-
-" When scrolling off-screen do so 3 lines at a time, not 1
-set scrolloff=3
-
-" flashes matching brackets or parentheses
-set showmatch
 
 " When scrolling off-screen do so 3 lines at a time, not 1
 set scrolloff=3
@@ -335,6 +329,14 @@ if executable('rg')
   let g:ctrlp_use_caching = 0
 endif
 
+""
+"" Section: Ack
+"" TODO: How do Ack, Ag, rg, CtrlP work together?
+""       Do I need Ack?
+" let g:ackprg = 'ag --nogroup --nocolor --column' " Use ag with Ack
+let g:ackprg = 'rg --vimgrep --no-heading' " Use rg with Ack
+map <leader>f :Ack<space>
+
 " Shift+Space - duplicate selected lines
 map <S-Space> y'>p
 vmap <S-Space> y'>p
@@ -488,13 +490,6 @@ map <Up> gk
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
-""
-"" Section: Ack
-"" TODO: How do Ack, Ag, rg, CtrlP work together?
-""       Do I need Ack?
-let g:ackprg = 'ag --nogroup --nocolor --column'
-map <leader>f :Ack<space>
-
 
 ""
 "" Section: Ale
@@ -522,9 +517,9 @@ let g:ale_echo_msg_warning_str = 'W'
 
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:move_key_modifier = 'N'
-let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 1
+let g:ale_lint_on_enter = 0
 let g:ale_lint_on_save = 1
 
 nmap <leader>d <Plug>(ale_fix)
@@ -535,10 +530,26 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 "" Section: startify
 ""
 if !has('nvim')
-	set viminfo='100,n$HOME/.vim/files/info/viminfo
+  set viminfo='100,n$HOME/.config/nvim/files/info
+  set viminfo+=n$HOME/.config/nvim/files/info
 endif
 
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'files',     'header': ['   MRU']            },
+      \ { 'type': 'sessions',  'header': ['   Sessions']       },
+      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
+      \ ]
+
 let g:startify_list_order = ['dir', 'bookmarks', 'sessions', 'commands']
+let g:startify_files_number = 5
+let g:startify_custom_header =
+      \ 'map(startify#fortune#quote(), "\"   \".v:val")'
+
+let g:startify_custom_header_quotes = [
+      \ ['[a]', '', 'Insert cursor after character']
+      \ ]
 
 " don't change into directory, to keep at project root
 let g:startify_change_to_dir = 0
@@ -550,6 +561,7 @@ map <leader>- :e $HOME/.config/nvim/init.vim<CR>
 map <leader>v :source $HOME/.config/nvim/init.vim<CR>
 
 " Terminal
+" TODO: This does what?
 tnoremap ., <C-\><C-n>
 
 " Move up and down on visual lines"
