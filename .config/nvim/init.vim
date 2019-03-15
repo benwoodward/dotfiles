@@ -32,13 +32,14 @@ Plug 'git@github.com:ludovicchabant/vim-gutentags.git' " The best ctags plugin f
 Plug 'git@github.com:keith/swift.vim.git' " Swift syntax highlighting
 Plug 'git@github.com:vim-ruby/vim-ruby.git' " Ruby syntax highlighting
 Plug 'git@github.com:henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
+Plug 'mattn/webapi-vim'
 Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
 " Plug 'https://github.com/adelarsq/vim-matchit' " Outdated / no longer use
 Plug 'gfontenot/vim-xcode' " Create and build XCode projects without using the dreaded XCode
 Plug 'mileszs/ack.vim' " Search files, configured to work with ripgrep
 " Plug 'itchyny/lightline.vim' " Disabled due to lag
 " Plug 'christoomey/vim-tmux-runner' " Disabled because I don't use it
-" Plug 'jerrymarino/SwiftPlayground.vim' " Disabled because it's broken / don't use it 
+" Plug 'jerrymarino/SwiftPlayground.vim' " Disabled because it's broken / don't use it
 " Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
 Plug 'w0rp/ale' " Async linting
 " Plug 'dikiaap/minimalist' " Don't use it
@@ -54,6 +55,10 @@ Plug 'farmergreg/vim-lastplace' " Open file at last place edited
 Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
 Plug 'voldikss/vim-searchme' " Search under cursor with options
 " Plug 'tpope/vim-rhubarb'
+Plug 'git://github.com/tommcdo/vim-lion.git'
+Plug 'henrik/vim-ruby-runner'
+Plug 'maksimr/vim-jsbeautify'
+
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -246,7 +251,9 @@ nnoremap <c-]> :call FollowTag()<CR>
 ""
 let g:NERDSpaceDelims = 1 " TODO: This does what?
 let nerdtreeshowlinenumbers=1 " TODO: This does what?
-map <leader>f :NERDTreeFind<cr>
+
+" Locate current file in Nerdtree
+map <leader>nf :NERDTreeFind<cr>
 map <leader>n :NERDTreeToggle<CR> :NERDTreeMirror<CR>
 augroup AuNERDTreeCmd " TODO: This does what?
 
@@ -258,7 +265,7 @@ let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '.beam']
 " so it doesn't complain about types it doesn't know
 let NERDShutUp = 1
 
-" quit NERDTree after openning a file
+" quit NERDTree after opening a file
 let NERDTreeQuitOnOpen=1
 
 " colored NERD Tree
@@ -268,14 +275,12 @@ let NERDChristmasTree = 1
 let NERDTreeMapActivateNode='<CR>'
 
 
-" previous file
-" map <Leader>p <C-^>
+" Toggle between current and previous file
+nmap <Tab> :call LoadPreviousFile()<CR>
+
 function! LoadPreviousFile()
   b#
 endfunction
-
-" Toggle between current and previous file
-nmap <Tab> :call LoadPreviousFile()<CR>
 
 ino <Leader>e <esc>
 cno <Leader>e <c-c>
@@ -329,6 +334,9 @@ if executable('rg')
   let g:ctrlp_use_caching = 0
 endif
 
+" TODO: This creates error when fzf is run as standalone command
+let $FZF_DEFAULT_COMMAND='rg --files --hidden --smartcase --glob "!.git/*"'
+
 ""
 "" Section: Ack
 "" TODO: How do Ack, Ag, rg, CtrlP work together?
@@ -370,6 +378,8 @@ vmap <S-M-Left> b
 smap <S-M-Right> <C-O>e
 smap <S-M-Left> <C-O>b
 
+set splitbelow
+set splitright
 
 " ;. - new file in vertical split
 imap <Leader>. <Esc>:new<CR><D-t>
@@ -386,7 +396,7 @@ smap <Leader><Leader> <C-g>S
 vmap <Leader><Leader> S
 
 " remove trailing whitespace (don't use on binary files!!)
-map <leader>fws :FixWhitespace
+map <leader>tws :FixWhitespace<CR>
 
 " insert hashrocket, =>, with control-l
 imap <C-l> <Space>=><Space>
@@ -409,6 +419,7 @@ autocmd BufRead,BufNewFile *.scss set filetype=scss.css|set tabstop=2|set shiftw
 autocmd BufRead,BufNewFile *.rb set filetype=ruby tabstop=2|set shiftwidth=2
 autocmd BufRead,BufNewFile *. set tabstop=2|set shiftwidth=2|set expandtab
 autocmd BufRead,BufNewFile *.jsx set filetype=javascript|set tabstop=2|set shiftwidth=2|set expandtab
+autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
 
 nmap sj :SplitjoinSplit<cr>
 nmap sk :SplitjoinJoin<cr>
@@ -495,7 +506,7 @@ nmap <leader>hs :set hlsearch! hlsearch?<CR>
 "" Section: Ale
 "" https://github.com/w0rp/ale
 ""
-let g:ale_enabled = 1
+let g:ale_enabled = 0
 
 let g:ale_linters = {
   \   'javascript': ['eslint'],
@@ -521,6 +532,8 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_save = 1
+
+let g:ale_ruby_reek_show_context = 1
 
 nmap <leader>d <Plug>(ale_fix)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -548,7 +561,7 @@ let g:startify_custom_header =
       \ 'map(startify#fortune#quote(), "\"   \".v:val")'
 
 let g:startify_custom_header_quotes = [
-      \ ['[a]', '', 'Insert cursor after character']
+      \ ['VIM: Fr', '', 'Jumps to the false previous r (same line only).']
       \ ]
 
 " don't change into directory, to keep at project root
@@ -593,3 +606,18 @@ augroup plugin_initialize
     autocmd!
     autocmd VimEnter * call FuckThatMatchParen()
 augroup END
+
+vmap <C-x> :!pbcopy<CR>
+vmap <C-c> :w !pbcopy<CR><CR>
+
+map <c-f> :call JsBeautify()<cr>
+" or
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" for json
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+" for jsx
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+" for html
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" for css or scss
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
