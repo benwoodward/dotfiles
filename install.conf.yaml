@@ -8,6 +8,7 @@
 - link:
     ~/.config/nvim:
         path: .config/nvim
+    ~/.config/karabiner/karabiner.json: .config/karabiner/karabiner.json
 
 - shell:
     - ["git submodule update --init --recursive", Installing/updating submodules]
