@@ -2,6 +2,8 @@
 # - Comment plugins with descriptions
 # - Remove unused zsh options once I know what they do
 
+TERM=xterm
+
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
