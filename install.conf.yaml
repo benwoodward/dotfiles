@@ -16,7 +16,7 @@
     - ["git submodule update --init --recursive", Installing/updating submodules]
     - ["git submodule foreach git pull origin master", Updating submodule contents]
     - ["date > ~/.dotfiles_update", Logging last update]
-    - vim +'PlugInstall --sync' +qa
+    - nvim +'PlugInstall --sync' +'PlugUpdate' +qa
     - defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2"
     - defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
