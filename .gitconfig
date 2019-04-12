@@ -1,0 +1,101 @@
+[diff]
+	tool = Kaleidoscope
+[difftool]
+	prompt = false
+[mergetool]
+  keepBackup = false
+	prompt = false
+[merge]
+  keepBackup = false
+	tool = Kaleidoscope
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustexitcode = true
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[alias]
+  lg = log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\n--abbrev-commit --date=relative
+  cl = clone
+  ai = add --interactive
+  authors = !git shortlog -s -n -e
+
+  # this is the number of commits in branch, use this on master to generate a
+  # build number for XCode release builds
+
+  # All the aliases relate to commits. Note that
+  # they are grouped by common prefixes, so I don't
+  # confuse what I want done by accident.
+  c = commit
+  # commit with a message
+  cm = commit -m
+  cma = commit -a -m
+  # amending the previous commit
+  # camd = commit --amend
+  #caa = commit -a --amend -C HEAD
+
+  # shortcuts for commands
+  s = status
+  d = diff
+  df = diff --color --color-words --abbrev
+  st = status -s
+  dt = difftool
+  a = add
+  co = checkout
+  b = branch
+  l = log
+  f = fetch
+  r = reset
+  rb = rebase
+
+  # merging
+  m = merge
+  mt = mergetool
+
+  # pretty git log
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+  #  pd = !/Users/benwoodward/dev/pretty-diff/pretty-diff.js
+  #  gd = !/Users/benwoodward/dev/pretty-diff/gist-diff.js
+  #  ctags = !.git/hooks/ctags
+  g = grep --break --heading --line-number
+
+  # deletes any local branches that have been merged into current HEAD
+  # cleanup = !git branch --merged | grep -v '^* master$' | grep -v '^  master$' | xargs git branch -d
+  cleanup = !git branch --merged | grep -v '\\*' | grep -v master | grep -v dev | grep -v develop | xargs -n 1 git branch -d
+  ctags = !.git/hooks/ctags\n
+  bn = !git rev-list HEAD | wc -l | tr -d ' '
+
+  pr = pull-request
+[push]
+  default = current
+[web]
+  browser = open
+[user]
+	name = Ben Woodward
+	email = benwoodward@users.noreply.github.com
+[github]
+  user = benwoodward
+[color]
+  ui = true
+  uk = true
+[core]
+  # editor = mvim -f --nomru -c \"au VimLeave * !open -a iTerm\"
+  editor = subl -n -w
+  excludesfile = ~/.gitignore
+  quotepath = false
+[credential]
+  helper = osxkeychain
+[grep]
+  lineNumber = true
+[filter "lfs"]
+  clean = git lfs clean %f
+  smudge = git lfs smudge %f
+  required = true
+	process = git-lfs filter-process
+[init]
+  ; templatedir = ~/.git_template
+[fetch]
+  prune = true
+[http]
+	cookiefile = ~/.gitcookies

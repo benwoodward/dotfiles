@@ -1,0 +1,15 @@
+.pt.yaml
+tags
+.tags
+.tags1
+tags.lock
+tags.temp
+.env*
+todo.taskpaper
+.agignore
+*.generated.swift
+.DS_Store
+completer.hist
+dump.rdb
+config/master.key
+node_modules
