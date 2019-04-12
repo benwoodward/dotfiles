@@ -11,6 +11,7 @@
     ~/.config/karabiner: .config/karabiner
     ~/.config/iterm2: .config/iterm2
     ~/.zshrc: .zshrc
+    ~/.zshrc.vimode: .zshrc.vimode
 
 - shell:
     - ["git submodule update --init --recursive", Installing/updating submodules]

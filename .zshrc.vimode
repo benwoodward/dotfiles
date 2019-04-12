@@ -1,0 +1,19 @@
+bindkey -v # activate vi modes
+export KEYTIMEOUT=1 # reduce ESC key delay to 0.01s
+
+# implement replace mode
+bindkey -N virep viins
+bindkey -M vicmd "R" overwrite-mode
+overwrite-mode() {
+  zle -K virep
+  zle .overwrite-mode
+}
+zle -N overwrite-mode
+
+# bindkey -M vicmd "^V" edit-command-line # edit command in vim
+
+bindkey -M viins "^W" backward-kill-word
+
+# https://github.com/denysdovhan/spaceship-prompt/issues/91
+bindkey "^?" backward-delete-char
+
