@@ -9,6 +9,7 @@
     ~/.config/nvim:
         path: .config/nvim
     ~/.config/karabiner: .config/karabiner
+    ~/.config/iterm2: .config/iterm2
 
 - shell:
     - ["git submodule update --init --recursive", Installing/updating submodules]
