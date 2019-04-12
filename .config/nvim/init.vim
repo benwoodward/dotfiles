@@ -9,7 +9,7 @@ call plug#begin()
 
 " Plug 'git@github.com:ap/vim-css-color.git' " Disabled due to create_matches() lagging
 " Plug 'git@github.com:tpope/vim-abolish.git' " Disabled because I never use it
-Plug 'git@github.com:Raimondi/delimitMate.git' " Auto-closes quotes, even when you don't want to!
+" Plug 'git@github.com:Raimondi/delimitMate.git' " Auto-closes quotes, even when you don't want to!
 Plug 'git@github.com:AndrewRadev/splitjoin.vim.git' " Switches between a single-line statement and a multi-line one
 " Plug 'git@github.com:tpope/vim-bundler.git' " Disabled because I never use
 Plug 'git@github.com:mattn/emmet-vim.git' " Emmet for Vim, make HTML without going mad
@@ -40,7 +40,7 @@ Plug 'mileszs/ack.vim' " Search files, configured to work with ripgrep
 " Plug 'itchyny/lightline.vim' " Disabled due to lag
 " Plug 'christoomey/vim-tmux-runner' " Disabled because I don't use it
 " Plug 'jerrymarino/SwiftPlayground.vim' " Disabled because it's broken / don't use it
-" Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
+Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
 Plug 'w0rp/ale' " Async linting
 " Plug 'dikiaap/minimalist' " Don't use it
 Plug 'othree/yajs.vim' " Most up to date JS highlighter, works well with React
@@ -58,6 +58,7 @@ Plug 'voldikss/vim-searchme' " Search under cursor with options
 Plug 'git://github.com/tommcdo/vim-lion.git'
 Plug 'henrik/vim-ruby-runner'
 Plug 'maksimr/vim-jsbeautify'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 
 " Add plugins to &runtimepath
@@ -166,6 +167,7 @@ set directory=/tmp/
 "" Whitespace
 ""
 set nowrap                        " don't wrap lines
+set linebreak
 set tabstop=2                     " a tab is two spaces
 set shiftwidth=2                  " an autoindent (with <<) is two spaces
 set expandtab                     " use spaces, not tabs
@@ -222,6 +224,9 @@ set wildignore+=*.swp,*~,._*
 
 " Don't search inside font files / svg graphics
 set wildignore+=*.svg
+
+" Ignore JS packages
+set wildignore+=*/node_modules
 
 " Backup and swap files
 set backupdir^=~/.vim/_backup//    " where to put backup files.
@@ -320,29 +325,20 @@ nmap <Leader>r :CtrlPBuffer<CR>
 let g:ctrlp_map = ''
 map <Leader>t :CtrlP<CR>
 
-" TODO: Can this just be specified in the general wildignore var?
-let g:ctrlp_custom_ignore = {
- \ 'dir':  '\v[\/]\.(git|hg|svn)$|bower_components|node_modules',
- \ 'file': '\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
- \ }
-
 " Use RipGrep with CtrlP
 " https://github.com/BurntSushi/ripgrep
 if executable('rg')
   set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob "" --ignore-file $HOME/.gitignore'
   let g:ctrlp_use_caching = 0
 endif
-
-" TODO: This creates error when fzf is run as standalone command
-let $FZF_DEFAULT_COMMAND='rg --files --hidden --smartcase --glob "!.git/*"'
 
 ""
 "" Section: Ack
 "" TODO: How do Ack, Ag, rg, CtrlP work together?
 ""       Do I need Ack?
 " let g:ackprg = 'ag --nogroup --nocolor --column' " Use ag with Ack
-let g:ackprg = 'rg --vimgrep --no-heading' " Use rg with Ack
+let g:ackprg = 'rg --vimgrep --no-heading --smart-case --ignore-file $HOME/.gitignore' " Use rg with Ack
 map <leader>f :Ack<space>
 
 " Shift+Space - duplicate selected lines
@@ -420,6 +416,8 @@ autocmd BufRead,BufNewFile *.rb set filetype=ruby tabstop=2|set shiftwidth=2
 autocmd BufRead,BufNewFile *. set tabstop=2|set shiftwidth=2|set expandtab
 autocmd BufRead,BufNewFile *.jsx set filetype=javascript|set tabstop=2|set shiftwidth=2|set expandtab
 autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
+autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
+
 
 nmap sj :SplitjoinSplit<cr>
 nmap sk :SplitjoinJoin<cr>
@@ -506,12 +504,17 @@ nmap <leader>hs :set hlsearch! hlsearch?<CR>
 "" Section: Ale
 "" https://github.com/w0rp/ale
 ""
-let g:ale_enabled = 0
+let g:ale_enabled = 1
 
 let g:ale_linters = {
   \   'javascript': ['eslint'],
+  \   'python':     ['flake8']
   \}
-let g:ale_open_list = 1 " show when there are errors
+let b:ale_fixers = {
+  \   'python': ['autopep8']
+  \}
+
+let g:ale_open_list = 0 " show when there are errors
 
 " always show sign column, so text doesn't move around
 let g:ale_sign_column_always = 1
@@ -522,7 +525,6 @@ highlight ALEErrorSign guifg=red ctermfg=red
 let g:ale_echo_msg_error_str = 'E'
 
 " Warnings
-let g:ale_sign_warning = '✔︎'
 highlight ALEWarningSign guifg=grey ctermfg=grey
 let g:ale_echo_msg_warning_str = 'W'
 
@@ -534,6 +536,12 @@ let g:ale_lint_on_enter = 0
 let g:ale_lint_on_save = 1
 
 let g:ale_ruby_reek_show_context = 1
+
+let g:ale_python_flake8_auto_pipenv = 0
+let g:ale_python_flake8_change_directory = 1
+let g:ale_python_flake8_executable = 'flake8'
+let g:ale_python_flake8_options = ''
+let g:ale_python_flake8_use_global = 0
 
 nmap <leader>d <Plug>(ale_fix)
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -621,3 +629,6 @@ autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
 autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
 " for css or scss
 autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+
+
+let g:python3_host_prog = '/usr/local/bin/python3'
