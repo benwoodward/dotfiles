@@ -2,7 +2,7 @@
 # - Comment plugins with descriptions
 # - Remove unused zsh options once I know what they do
 
-TERM=xterm
+TERM=xterm-256color
 
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
@@ -172,6 +172,10 @@ zi() {
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=100000
 SAVEHIST=$HISTSIZE
+
+# zplugin settings
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+
 
 setopt hist_ignore_all_dups # remove older duplicate entries from history
 setopt hist_reduce_blanks # remove superfluous blanks from history items
