@@ -476,6 +476,9 @@ vmap gx <Plug>(openbrowser-open)
 
 set smartcase
 
+" Set cursor to underscore in normal mode
+set guicursor+=n:hor20-Cursor/lCursor
+
 " https://github.com/airblade/vim-gitgutter/issues/259
 let g:gitgutter_max_signs = 1000
 
@@ -641,3 +644,4 @@ autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 
 
 let g:python3_host_prog = '/usr/local/bin/python3'
+
