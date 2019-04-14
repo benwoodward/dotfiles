@@ -84,6 +84,7 @@
   editor = subl -n -w
   excludesfile = ~/.gitignore
   quotepath = false
+	pager = less -F -X
 [credential]
   helper = osxkeychain
 [grep]
