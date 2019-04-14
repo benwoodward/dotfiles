@@ -38,9 +38,11 @@ HOMEBREW_PREFIX="/usr/local"
 
 if [ -d "$HOMEBREW_PREFIX" ]; then
   read -p "Add 'brew' group with homebrew users in 'Users & Groups' in Sys. Prefs. Press enter when complete"
-  sudo chgrp -R brew $(brew --prefix)/*
-  sudo chmod -R g+rwx $(brew --prefix)/*
-  sudo chown -R root $(brew --prefix)/*
+  sudo chgrp -R brew $(brew --prefix)
+  sudo chmod -R g+rwx $(brew --prefix)
+  sudo chown -R root $(brew --prefix)
+  sudo chmod -R g+rwx /usr/local/share/zsh
+  sudo chown -R root /usr/local/share/zsh
   if ! [ -r "$HOMEBREW_PREFIX" ]; then
     printf ""
   fi
