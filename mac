@@ -183,3 +183,9 @@ fancy_echo "Installing latest Node ..."
 bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs"
 
+fancy_echo "Adding application preferences ..."
+defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2"
+defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+
+fancy_echo "Adding keyboard shortcuts ..."
+defaults write com.googlecode.iterm2 NSUserKeyEquivalents -dict-add "Close" "@^w"

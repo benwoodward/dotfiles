@@ -20,6 +20,4 @@
     - ["git submodule foreach git pull origin master", Updating submodule contents]
     - ["date > ~/.dotfiles_update", Logging last update]
     # - nvim +'PlugInstall --sync' +'PlugUpdate' +qa
-    - defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2"
-    - defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
