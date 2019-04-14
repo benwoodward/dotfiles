@@ -263,3 +263,15 @@ path-print() {
 list-keychain-passwords() {
   security dump-keychain | grep 0x00000007 | awk -F= '{print $2}'
 }
+
+# https://superuser.com/a/451519/1021429
+# Look up bundle id for app (app name isn't always what's displayed in Menu Bar
+# bundle-id iTerm
+# returns: com.googlecode.iterm2
+bundle-id() {
+  a="$1";
+  a="${a//\'/\'}.app";
+  a=${a//"/\\"};
+  a=${a//\\/\\\\};
+  mdls -name kMDItemCFBundleIdentifier -raw "$(mdfind 'kMDItemContentType==com.apple.application-bundle&&kMDItemFSName=="'"$a"'"c' | head -n1)"
+}
