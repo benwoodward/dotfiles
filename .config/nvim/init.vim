@@ -301,17 +301,17 @@ cno <Leader>e <c-c>
 vno <Leader>e <esc>
 
 " Open latest commit in browser
-map lc :Gbrowse HEAD^{}<CR>
+map <Leader>lc :Gbrowse HEAD^{}<CR>
 
 " Open current file at HEAD in browser
-map flc :Gbrowse HEAD^{}:%<CR>
+map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 
 
 " vim-search-me
 " https://github.com/voldikss/vim-search-me
 "
 " Search word under cursor in default browser
-noremap  <Leader>ss :<C-u>SearchCurrentText<CR>
+noremap <Leader>ss :<C-u>SearchCurrentText<CR>
 " Search selected text in default browser
 vnoremap <Leader>sv :<C-u>SearchVisualText<CR>
 
@@ -428,8 +428,8 @@ autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandt
 autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
 
 
-nmap sj :SplitjoinSplit<cr>
-nmap sk :SplitjoinJoin<cr>
+nmap <Leader>sj :SplitjoinSplit<cr>
+nmap <Leader>sk :SplitjoinJoin<cr>
 
 let g:session_autoload="no"
 let g:session_autosave="no"
@@ -467,12 +467,6 @@ set undoreload=10000
 set ts=2 sw=2 et
 let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
-
-let g:netrw_nogx = 0 " disable netrw's gx mapping.
-nmap gx <Plug>(openbrowser-open)
-vmap gx <Plug>(openbrowser-open)
-
-
 
 set smartcase
 
