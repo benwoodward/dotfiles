@@ -1,12 +1,17 @@
+#!/bin/sh
+
 ###############################################################################
 # Dock
 ###############################################################################
 
-# Set the icon size of Dock items to 35 pixels
-defaults write com.apple.dock tilesize -int 90
+# Remove all apps from Dock
+defaults write com.apple.dock persistent-apps -array
+
+# Set the icon size of Dock items to 90 pixels
+defaults write com.apple.dock tilesize -int 40
 
 # Set magnification size
-defaults write com.apple.dock largesize -int 125
+defaults write com.apple.dock largesize -int 55
 
 # Enable highlight hover effect for the grid view of a stack (Dock)
 defaults write com.apple.dock mouse-over-hilte-stack -bool true
@@ -14,15 +19,11 @@ defaults write com.apple.dock mouse-over-hilte-stack -bool true
 # Animate opening applications from the Dock
 defaults write com.apple.dock launchanim -bool true
 
-
 # Disable Bouncing dock icons
 defaults write com.apple.dock no-bouncing -bool true
 
 # Remove the auto-hiding Dock delay
-defaults write com.apple.dock autohide-delay -float 0.25
-
-# Remove the animation when hiding/showing the Dock
-defaults write com.apple.dock autohide-time-modifier -float 0
+defaults write com.apple.dock autohide-delay -float 0.2
 
 # Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
