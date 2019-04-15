@@ -11,7 +11,7 @@ export GITHUB_TOKEN=$(security find-generic-password -s 'hub github token' -w)
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=$PATH:/Users/ben/bin
+export PATH=$PATH:/Users/$(whoami)/bin
 
 # rbenv initialisation
 export PATH="$HOME/.rbenv/bin:$PATH"
@@ -149,6 +149,9 @@ prompt pure
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
 
+# Load asdf version manager
+source /Users/$(whoami)/.asdf/asdf.sh
+
 movtogif () {
     ffmpeg -i "$1" -vf scale=800:-1 -r 10 -f image2pipe -vcodec ppm - |\
     convert -delay 5 -layers Optimize -loop 0 - "$2"
@@ -275,3 +278,15 @@ bundle-id() {
   a=${a//\\/\\\\};
   mdls -name kMDItemCFBundleIdentifier -raw "$(mdfind 'kMDItemContentType==com.apple.application-bundle&&kMDItemFSName=="'"$a"'"c' | head -n1)"
 }
+
+fix_brew_permissions() {
+  # Make /usr/local writable
+  sudo chmod -R g+rwx $(brew --prefix)/*(D)
+  # sudo chmod -R g+rwx /usr/local/share/zsh
+
+  # Make it usable for multiple users (anyone in custom 'brew' group)
+  # sudo chgrp -R brew $(brew --prefix)/*(D)
+  # sudo chown -R root $(brew --prefix)/*(D)
+  # sudo chown -R root /usr/local/share/zsh
+}
+

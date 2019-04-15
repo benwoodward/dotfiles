@@ -10,6 +10,20 @@ fancy_echo() {
   printf "\\n$fmt\\n" "$@"
 }
 
+fix_brew_permissions() {
+  # Force bash to include dotfiles in glob
+  shopt -u dotglob
+
+  # Make /usr/local writable
+  sudo chmod -R g+rwx $(brew --prefix)/*
+  # sudo chmod -R g+rwx /usr/local/share/zsh
+
+  # Make it usable for multiple users (anyone in custom 'brew' group)
+  sudo chgrp -R brew $(brew --prefix)/*
+  sudo chown -R root $(brew --prefix)/*
+  # sudo chown -R root /usr/local/share/zsh
+}
+
 append_to_zshrc() {
   local text="$1" zshrc
   local skip_new_line="${2:-0}"
@@ -29,8 +43,16 @@ append_to_zshrc() {
   fi
 }
 
+set -eE -o functrace
+failure() {
+  local lineno=$1
+  local msg=$2
+  echo "Failed at $lineno: $msg"
+}
+trap 'failure ${LINENO} "$BASH_COMMAND"' ERR
+
 # shellcheck disable=SC2154
-trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+# trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
 
 set -e
 
@@ -38,11 +60,7 @@ HOMEBREW_PREFIX="/usr/local"
 
 if [ -d "$HOMEBREW_PREFIX" ]; then
   read -p "Add 'brew' group with homebrew users in 'Users & Groups' in Sys. Prefs. Press enter when complete"
-  sudo chgrp -R brew $(brew --prefix)
-  sudo chmod -R g+rwx $(brew --prefix)
-  sudo chown -R root $(brew --prefix)
-  sudo chmod -R g+rwx /usr/local/share/zsh
-  sudo chown -R root /usr/local/share/zsh
+  fix_brew_permissions
   if ! [ -r "$HOMEBREW_PREFIX" ]; then
     printf ""
   fi
@@ -62,7 +80,6 @@ update_shell() {
     sudo sh -c "echo $shell_path >> /etc/shells"
   fi
   sudo chsh -s "$shell_path" "$USER"
-  compaudit | xargs sudo chmod g-w,o-w
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 }
 
@@ -129,10 +146,13 @@ brew "imagemagick"
 # Programming language prerequisites and package managers
 brew "libyaml" # should come after openssl
 brew "coreutils"
+cask "gpg-suite"
 
 # Databases
 brew "postgres", restart_service: :changed
 EOF
+
+fix_brew_permissions
 
 fancy_echo "Update heroku binary ..."
 brew unlink heroku
@@ -183,6 +203,13 @@ fancy_echo "Installing latest Node ..."
 bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs"
 
+# Fix zsh permissions
+fancy_echo "Fixing zsh permissions ..."
+/bin/zsh -i -c 'compaudit | xargs sudo chmod g-w'
+
+fancy_echo "Reloading zshell ..."
+source ~/.zshrc
+
 # TODO: Copy minimal icons to iTerm via command
 # https://superuser.com/a/1343756
 # https://github.com/jasonlong/iterm2-icons
@@ -192,4 +219,10 @@ fancy_echo "Adding application preferences ..."
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
 fancy_echo "Adding application keyboard shortcuts ..."
+# Add ⌘⌃W as close window shortcut in iTerm2 to prevent accidentally closing all tabs
 defaults write com.googlecode.iterm2 NSUserKeyEquivalents -dict-add "Close" "@^w"
+
+fancy_echo "Adding MacOS configs"
+# Install 3 finger drag
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
