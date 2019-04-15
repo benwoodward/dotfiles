@@ -376,7 +376,7 @@ defaults write com.apple.dock notification-always-show-image -bool true
 defaults write com.apple.loginwindow TALLogoutSavesState -bool true
 defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool true
 
-source "./modules/dock.sh"
+source "modules/dock.sh"
 
 fancy_echo "Some configs will not take effect until after logout, e.g. MacOS configs like 3 finger drag"
 
