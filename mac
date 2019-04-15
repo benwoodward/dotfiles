@@ -183,9 +183,13 @@ fancy_echo "Installing latest Node ..."
 bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs"
 
-fancy_echo "Adding application preferences ..."
+# TODO: Copy minimal icons to iTerm via command
+# https://superuser.com/a/1343756
+# https://github.com/jasonlong/iterm2-icons
 defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2"
+
+fancy_echo "Adding application preferences ..."
 defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
 
-fancy_echo "Adding keyboard shortcuts ..."
+fancy_echo "Adding application keyboard shortcuts ..."
 defaults write com.googlecode.iterm2 NSUserKeyEquivalents -dict-add "Close" "@^w"
