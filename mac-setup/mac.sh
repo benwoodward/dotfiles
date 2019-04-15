@@ -200,6 +200,11 @@ fancy_echo "Installing latest Ruby ..."
 install_asdf_language "ruby"
 gem update --system
 gem_install_or_update "bundler"
+
+fancy_echo "Installing iOS dev gems ..."
+gem_install_or_update "cocoapods"
+gem_install_or_update "slather"
+
 number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
 
