@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Useful resources:
+# https://github.com/joeyhoer/starter/tree/master/system
+# https://github.com/thoughtbot/laptop
+
 # Run this with:
 # sh mac 2>&1 | tee ~/laptop.log
 
@@ -353,19 +357,6 @@ defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
-###############################################################################
-# Dock, Dashboard, and hot corners                                            #
-###############################################################################
-
-# Set the icon size of Dock items to 35 pixels
-defaults write com.apple.dock tilesize -int 35
-
-# Enable highlight hover effect for the grid view of a stack (Dock)
-defaults write com.apple.dock mouse-over-hilte-stack -bool true
-
-# Animate opening applications from the Dock
-defaults write com.apple.dock launchanim -bool true
-
 # Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.5
 
@@ -375,29 +366,14 @@ defaults write com.apple.Dock mcx-expose-disabled -bool true
 # Show image for notifications
 defaults write com.apple.dock notification-always-show-image -bool true
 
-# Disable Bouncing dock icons
-defaults write com.apple.dock no-bouncing -bool true
-
-# Remove the auto-hiding Dock delay
-defaults write com.apple.dock autohide-delay -float 0
-
-# Remove the animation when hiding/showing the Dock
-defaults write com.apple.dock autohide-time-modifier -float 0
-
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
-
-# Automatically magnify the Dock
-defaults write com.apple.dock magnification -bool true
-
-# Make Dock icons of hidden applications translucent
-defaults write com.apple.dock showhidden -bool true
-
 # Enable the 'reopen windows when logging back in' option
 # This works, although the checkbox will still appear to be checked.
 defaults write com.apple.loginwindow TALLogoutSavesState -bool true
 defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool true
 
+source "./modules/dock.sh"
+
 fancy_echo "Some configs will not take effect until after logout, e.g. MacOS configs like 3 finger drag"
 
 # TODO: Add notification settings for specific apps via `defaults write`, e.g. hide/silence iMessage notifications
+# TODO: Extract the rest of this to modules so sections of this can be run individually for convenience and manual testing
