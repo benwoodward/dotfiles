@@ -1,0 +1,14 @@
+# Trackpad
+###############################################################################
+
+# Enable tap to click on trackpad
+defaults write -g com.apple.mouse.tapBehavior -int 1
+
+# Install 3 finger drag
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -int 1
+defaults write com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad -int 1
+
+# Tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1

@@ -347,26 +347,8 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict-add "MetaData" -bool f
 defaults write com.apple.finder FXInfoPanesExpanded -dict-add "OpenWith" -bool true
 defaults write com.apple.finder FXInfoPanesExpanded -dict-add "Privileges" -bool true
 
-# Trackpad
-###############################################################################
-
-# Enable tap to click on trackpad
-defaults write -g com.apple.mouse.tapBehavior -int 1
-
-# Install 3 finger drag
-defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -int 1
-defaults write com.apple.AppleMultitouchTrackpad com.apple.driver.AppleBluetoothMultitouch.trackpad -int 1
-
-# Tap to click for this user and for the login screen
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-
 # Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.5
-
-# Disable Mission Control
-defaults write com.apple.Dock mcx-expose-disabled -bool true
 
 # Show image for notifications
 defaults write com.apple.dock notification-always-show-image -bool true
@@ -376,6 +358,7 @@ defaults write com.apple.dock notification-always-show-image -bool true
 defaults write com.apple.loginwindow TALLogoutSavesState -bool true
 defaults write com.apple.loginwindow LoginwindowLaunchesRelaunchApps -bool true
 
+source "modules/trackpad.sh"
 source "modules/dock.sh"
 
 fancy_echo "Some configs will not take effect until after logout, e.g. MacOS configs like 3 finger drag"
