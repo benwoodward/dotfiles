@@ -11,6 +11,9 @@
       command: sudo rm -R ~/Library/Application\ Support/obs-studio/basic/scenes
       description: Deleting OBS scenes dir before symlinking]
     -
+      command: sudo chmod -R 555 ~/.dotfiles/Library/Application\ Support/obs-studio/basic/scenes
+      description: Preventing OBS overwriting scene files by chmod'ing the directory
+    -
       command: sudo cp Library/Application\ Support/obs-studio/basic/scenes/vertical-divider.png /usr/local/dotbot
       description: Copying OBS assets to shared /usr/local/dotbot dir
     - ["sudo chmod 777 /usr/local/dotbot/vertical-divider.png", Making shared OBS assets readable]
