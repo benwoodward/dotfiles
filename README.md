@@ -12,7 +12,7 @@ $ cd dotfiles
 
 Run mac setup script first:
 
-`sh mac 2>&1 | tee ~/laptop.log`
+`sh mac-setup/mac.sh 2>&1 | tee ~/laptop.log`
 
 Change name and email in .gitconfig and elsewhere
 
