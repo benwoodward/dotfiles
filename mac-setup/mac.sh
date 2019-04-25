@@ -165,7 +165,7 @@ brew link --force heroku
 fancy_echo "Configuring asdf version manager ..."
 if [ ! -d "$HOME/.asdf" ]; then
   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.5.0
-  append_to_zshrc "source $HOME/.asdf/asdf.sh" 1
+  append_to_zshrc "source ~/.asdf/asdf.sh" 1
 fi
 
 alias install_asdf_plugin=add_or_update_asdf_plugin
@@ -213,8 +213,8 @@ bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs"
 
 # Fix zsh permissions
-fancy_echo "Fixing zsh permissions ..."
-/bin/zsh -i -c 'compaudit | xargs sudo chmod g-w'
+# fancy_echo "Fixing zsh permissions ..."
+# /bin/zsh -i -c 'compaudit | xargs sudo chmod g-w'
 
 # TODO: Copy minimal icons to iTerm via command
 # https://superuser.com/a/1343756

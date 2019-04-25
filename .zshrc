@@ -2,6 +2,13 @@
 # - Comment plugins with descriptions
 # - Remove unused zsh options once I know what they do
 
+# This doesn't really work, alternative solution is maybe to edit
+# the postgres brew file with `brew edit postgres`, change the
+# path for the directories stored in /usr/local/share/zsh so
+# Homebrew stops complaining about their status
+# https://github.com/robbyrussell/oh-my-zsh/issues/6939#issuecomment-484750107
+ZSH_DISABLE_COMPFIX=true
+
 TERM=xterm-256color
 
 # Read the API token from the macOS Keychain
@@ -16,6 +23,13 @@ export PATH=$PATH:/Users/$(whoami)/bin
 # rbenv initialisation
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# Load completions, must happen before loading oh-my-zsh.sh because
+# it calls compinit
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -46,7 +60,7 @@ HYPHEN_INSENSITIVE="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"

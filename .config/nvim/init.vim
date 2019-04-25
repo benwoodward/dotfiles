@@ -274,13 +274,13 @@ augroup AuNERDTreeCmd " TODO: This does what?
 let NERDTreeHijackNetrw=0
 let NERDTreeHighlightCursorline = 1
 let NERDTreeShowHidden = 1
-let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '.beam']
+let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '\.beam']
 
 " so it doesn't complain about types it doesn't know
 let NERDShutUp = 1
 
 " quit NERDTree after opening a file
-let NERDTreeQuitOnOpen=1
+let NERDTreeQuitOnOpen=0
 
 " colored NERD Tree
 let NERDChristmasTree = 1
@@ -418,6 +418,7 @@ au BufNewFile,BufRead *.es6 set filetype=javascript
 au BufNewFile,BufRead *.slim set filetype=slim
 au BufNewFile,BufRead *.tsv,*.psv setf csv
 au BufRead,BufNewFile Gemfile* set filetype=ruby
+au BufRead,BufNewFile Dockerfile* set filetype=Dockerfile
 autocmd BufNewFile,BufRead Guardfile set filetype=ruby
 autocmd BufNewFile,BufRead *.md set filetype=markdown
 autocmd BufRead,BufNewFile *.scss set filetype=scss.css|set tabstop=2|set shiftwidth=2
