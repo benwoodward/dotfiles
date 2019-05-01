@@ -515,7 +515,8 @@ let g:ale_enabled = 1
 
 let g:ale_linters = {
   \   'javascript': ['eslint'],
-  \   'python':     ['flake8']
+  \   'python':     ['flake8'],
+  \   'elixir':     ['credo']
   \}
 let b:ale_fixers = {
   \   'python': ['autopep8']
@@ -639,4 +640,7 @@ autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 
 
 let g:python3_host_prog = '/usr/local/bin/python3'
+
+" Turn off auto-indendation before pasting
+set pastetoggle=<F3>
 

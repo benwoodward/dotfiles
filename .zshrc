@@ -255,6 +255,9 @@ bindkey '^ ' autosuggest-accept                   # ctrl+space (or right arrow)
 bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move through the completion menu backwards
 bindkey -M menuselect '^n' accept-and-infer-next-history    # completion - accept and try next mach i.e subdirectory
 
+# Fn-Up/Down arrow (PgUp/PgDown)
+bindkey "^[[5~" history-beginning-search-backward
+bindkey "^[[6~" history-beginning-search-forward
 
 # `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
 # the `.git` directory, listing directories first. The output gets piped into
