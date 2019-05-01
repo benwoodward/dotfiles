@@ -2,3 +2,5 @@
 .config/nvim/.netrwhist
 tags
 *.log
+Library/Application\ Support/obs-studio/basic/scenes/*.json.bak
+.config/karabiner/automatic_backups/

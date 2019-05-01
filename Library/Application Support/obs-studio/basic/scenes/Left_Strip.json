@@ -102,11 +102,7 @@
                     "push-to-talk": false,
                     "push-to-talk-delay": 0,
                     "settings": {
-                        "brightness": 0.029999999999999999,
-                        "contrast": -0.16,
-                        "gamma": 0.11,
-                        "opacity": 86,
-                        "saturation": 0.029999999999999999
+                        "opacity": 40
                     },
                     "sync": 0,
                     "volume": 1.0
@@ -114,48 +110,18 @@
             ],
             "flags": 0,
             "hotkeys": {},
-            "id": "av_capture_input",
+            "id": "image_source",
             "mixers": 0,
             "monitoring_type": 0,
             "muted": false,
-            "name": "Webcam",
+            "name": "vertical-divider",
             "private_settings": {},
             "push-to-mute": false,
             "push-to-mute-delay": 0,
             "push-to-talk": false,
             "push-to-talk-delay": 0,
             "settings": {
-                "device": "0x14100000046d082d",
-                "device_name": "HD Pro Webcam C920",
-                "frame_rate": {
-                    "denominator": 0.0,
-                    "numerator": 0.0
-                },
-                "resolution": "{\n    \"height\": 1080,\n    \"width\": 1920\n}",
-                "use_preset": true
-            },
-            "sync": 0,
-            "volume": 1.0
-        },
-        {
-            "balance": 0.5,
-            "deinterlace_field_order": 0,
-            "deinterlace_mode": 0,
-            "enabled": true,
-            "flags": 0,
-            "hotkeys": {},
-            "id": "display_capture",
-            "mixers": 0,
-            "monitoring_type": 0,
-            "muted": false,
-            "name": "Display Capture",
-            "private_settings": {},
-            "push-to-mute": false,
-            "push-to-mute-delay": 0,
-            "push-to-talk": false,
-            "push-to-talk-delay": 0,
-            "settings": {
-                "display": 0
+                "file": "/usr/local/dotbot/vertical-divider.png"
             },
             "sync": 0,
             "volume": 1.0
@@ -286,6 +252,29 @@
             "deinterlace_field_order": 0,
             "deinterlace_mode": 0,
             "enabled": true,
+            "flags": 0,
+            "hotkeys": {},
+            "id": "display_capture",
+            "mixers": 0,
+            "monitoring_type": 0,
+            "muted": false,
+            "name": "Display Capture",
+            "private_settings": {},
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "settings": {
+                "display": 0
+            },
+            "sync": 0,
+            "volume": 1.0
+        },
+        {
+            "balance": 0.5,
+            "deinterlace_field_order": 0,
+            "deinterlace_mode": 0,
+            "enabled": true,
             "filters": [
                 {
                     "balance": 0.5,
@@ -305,7 +294,11 @@
                     "push-to-talk": false,
                     "push-to-talk-delay": 0,
                     "settings": {
-                        "opacity": 40
+                        "brightness": 0.029999999999999999,
+                        "contrast": -0.16,
+                        "gamma": 0.11,
+                        "opacity": 86,
+                        "saturation": 0.029999999999999999
                     },
                     "sync": 0,
                     "volume": 1.0
@@ -313,18 +306,25 @@
             ],
             "flags": 0,
             "hotkeys": {},
-            "id": "image_source",
+            "id": "av_capture_input",
             "mixers": 0,
             "monitoring_type": 0,
             "muted": false,
-            "name": "vertical-divider",
+            "name": "Webcam",
             "private_settings": {},
             "push-to-mute": false,
             "push-to-mute-delay": 0,
             "push-to-talk": false,
             "push-to-talk-delay": 0,
             "settings": {
-                "file": "/usr/local/dotbot/vertical-divider.png"
+                "device": "0x14100000046d082d",
+                "device_name": "HD Pro Webcam C920",
+                "frame_rate": {
+                    "denominator": 0.0,
+                    "numerator": 0.0
+                },
+                "resolution": "{\n    \"height\": 1080,\n    \"width\": 1920\n}",
+                "use_preset": true
             },
             "sync": 0,
             "volume": 1.0
