@@ -23,7 +23,7 @@ Plug 'git@github.com:AndrewRadev/splitjoin.vim.git' " Switches between a single-
 " Plug 'git@github.com:tpope/vim-bundler.git' " Disabled because I never use
 Plug 'git@github.com:mattn/emmet-vim.git' " Emmet for Vim, make HTML without going mad
 Plug 'git@github.com:tpope/vim-rails.git' " Rails shortcuts
-" Plug 'git@github.com:tyru/open-browser.vim.git' " Disabled because replaced with vim-search-me
+Plug 'git@github.com:tyru/open-browser.vim.git' " Disabled because replaced with vim-search-me
 Plug 'git@github.com:junegunn/vim-easy-align.git' " Alignment plugin with smart key bindings
 Plug 'git@github.com:stephpy/vim-yaml.git' " YAML hightlighting
 Plug 'git@github.com:ctrlpvim/ctrlp.vim.git' " Fuzzy search files, ctags and more

@@ -15,6 +15,8 @@ TERM=xterm-256color
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
 export GITHUB_TOKEN=$(security find-generic-password -s 'hub github token' -w)
+export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
+export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -224,6 +226,11 @@ fh() {
   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
 
+# fhc - fuzzy search in your command history and copy selected command
+fhc() {
+  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//' | pbcopy
+}
+
 # fd - fuzzy search recursive directories, and cd to into selected
 fd() {
   local dir
@@ -306,4 +313,5 @@ fix_brew_permissions() {
   # sudo chown -R root $(brew --prefix)/*(D)
   # sudo chown -R root /usr/local/share/zsh
 }
+
 

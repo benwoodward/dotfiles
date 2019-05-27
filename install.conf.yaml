@@ -27,6 +27,7 @@
     ~/.zshrc.vimode: .zshrc.vimode
     ~/.gitconfig: .gitconfig
     ~/.gitignore: .global_gitignore
+    ~/.ctags: .ctags
     ~/Library/Preferences/com.mizage.Divvy.plist: Library/Preferences/com.mizage.Divvy.plist
     ~/Library/Application Support/obs-studio/basic/scenes: Library/Application Support/obs-studio/basic/scenes
 
