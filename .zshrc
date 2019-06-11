@@ -15,8 +15,11 @@ TERM=xterm-256color
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
 export GITHUB_TOKEN=$(security find-generic-password -s 'hub github token' -w)
+export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
 export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
 export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
+export REALM_ADMIN_USERNAME=$(security find-generic-password -s 'realm admin username' -w)
+export REALM_ADMIN_PASSWORD=$(security find-generic-password -s 'realm admin password' -w)
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH

@@ -65,7 +65,7 @@ Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
 Plug 'voldikss/vim-searchme' " Search under cursor with options
 " Plug 'tpope/vim-rhubarb'
 Plug 'git://github.com/tommcdo/vim-lion.git'
-Plug 'henrik/vim-ruby-runner'
+" Plug 'henrik/vim-ruby-runner'
 Plug 'maksimr/vim-jsbeautify'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
@@ -643,4 +643,6 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Turn off auto-indendation before pasting
 set pastetoggle=<F3>
+
+map <leader>o :!open % -a "Xcode-beta"<enter>
 
