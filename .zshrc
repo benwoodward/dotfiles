@@ -20,14 +20,15 @@ export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username'
 export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
 export REALM_ADMIN_USERNAME=$(security find-generic-password -s 'realm admin username' -w)
 export REALM_ADMIN_PASSWORD=$(security find-generic-password -s 'realm admin password' -w)
+export BENW_DEMO_GMAIL_PASSWORD=$(security find-generic-password -s 'benw.demo password' -w)
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:/Users/$(whoami)/bin
 
 # rbenv initialisation
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
 
 # Load completions, must happen before loading oh-my-zsh.sh because
 # it calls compinit

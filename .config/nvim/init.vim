@@ -59,6 +59,7 @@ Plug 'othree/html5.vim' " html5 syntax highlighting
 " Plug 'tpope/vim-repeat' " Don't use it
 Plug 'maxmellon/vim-jsx-pretty' " Jsx syntax highlighting
 Plug 'elixir-editors/vim-elixir' " Elixir syntax highlighting
+Plug 'slashmili/alchemist.vim'
 Plug 'mhinz/vim-startify' " Startup screen for Vim
 Plug 'farmergreg/vim-lastplace' " Open file at last place edited
 Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
