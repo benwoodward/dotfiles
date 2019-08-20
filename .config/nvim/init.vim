@@ -21,7 +21,7 @@ call plug#begin()
 " Plug 'git@github.com:Raimondi/delimitMate.git' " Auto-closes quotes, even when you don't want to!
 Plug 'git@github.com:AndrewRadev/splitjoin.vim.git' " Switches between a single-line statement and a multi-line one
 " Plug 'git@github.com:tpope/vim-bundler.git' " Disabled because I never use
-Plug 'git@github.com:mattn/emmet-vim.git' " Emmet for Vim, make HTML without going mad
+Plug 'git@github.com:mattn/emmet-vim.git', { 'for': ['html', 'vue.html.javascript.css'] } " Emmet for Vim, make HTML without going mad
 Plug 'git@github.com:tpope/vim-rails.git' " Rails shortcuts
 Plug 'git@github.com:tyru/open-browser.vim.git' " Disabled because replaced with vim-search-me
 Plug 'git@github.com:junegunn/vim-easy-align.git' " Alignment plugin with smart key bindings
@@ -69,6 +69,9 @@ Plug 'git://github.com/tommcdo/vim-lion.git'
 " Plug 'henrik/vim-ruby-runner'
 Plug 'maksimr/vim-jsbeautify'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'posva/vim-vue'
+Plug 'sbdchd/neoformat'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 
 " Add plugins to &runtimepath
@@ -142,6 +145,9 @@ set nocompatible
 syntax enable
 
 set nolazyredraw
+
+" Enable command line completion vertical menu
+set wildoptions+=pum
 
 " TODO: What does this do?
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
@@ -260,6 +266,57 @@ function! FollowTag()
 endfunction
 
 nnoremap <c-]> :call FollowTag()<CR>
+
+
+
+
+""
+"" Section: Coc.nvim
+""
+let g:coc_global_extensions = [
+      \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
+      \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
+      \ 'coc-css', 'coc-json', 'coc-pyls', 'coc-yaml'
+      \ ]
+
+" Better display for messages
+set cmdheight=2
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes
+
+" Use `lp` and `ln` for navigate diagnostics
+nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
+
+" Remap keys for gotos
+nmap <silent> <leader>ld <Plug>(coc-definition)
+nmap <silent> <leader>lt <Plug>(coc-type-definition)
+nmap <silent> <leader>li <Plug>(coc-implementation)
+nmap <silent> <leader>lf <Plug>(coc-references)
+
+" Remap for rename current word
+nmap <leader>lr <Plug>(coc-rename)
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+
 
 ""
 "" Section: Nerdtree
@@ -428,6 +485,7 @@ autocmd BufRead,BufNewFile *. set tabstop=2|set shiftwidth=2|set expandtab
 autocmd BufRead,BufNewFile *.jsx set filetype=javascript|set tabstop=2|set shiftwidth=2|set expandtab
 autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
 autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
+autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
 
 
 nmap <Leader>sj :SplitjoinSplit<cr>
