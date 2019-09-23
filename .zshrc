@@ -30,6 +30,9 @@ export PATH=$PATH:/Users/$(whoami)/bin
 # export PATH="$HOME/.rbenv/bin:$PATH"
 # eval "$(rbenv init -)"
 
+# https://blog.jez.io/cli-code-review/
+export REVIEW_BASE='master'
+
 # Load completions, must happen before loading oh-my-zsh.sh because
 # it calls compinit
 if type brew &>/dev/null; then
@@ -94,7 +97,7 @@ COMPLETION_WAITING_DOTS="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -148,7 +151,7 @@ sort"
 alias tag-gems='ctags --recurse . `bundle show --paths`'
 alias ssh='TERM=xterm-256color ssh'
 alias nvimconfig='nvim ~/.config/nvim/init.vim'
-alias add-vim-tip='nvim ~/.config/nvim/init.vim +554' # Add a vim-tip as Startify header quote
+
 
 # zplug
 export ZPLUG_HOME=/usr/local/opt/zplug
@@ -159,6 +162,15 @@ zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 zplug 'zsh-users/zsh-autosuggestions'
 # zplug 'wfxr/forgit'
+zplug "changyuheng/fz", defer:2
+zplug "rupa/z", use:z.sh
+zplug "djui/alias-tips"
+zplug "kiurchv/asdf.plugin.zsh", defer:2
+zplug "supercrabtree/k"
+zplug "MichaelAquilina/zsh-you-should-use"
+zplug "ericfreese/zsh-cwd-history"
+zplug "gusaiani/elixir-oh-my-zsh"
+# zplug "hschne/fzf-git"
 
 zplug load
 
@@ -198,6 +210,8 @@ SAVEHIST=$HISTSIZE
 
 # zplugin settings
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+
+export FZ_CMD=z
 
 
 setopt hist_ignore_all_dups # remove older duplicate entries from history
@@ -258,9 +272,50 @@ ch() {
   fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs open
 }
 
+# From https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
+
+# Will return non-zero status if the current directory is not managed by git
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+# Select file from git status
+gfi() {
+  is_in_git_repo || return
+  git -c color.status=always status --short |
+  fzf --height 40% --reverse -m --ansi --nth 2..,.. \
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1}) | head -500' |
+  cut -c4- | sed 's/.* -> //'
+}
+
+# Select commit from git history
+gh() {
+  is_in_git_repo || return
+  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  fzf --height 50% --ansi --no-sort --reverse --multi --bind 'ctrl-s:toggle-sort' \
+    --header 'Press CTRL-S to toggle sort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always | head -'$LINES |
+  grep -o "[a-f0-9]\{7,\}"
+}
+
+# A helper function to join multi-line output from fzf
+join-lines() {
+  local item
+  while read item; do
+    echo -n "${(q)item} "
+  done
+}
+
+fzf-gfi-widget() { local result=$(gfi | join-lines); zle reset-prompt; LBUFFER+=$result }
+fzf-gh-widget()  { local result=$(gh  | join-lines); zle reset-prompt; LBUFFER+=$result }
+zle -N fzf-gfi-widget
+zle -N fzf-gh-widget
+bindkey '^gf' fzf-gfi-widget
+bindkey '^gh' fzf-gh-widget
+
 # https://github.com/zsh-users/zsh-autosuggestions autocomplete word by word
 bindkey '^e' forward-word
-bindkey '^ ' autosuggest-accept                   # ctrl+space (or right arrow)
+bindkey '^r' autosuggest-accept # ctrl+r
 
 # completion
 bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move through the completion menu backwards

@@ -4,6 +4,7 @@ tags
 .tags1
 tags.lock
 tags.temp
+tags.temp.tmp
 .env*
 todo.taskpaper
 .agignore
@@ -13,3 +14,5 @@ completer.hist
 dump.rdb
 config/master.key
 node_modules
+.elixir_ls
+.gutctags

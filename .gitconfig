@@ -67,6 +67,20 @@
   bn = !git rev-list HEAD | wc -l | tr -d ' '
 
   pr = pull-request
+
+  # list files which have changed since REVIEW_BASE
+  # (REVIEW_BASE defaults to 'master' in my zshrc)
+  #
+  # Review between 'gh-pages' and the current branch
+  # REVIEW_BASE=gh-pages git stat
+  #
+  # Review changes made by the last commit of this branch:
+  # REVIEW_BASE=HEAD^ git stat
+  files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+
+  # Same as above, but with a diff stat instead of just names
+  # (better for interactive use)
+  stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
 [push]
   default = current
 [web]
