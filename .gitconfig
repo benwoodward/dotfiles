@@ -65,6 +65,8 @@
   cleanup = !git branch --merged | grep -v '\\*' | grep -v master | grep -v dev | grep -v develop | xargs -n 1 git branch -d
   ctags = !.git/hooks/ctags\n
   bn = !git rev-list HEAD | wc -l | tr -d ' '
+  browse = "!f(){ open `git remote -v | awk '/fetch/{print $2}' | sed -Ee 's#(git@|git://)#http://#' -e 's@com:@com/@'`| head -n1; }; f"
+
 
   pr = pull-request
 

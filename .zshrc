@@ -244,7 +244,6 @@ bindkey '^r' autosuggest-accept # ctrl+r
 
 # completion
 bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move through the completion menu backwards
-bindkey -M menuselect '^n' accept-and-infer-next-history    # completion - accept and try next mach i.e subdirectory
 
 # Fn-Up/Down arrow (PgUp/PgDown)
 bindkey "^[[5~" history-beginning-search-backward
@@ -298,4 +297,18 @@ fix_brew_permissions() {
   # sudo chown -R root /usr/local/share/zsh
 }
 
+# https://gist.github.com/igrigorik/6666860
+# git browse
+gb() {
+  open $(git config remote.origin.url | sed "s/git@\(.*\):\(.*\).git/https:\/\/\1\/\2/")/$1$2$3
+}
+
+# Open current branch
+alias gbb="gb tree/$(git symbolic-ref --quiet --short HEAD )"
+
+# Open current directory/file in current branch
+alias gbbf="gb tree/$(git symbolic-ref --quiet --short HEAD )/$(git rev-parse --show-prefix)"
+
+# Open current directory/file in master branch
+alias gbmf="gb tree/master/$(git rev-parse --show-prefix)"
 
