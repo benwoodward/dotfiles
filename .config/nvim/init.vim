@@ -16,25 +16,19 @@ unlet autoload_plug_path
 
 call plug#begin()
 
-" Plug 'git@github.com:ap/vim-css-color.git' " Disabled due to create_matches() lagging
-" Plug 'git@github.com:tpope/vim-abolish.git' " Disabled because I never use it
-" Plug 'git@github.com:Raimondi/delimitMate.git' " Auto-closes quotes, even when you don't want to!
 Plug 'git@github.com:AndrewRadev/splitjoin.vim.git' " Switches between a single-line statement and a multi-line one
-" Plug 'git@github.com:tpope/vim-bundler.git' " Disabled because I never use
 Plug 'git@github.com:mattn/emmet-vim.git', { 'for': ['html', 'vue.html.javascript.css'] } " Emmet for Vim, make HTML without going mad
 Plug 'git@github.com:tpope/vim-rails.git' " Rails shortcuts
 Plug 'git@github.com:tyru/open-browser.vim.git' " Disabled because replaced with vim-search-me
 Plug 'git@github.com:junegunn/vim-easy-align.git' " Alignment plugin with smart key bindings
 Plug 'git@github.com:stephpy/vim-yaml.git' " YAML hightlighting
 Plug 'git@github.com:ctrlpvim/ctrlp.vim.git' " Fuzzy search files, ctags and more
-" Plug 'git@github.com:ervandew/supertab.git' " Don't use it
-" Plug 'git@github.com:airblade/vim-gitgutter.git' " Disabled due to lag
+Plug 'mhinz/vim-signify'
 Plug 'git@github.com:elzr/vim-json.git' " JSON highlighter
 Plug 'git@github.com:bronson/vim-trailing-whitespace.git' " Hightligts trailing whitespace characters in red
 Plug 'git@github.com:scrooloose/nerdtree.git' " File browser in sidebar
 Plug 'git@github.com:scrooloose/nerdcommenter.git' " Toggle comments
 Plug 'git@github.com:tpope/vim-fugitive.git' " Github commands
-" Plug 'git@github.com:Chun-Yang/vim-action-ag.git' " Outdated / no longer use
 Plug 'git@github.com:tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
 Plug 'git@github.com:terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
 Plug 'git@github.com:ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
@@ -43,35 +37,35 @@ Plug 'git@github.com:vim-ruby/vim-ruby.git' " Ruby syntax highlighting
 Plug 'git@github.com:henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
 Plug 'mattn/webapi-vim'
 Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
-" Plug 'https://github.com/adelarsq/vim-matchit' " Outdated / no longer use
 Plug 'gfontenot/vim-xcode' " Create and build XCode projects without using the dreaded XCode
 Plug 'mileszs/ack.vim' " Search files, configured to work with ripgrep
-" Plug 'itchyny/lightline.vim' " Disabled due to lag
-" Plug 'christoomey/vim-tmux-runner' " Disabled because I don't use it
 " Plug 'jerrymarino/SwiftPlayground.vim' " Disabled because it's broken / don't use it
 Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
-Plug 'w0rp/ale' " Async linting
-" Plug 'dikiaap/minimalist' " Don't use it
 Plug 'othree/yajs.vim' " Most up to date JS highlighter, works well with React
 Plug 'mhartington/oceanic-next' " Best dark colorscheme
 Plug 'othree/html5.vim' " html5 syntax highlighting
-" Plug 'HerringtonDarkholme/yats.vim' " Don't use it
-" Plug 'tpope/vim-repeat' " Don't use it
 Plug 'maxmellon/vim-jsx-pretty' " Jsx syntax highlighting
 Plug 'elixir-editors/vim-elixir' " Elixir syntax highlighting
-Plug 'slashmili/alchemist.vim'
-Plug 'mhinz/vim-startify' " Startup screen for Vim
 Plug 'farmergreg/vim-lastplace' " Open file at last place edited
 Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
 Plug 'voldikss/vim-searchme' " Search under cursor with options
-" Plug 'tpope/vim-rhubarb'
 Plug 'git://github.com/tommcdo/vim-lion.git'
-" Plug 'henrik/vim-ruby-runner'
 Plug 'maksimr/vim-jsbeautify'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'posva/vim-vue'
 Plug 'sbdchd/neoformat'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'floobits/floobits-neovim'
+Plug '~/Dev/GitHub/CoVim-Neovim', {'branch': 'neovim'}
+Plug 'honza/vim-snippets'
+Plug 'mhinz/vim-mix-format'
+Plug 'liuchengxu/vista.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'haya14busa/incsearch.vim'
+
 
 
 " Add plugins to &runtimepath
@@ -257,9 +251,8 @@ set tags+=tags
 " g] <- show multiple
 " http://stackoverflow.com/a/33629584
 function! FollowTag()
-  echom "test"
   if !exists("w:tagbrowse")
-    vsplit
+    " vsplit
     let w:tagbrowse=1
   endif
   execute "tag " . expand("<cword>")
@@ -267,7 +260,27 @@ endfunction
 
 nnoremap <c-]> :call FollowTag()<CR>
 
+let g:gutentags_enabled = 1
+let g:gutentags_trace = 0
+let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".git", "node_modules", "*.vim/bundle/*"]
+let g:gutentags_file_list_command = '( rg --files --no-ignore lib | rg .ex ; rg --files --no-ignore deps | rg .ex ) | cat'
 
+" enable gtags module
+" let g:gutentags_modules = ['ctags', 'gtags_cscope']
+
+" config project root markers.
+let g:gutentags_project_root = ['.root']
+
+" generate datebases in my cache directory, prevent gtags files polluting my project
+" let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+
+""
+"" Section: open-browser
+""
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
 
 
 ""
@@ -276,8 +289,25 @@ nnoremap <c-]> :call FollowTag()<CR>
 let g:coc_global_extensions = [
       \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
       \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
-      \ 'coc-css', 'coc-json', 'coc-pyls', 'coc-yaml'
+      \ 'coc-css', 'coc-json', 'coc-pyls', 'coc-yaml',
+      \ 'coc-snippets', 'coc-elixir'
       \ ]
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<C-n>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<C-p>'
+
+" Use <C-j> and <C-k> to navigate the completion list
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+
 
 " Better display for messages
 set cmdheight=2
@@ -289,17 +319,14 @@ set shortmess+=c
 set signcolumn=yes
 
 " Use `lp` and `ln` for navigate diagnostics
-nmap <silent> <leader>lp <Plug>(coc-diagnostic-prev)
-nmap <silent> <leader>ln <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>dp <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>dn <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> <leader>ld <Plug>(coc-definition)
 nmap <silent> <leader>lt <Plug>(coc-type-definition)
 nmap <silent> <leader>li <Plug>(coc-implementation)
 nmap <silent> <leader>lf <Plug>(coc-references)
-
-" Remap for rename current word
-nmap <leader>lr <Plug>(coc-rename)
 
 " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -312,9 +339,19 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" Fix current line
+nmap <Leader>qf <Plug>(coc-fix-current)
+vmap <leader>fs <Plug>(coc-format-selected)
+nmap <leader>fs <Plug>(coc-format-selected)
+nmap <Leader>rn <Plug>(coc-rename)
+nmap <Leader>gd <Plug>(coc-definition)
 
+" Auto-scroll floating window
+nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
+nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
+
+" Highlight symbol under cursor on CursorHold
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 
 
@@ -323,6 +360,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 ""
 let g:NERDSpaceDelims = 1 " TODO: This does what?
 let nerdtreeshowlinenumbers=1 " TODO: This does what?
+let g:NERDTreeWinPos = "right"
 
 " Locate current file in Nerdtree
 map <leader>nf :NERDTreeFind<cr>
@@ -370,6 +408,7 @@ map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 "
 " Search word under cursor in default browser
 noremap <Leader>ss :<C-u>SearchCurrentText<CR>
+
 " Search selected text in default browser
 vnoremap <Leader>sv :<C-u>SearchVisualText<CR>
 
@@ -381,6 +420,7 @@ let g:xcode_runner_command = 'VtrSendCommandToRunner! {cmd}'
 ""
 " show hidden files in CtrlP
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_working_path_mode = 'ra'
 
 " Search ctags
 nmap <Leader>c :CtrlPTag<CR>
@@ -396,7 +436,7 @@ map <Leader>t :CtrlP<CR>
 " https://github.com/BurntSushi/ripgrep
 if executable('rg')
   set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob "" --ignore-file $HOME/.gitignore'
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob "" --ignore-file $HOME/.ctrlp-ignore --hidden'
   let g:ctrlp_use_caching = 0
 endif
 
@@ -408,6 +448,10 @@ endif
 let g:ackprg = 'rg --vimgrep --no-heading --smart-case --ignore-file $HOME/.gitignore' " Use rg with Ack
 map <leader>f :Ack<space>
 
+
+
+
+" TODO: Why has this stopped working?
 " Shift+Space - duplicate selected lines
 map <S-Space> y'>p
 vmap <S-Space> y'>p
@@ -533,9 +577,6 @@ set smartcase
 " Set cursor to underscore in normal mode
 set guicursor+=n:hor20-Cursor/lCursor
 
-" https://github.com/airblade/vim-gitgutter/issues/259
-let g:gitgutter_max_signs = 1000
-
 runtime macros/matchit.vim
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -564,83 +605,6 @@ map <Up> gk
 
 " Toggle hlsearch with <leader>hs
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
-
-
-""
-"" Section: Ale
-"" https://github.com/w0rp/ale
-""
-let g:ale_enabled = 1
-
-let g:ale_linters = {
-  \   'javascript': ['eslint'],
-  \   'python':     ['flake8'],
-  \   'elixir':     ['credo']
-  \}
-let b:ale_fixers = {
-  \   'python': ['autopep8']
-  \}
-
-let g:ale_open_list = 0 " show when there are errors
-
-" always show sign column, so text doesn't move around
-let g:ale_sign_column_always = 1
-
-" Errors
-let g:ale_sign_error = '✖︎'
-highlight ALEErrorSign guifg=red ctermfg=red
-let g:ale_echo_msg_error_str = 'E'
-
-" Warnings
-highlight ALEWarningSign guifg=grey ctermfg=grey
-let g:ale_echo_msg_warning_str = 'W'
-
-let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:move_key_modifier = 'N'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0
-let g:ale_lint_on_save = 1
-
-let g:ale_ruby_reek_show_context = 1
-
-let g:ale_python_flake8_auto_pipenv = 0
-let g:ale_python_flake8_change_directory = 1
-let g:ale_python_flake8_executable = 'flake8'
-let g:ale_python_flake8_options = ''
-let g:ale_python_flake8_use_global = 0
-
-nmap <leader>d <Plug>(ale_fix)
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-
-""
-"" Section: startify
-""
-if !has('nvim')
-  set viminfo='100,n$HOME/.config/nvim/files/info
-  set viminfo+=n$HOME/.config/nvim/files/info
-endif
-
-let g:startify_lists = [
-      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-      \ { 'type': 'files',     'header': ['   MRU']            },
-      \ { 'type': 'sessions',  'header': ['   Sessions']       },
-      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-      \ { 'type': 'commands',  'header': ['   Commands']       },
-      \ ]
-
-let g:startify_list_order = ['dir', 'bookmarks', 'sessions', 'commands']
-let g:startify_files_number = 5
-let g:startify_custom_header =
-      \ 'map(startify#fortune#quote(), "\"   \".v:val")'
-
-let g:startify_custom_header_quotes = [
-      \ ['VIM: Fr', '', 'Jumps to the false previous r (same line only).']
-      \ ]
-
-" don't change into directory, to keep at project root
-let g:startify_change_to_dir = 0
 
 " init.vim editing
 map <leader>- :e $HOME/.config/nvim/init.vim<CR>
@@ -685,17 +649,17 @@ augroup END
 vmap <C-x> :!pbcopy<CR>
 vmap <C-c> :w !pbcopy<CR><CR>
 
-map <c-f> :call JsBeautify()<cr>
-" or
-autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
-" for json
-autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
-" for jsx
-autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
-" for html
-autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
-" for css or scss
-autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+" map <c-f> :call JsBeautify()<cr>
+" " or
+" autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+" " for json
+" autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+" " for jsx
+" autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+" " for html
+" autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+" " for css or scss
+" autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 
 
 let g:python3_host_prog = '/usr/local/bin/python3'
@@ -705,3 +669,87 @@ set pastetoggle=<F3>
 
 map <leader>o :!open % -a "Xcode-beta"<enter>
 
+
+
+" let g:mix_format_on_save = 0
+
+no <silent><leader>cc :call NERDComment("n", "Toggle")<CR>
+
+map Q :q<CR>
+
+" if executable('sourcekit-lsp')
+    " au User lsp_setup call lsp#register_server({
+        " \ 'name': 'sourcekit-lsp',
+        " \ 'cmd': {server_info->['sourcekit-lsp']},
+        " \ 'whitelist': ['swift'],
+        " \ })
+" else
+  " echohl ErrorMsg
+  " echom 'Sorry, `sourcekit-lsp` is not installed. See `:help vim-lsp-swift` for more details on setup.'
+  " echohl NONE
+" endif
+
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/vim-lsp.log')
+
+" for asyncomplete.vim log
+let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+
+
+" when pairing some braces or quotes, put cursor between them
+inoremap <>   <><Left>
+inoremap ()   ()<Left>
+inoremap {}   {}<Left>
+inoremap []   []<Left>
+inoremap ""   ""<Left>
+inoremap ''   ''<Left>
+inoremap ``   ``<Left>
+
+
+" Incsearch {{{
+let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
+let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
+let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
+
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+" :h g:incsearch#auto_nohlsearch
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
+
+
+" Fzf {{{
+  " use bottom positioned 20% height bottom split
+  let g:fzf_layout = { 'down': '~20%' }
+  let g:fzf_colors =
+  \ { 'fg':      ['fg', 'Normal'],
+    \ 'bg':      ['bg', 'Clear'],
+    \ 'hl':      ['fg', 'String'],
+    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+    \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+    \ 'hl+':     ['fg', 'Statement'],
+    \ 'info':    ['fg', 'PreProc'],
+    \ 'prompt':  ['fg', 'Conditional'],
+    \ 'pointer': ['fg', 'Exception'],
+    \ 'marker':  ['fg', 'Keyword'],
+    \ 'spinner': ['fg', 'Label'],
+    \ 'header':  ['fg', 'Comment'] }
+
+    " keeping Rg command since the built-in one does not skip checking filenames
+  " for an in-file search...
+  command! -bang -nargs=* Rg
+   \ call fzf#vim#grep(
+   \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+   \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+   \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
+   \   <bang>0)
+
+  " only use FZF shortcuts in non diff-mode
+  if !&diff
+    nnoremap <C-g> :Rg<Cr>
+  endif

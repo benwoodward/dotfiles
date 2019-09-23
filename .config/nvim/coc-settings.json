@@ -1,0 +1,15 @@
+{
+  "diagnostic.checkCurrentLine": true,
+  "suggest.timeout": 2000,
+  "languageserver": {
+    "swift": {
+      "command": "/Users/ben/dev/GitHub/sourcekit-lsp/.build/x86_64-apple-macosx/debug/sourcekit-lsp",
+      "args": [],
+      "filetypes": ["swift"],
+      "trace.server": "verbose",
+      "initializationOptions": {},
+      "settings": {
+      }
+    }
+  }
+}
