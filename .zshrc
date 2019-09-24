@@ -304,11 +304,11 @@ gb() {
 }
 
 # Open current branch
-alias gbb="gb tree/$(git symbolic-ref --quiet --short HEAD )"
+alias gbb='gb tree/$(git symbolic-ref --quiet --short HEAD )'
 
 # Open current directory/file in current branch
-alias gbbf="gb tree/$(git symbolic-ref --quiet --short HEAD )/$(git rev-parse --show-prefix)"
+alias gbbf='gb tree/$(git symbolic-ref --quiet --short HEAD )/$(git rev-parse --show-prefix)'
 
 # Open current directory/file in master branch
-alias gbmf="gb tree/master/$(git rev-parse --show-prefix)"
+alias gbmf='gb tree/master/$(git rev-parse --show-prefix)'
 
