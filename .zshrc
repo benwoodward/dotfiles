@@ -21,6 +21,9 @@ export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password'
 export REALM_ADMIN_USERNAME=$(security find-generic-password -s 'realm admin username' -w)
 export REALM_ADMIN_PASSWORD=$(security find-generic-password -s 'realm admin password' -w)
 export BENW_DEMO_GMAIL_PASSWORD=$(security find-generic-password -s 'benw.demo password' -w)
+export VIMIFY_SPOTIFY_TOKEN=$(security find-generic-password -s 'benw.demo password' -w)
+export GIST_ID=$(security find-generic-password -s 'things-gist-id' -w)
+export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-token' -w)
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -49,7 +52,9 @@ else
 fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
-alias zshconfig="nvim ~/.zshrc"
+alias nv="nvim"
+alias nn="nvim ."
+alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias g='git'
@@ -76,7 +81,7 @@ sort"
 
 alias tag-gems='ctags --recurse . `bundle show --paths`'
 alias ssh='TERM=xterm-256color ssh'
-alias nvimconfig='nvim ~/.config/nvim/init.vim'
+alias nc='nvim ~/.config/nvim/init.vim'
 
 
 # zplug
@@ -90,10 +95,21 @@ zplug 'zsh-users/zsh-autosuggestions'
 # zplug 'wfxr/forgit'
 zplug "changyuheng/fz", defer:2
 zplug "rupa/z", use:z.sh
-zplug "djui/alias-tips"
 zplug "kiurchv/asdf.plugin.zsh", defer:2
 zplug "supercrabtree/k"
-zplug "MichaelAquilina/zsh-you-should-use"
+zplug "zpm-zsh/ls"
+zplug "zpm-zsh/dircolors-material"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "b4b4r07/enhancd", use:init.sh
+ENHANCD_FILTER=fzf
+
+# Disabled until I figure out these errors:
+#
+# _zsh_prioritize_cwd_history_cwd_hist_entries:9: command not found: #
+# _zsh_prioritize_cwd_history_cwd_hist_entries:12: command not found: #
+# _zsh_prioritize_cwd_history_cwd_hist_entries:15: command not found: #
+#
+# zplug "ericfreese/zsh-prioritize-cwd-history"
 
 # zplug "hschne/fzf-git"
 
@@ -156,6 +172,8 @@ zstyle ':completion:*' menu select # select completions with arrow keys
 zstyle ':completion:*' group-name '' # group results by category
 # zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
 
 # History completion
 zle -C hist-complete complete-word _generic
@@ -189,6 +207,21 @@ ch() {
   sep='{::}'
 
   cp -f ~/Library/Application\ Support/Google/Chrome/Profile\ 4/History /tmp/h
+
+  sqlite3 -separator $sep /tmp/h \
+    "select substr(title, 1, $cols), url
+     from urls order by last_visit_time desc" |
+  awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\x1b[m\n", $1, $2}' |
+  fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs open
+}
+
+# bh - browse brave history
+bh() {
+  local cols sep
+  cols=$(( COLUMNS / 3 ))
+  sep='{::}'
+
+  cp -f ~/Library/Application\ Support/BraveSoftware/Brave-Browser/Default/History /tmp/h
 
   sqlite3 -separator $sep /tmp/h \
     "select substr(title, 1, $cols), url
@@ -311,4 +344,21 @@ alias gbbf='gb tree/$(git symbolic-ref --quiet --short HEAD )/$(git rev-parse --
 
 # Open current directory/file in master branch
 alias gbmf='gb tree/master/$(git rev-parse --show-prefix)'
+
+DISABLE_AUTO_TITLE="true"
+tab_title() {
+  # sets the tab title to current dir
+  echo -ne "\e]1;${PWD##*/}\a"
+}
+add-zsh-hook precmd tab_title
+
+node-project() {
+  git init
+  npx license $(npm get init.license) -o "$(npm get init.author.name)" > LICENSE
+  npx gitignore node
+  npx covgen "$(npm get init.author.email)"
+  npm init -y
+  git add -A
+  git commit -m "Initial commit"
+}
 
