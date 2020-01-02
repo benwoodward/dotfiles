@@ -2,13 +2,11 @@
 " - Comment, and group all Plugins with configs and by type
 " - Group settings/configs, functions, mappings etc.
 " - Divide sections with " ================ Section: Name ===========================
-" - Why do L and H no longer go to the absolute top or bottom of window
-"   anylonger? scrolloff setting?
 
 " Bootstrap Plug
 let autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
 if !filereadable(autoload_plug_path)
-  silent execute '!curl -fLo ' . autoload_plug_path . '  --create-dirs 
+  silent execute '!curl -fLo ' . autoload_plug_path . '  --create-dirs
       \ "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -16,14 +14,17 @@ unlet autoload_plug_path
 
 call plug#begin()
 
-Plug 'git@github.com:AndrewRadev/splitjoin.vim.git' " Switches between a single-line statement and a multi-line one
-Plug 'git@github.com:mattn/emmet-vim.git', { 'for': ['html', 'vue.html.javascript.css'] } " Emmet for Vim, make HTML without going mad
-Plug 'git@github.com:tpope/vim-rails.git' " Rails shortcuts
-Plug 'git@github.com:tyru/open-browser.vim.git' " Disabled because replaced with vim-search-me
+" Switches between a single-line statement and a multi-line one
+Plug 'git@github.com:AndrewRadev/splitjoin.vim.git'
+
+" Emmet for Vim, make HTML without going mad
+Plug 'git@github.com:mattn/emmet-vim.git', { 'for': ['html', 'vue', 'javascript', 'css', 'svelte'] }
+
+Plug 'git@github.com:tpope/vim-rails.git', { 'for': ['rb'] } " Rails shortcuts
 Plug 'git@github.com:junegunn/vim-easy-align.git' " Alignment plugin with smart key bindings
-Plug 'git@github.com:stephpy/vim-yaml.git' " YAML hightlighting
+Plug 'git@github.com:stephpy/vim-yaml.git', { 'for': ['yaml.yml'] } " YAML hightlighting
 Plug 'git@github.com:ctrlpvim/ctrlp.vim.git' " Fuzzy search files, ctags and more
-Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-signify' " Alternative to git-gutter, shortcuts: [c, ]c, [C, ]C
 Plug 'git@github.com:elzr/vim-json.git' " JSON highlighter
 Plug 'git@github.com:bronson/vim-trailing-whitespace.git' " Hightligts trailing whitespace characters in red
 Plug 'git@github.com:scrooloose/nerdtree.git' " File browser in sidebar
@@ -64,7 +65,15 @@ Plug 'prabirshrestha/vim-lsp'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'haya14busa/incsearch.vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'godlygeek/tabular'
+Plug 'voldikss/vim-floaterm'
+Plug 'HendrikPetertje/vimify'
+Plug 'psliwka/vim-smoothie'
+Plug 'evanleck/vim-svelte'
 Plug 'tpope/vim-commentary'
+Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
+Plug 'sheerun/vim-polyglot'
 
 
 
@@ -75,10 +84,14 @@ call plug#end()
 " Section: configs
 
 " Change <Leader>
-let mapleader = ";"
+nnoremap <SPACE> <Nop>
+map <Space> <Leader>
+
+
 
 " Show line numbers
 set number
+
 
 " Show line number for current line, and relative numbers for others
 " Toggle with F4
@@ -117,7 +130,7 @@ if exists("+relativenumber")
    endfunc
   endif
   nnoremap <F4> :call RelativeNumberToggle()<CR>
-  inoremap <F4> <ESC>:call RelativeNumberToggle()<CR>a
+  inoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
   vnoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
 else                  " fallback
   set number          " show line numbers
@@ -125,11 +138,6 @@ else                  " fallback
   nnoremap <F4> :set number! number?<CR>
 endif
 
-
-" enable setting title
-set title
-" configure title to look like: Vim /path/to/file
-set titlestring=VIM:\ %-25.55F\ %a%r%m titlelen=70
 
 " Show line and column number
 " set ruler
@@ -168,7 +176,7 @@ endif
 set cursorline
 
 " When scrolling off-screen do so 3 lines at a time, not 1
-set scrolloff=3
+" set scrolloff=3
 
 " Set temporary directory (don't litter local dir with swp/tmp files)
 set directory=/tmp/
@@ -420,7 +428,7 @@ let g:xcode_runner_command = 'VtrSendCommandToRunner! {cmd}'
 ""
 " show hidden files in CtrlP
 let g:ctrlp_show_hidden = 1
-let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_root_markers = ['mix.exs', 'Gemfile']
 
 " Search ctags
 nmap <Leader>c :CtrlPTag<CR>
@@ -428,9 +436,9 @@ nmap <Leader>c :CtrlPTag<CR>
 " Search buffers
 nmap <Leader>r :CtrlPBuffer<CR>
 
-" Map CtrlP to <Leader>t
+" Map CtrlP to <Leader>p
 let g:ctrlp_map = ''
-map <Leader>t :CtrlP<CR>
+map <Leader>p :CtrlP<CR>
 
 " Use RipGrep with CtrlP
 " https://github.com/BurntSushi/ripgrep
@@ -446,7 +454,10 @@ endif
 ""       Do I need Ack?
 " let g:ackprg = 'ag --nogroup --nocolor --column' " Use ag with Ack
 let g:ackprg = 'rg --vimgrep --no-heading --smart-case --ignore-file $HOME/.gitignore' " Use rg with Ack
-map <leader>f :Ack<space>
+" map <leader>f :Ack<space>
+
+noremap F :Clap grep<CR>
+noremap ff :Clap grep ++query=<cword><CR>
 
 
 
@@ -503,13 +514,10 @@ smap <Leader><Leader> <C-g>S
 vmap <Leader><Leader> S
 
 " remove trailing whitespace (don't use on binary files!!)
-map <leader>tws :FixWhitespace<CR>
+map <leader>fws :FixWhitespace<CR>
 
 " insert hashrocket, =>, with control-l
 imap <C-l> <Space>=><Space>
-
-" align hashrockets with <leader>t control-l
-vmap <leader>t<C-l> :Align =><CR>
 
 ""
 "" Section: Filetypes
@@ -669,13 +677,10 @@ set pastetoggle=<F3>
 
 map <leader>o :!open % -a "Xcode-beta"<enter>
 
-
-
-" let g:mix_format_on_save = 0
-
-no <silent><leader>cc :call NERDComment("n", "Toggle")<CR>
+let g:mix_format_on_save = 1
 
 map Q :q<CR>
+map W :w<CR>
 
 " if executable('sourcekit-lsp')
     " au User lsp_setup call lsp#register_server({
@@ -753,3 +758,80 @@ map g# <Plug>(incsearch-nohl-g#)
   if !&diff
     nnoremap <C-g> :Rg<Cr>
   endif
+
+" disable header folding
+let g:vim_markdown_folding_disabled = 1
+
+" do not use conceal feature, the implementation is not so good
+let g:vim_markdown_conceal = 0
+
+let g:vim_markdown_strikethrough = 1
+
+
+function! s:goyo_enter()
+  set wrap
+  set linebreak
+  " set noshowmode
+  " set noshowcmd
+  set scrolloff=999
+  set filetype=markdown
+endfunction
+
+function! s:goyo_leave()
+  set nowrap
+  set nolinebreak
+  set showmode
+  set showcmd
+  set scrolloff=0
+  autocmd! BufRead
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+let g:floaterm_width = float2nr(&columns * 0.7)
+let g:floaterm_height = float2nr((&lines - 2) * 0.6)
+let g:floaterm_position = 'center'
+
+noremap  <silent> <F12>           :FloatermToggle<CR>
+noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>
+tnoremap <silent> <F12>           <C-\><C-n>:FloatermToggle<CR>
+
+highlight VertSplit guibg=NONE
+
+
+let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o -path '_build' -prune -o -path 'deps' -prune -o -path 'tags' -prune -o  -type f -print -o -type l -print 2> /dev/null"
+let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1 --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse  --margin=1,4'
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+
+  let height = float2nr(10)
+  let width = float2nr(80)
+  let horizontal = float2nr((&columns - width) / 2)
+  let vertical = 1
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': vertical,
+        \ 'col': horizontal,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
+endfunction
+
+" nnoremap <silent> <leader>t :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
+
+nnoremap <silent> <leader>t :Clap files<CR>
+
+" set timeoutlen=100
+
+let g:spotify_token=$VIMIFY_SPOTIFY_TOKEN
+
+let g:vista_fzf_preview = ['right:50%']
+
