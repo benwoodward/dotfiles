@@ -27,7 +27,6 @@ Plug 'mhinz/vim-signify'
 Plug 'git@github.com:elzr/vim-json.git' " JSON highlighter
 Plug 'git@github.com:bronson/vim-trailing-whitespace.git' " Hightligts trailing whitespace characters in red
 Plug 'git@github.com:scrooloose/nerdtree.git' " File browser in sidebar
-Plug 'git@github.com:scrooloose/nerdcommenter.git' " Toggle comments
 Plug 'git@github.com:tpope/vim-fugitive.git' " Github commands
 Plug 'git@github.com:tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
 Plug 'git@github.com:terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
@@ -65,6 +64,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'haya14busa/incsearch.vim'
+Plug 'tpope/vim-commentary'
 
 
 
