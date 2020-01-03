@@ -1,5 +1,4 @@
 " TODO:
-" - Comment, and group all Plugins with configs and by type
 " - Group settings/configs, functions, mappings etc.
 " - Divide sections with " ================ Section: Name ===========================
 
@@ -14,67 +13,203 @@ unlet autoload_plug_path
 
 call plug#begin()
 
+""
+"" Section: Editing
+""
+
 " Switches between a single-line statement and a multi-line one
 Plug 'git@github.com:AndrewRadev/splitjoin.vim.git'
+  nmap <Leader>sj :SplitjoinSplit<cr>
+  nmap <Leader>sk :SplitjoinJoin<cr>
 
 " Emmet for Vim, make HTML without going mad
 Plug 'git@github.com:mattn/emmet-vim.git', { 'for': ['html', 'vue', 'javascript', 'css', 'svelte'] }
+  xmap ga <Plug>(EasyAlign)
+  nmap ga <Plug>(EasyAlign)
 
-Plug 'git@github.com:tpope/vim-rails.git', { 'for': ['rb'] } " Rails shortcuts
-Plug 'git@github.com:junegunn/vim-easy-align.git' " Alignment plugin with smart key bindings
+" Alignment plugin with smart key bindings
+Plug 'git@github.com:junegunn/vim-easy-align.git'
+  " Key bindings:
+  " ga
+  "
+  " vipga=
+  "   - visual-select inner paragraph
+  "   - Start EasyAlign command (ga)
+  "   - Align around =
+  "
+  " gaip=
+  "   - Start EasyAlign command (ga) for inner paragraph
+  "   - Align around =
+
+
+
+""
+"" Section: Syntax Tools
+""
+
+Plug 'sheerun/vim-polyglot' " Syntax highlighting for multiple languages.
+  " TODO: See whether I can remove other syntax plugins using this
+
+Plug 'git@github.com:vim-ruby/vim-ruby.git', { 'for': ['rb']} " Ruby syntax highlighting
+Plug 'othree/yajs.vim'           " Most up to date JS highlighter, works well with React
+Plug 'othree/html5.vim'          " html5 syntax highlighting
+Plug 'maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
+Plug 'maksimr/vim-jsbeautify'
+Plug 'mhartington/oceanic-next'  " Best dark colorscheme
+Plug 'elixir-editors/vim-elixir' " Elixir syntax highlighting
+Plug 'sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
+Plug 'evanleck/vim-svelte'       " Svelte highlighting
+Plug 'mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
+Plug 'plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
+
+" Intellisense for Neovim
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+  let g:coc_global_extensions = [
+        \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
+        \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
+        \ 'coc-css', 'coc-json', 'coc-pyls', 'coc-yaml',
+        \ 'coc-snippets', 'coc-elixir'
+        \ ]
+  let g:coc_snippet_next = '<C-n>' " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+  let g:coc_snippet_prev = '<C-p>' " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+  " Use <C-j> and <C-k> to navigate the completion list
+  inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+  inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+  " Coc only does snippet and additional edit on confirm.
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  set cmdheight=2 " Better display for messages
+  set updatetime=300 " Smaller updatetime for CursorHold & CursorHoldI
+  set shortmess+=c " don't give |ins-completion-menu| messages.
+  set signcolumn=yes " always show signcolumns
+  " Use `lp` and `ln` for navigate diagnostics
+  nmap <silent> <leader>dp <Plug>(coc-diagnostic-prev)
+  nmap <silent> <leader>dn <Plug>(coc-diagnostic-next)
+  " Remap keys for gotos
+  nmap <silent> <leader>ld <Plug>(coc-definition)
+  nmap <silent> <leader>lt <Plug>(coc-type-definition)
+  nmap <silent> <leader>li <Plug>(coc-implementation)
+  nmap <silent> <leader>lf <Plug>(coc-references)
+  " Use K for show documentation in preview window
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+  function! s:show_documentation()
+    if &filetype == 'vim'
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
+
+  " Fix current line
+  nmap <Leader>qf <Plug>(coc-fix-current)
+  vmap <leader>fs <Plug>(coc-format-selected)
+  nmap <leader>fs <Plug>(coc-format-selected)
+  nmap <Leader>rn <Plug>(coc-rename)
+  nmap <Leader>gd <Plug>(coc-definition)
+  " Auto-scroll floating window
+  nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
+  nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
+
 Plug 'git@github.com:stephpy/vim-yaml.git', { 'for': ['yaml.yml'] } " YAML hightlighting
-Plug 'git@github.com:ctrlpvim/ctrlp.vim.git' " Fuzzy search files, ctags and more
-Plug 'mhinz/vim-signify' " Alternative to git-gutter, shortcuts: [c, ]c, [C, ]C
-Plug 'git@github.com:elzr/vim-json.git' " JSON highlighter
-Plug 'git@github.com:bronson/vim-trailing-whitespace.git' " Hightligts trailing whitespace characters in red
-Plug 'git@github.com:scrooloose/nerdtree.git' " File browser in sidebar
-Plug 'git@github.com:tpope/vim-fugitive.git' " Github commands
+Plug 'git@github.com:elzr/vim-json.git', { 'for': ['json']}         " JSON highlighter
+Plug 'git@github.com:bronson/vim-trailing-whitespace.git'           " Highlights trailing whitespace characters in red
+
+
+
+""
+"" Section: Interface enhancements
+""
+Plug 'farmergreg/vim-lastplace' " Open file at last place edited
+
+" Alternative to git-gutter, display git status for modified lines in gutter
+Plug 'mhinz/vim-signify'
+  " `+`     This line was added.
+  " `!`     This line was modified.
+  " `_1`    The number of deleted lines below this sign. If the number is larger
+  " `99`    than 9, the `_` will be omitted. For numbers larger than 99, `_>`
+  " `_>`    will be shown instead.
+  " `!1`    This line was modified and the lines below were deleted.
+  " `!>`    It is a combination of `!` and `_`. If the number is larger than 9,
+  "       `!>` will be shown instead.
+  " `‾`     The first line was removed. It's a special case of the `_` sign.
+  "
+  " Key bindings:
+  " ]c   Jump to the next hunk.
+  " [c   Jump to the previous hunk.
+
+  " ]C   Jump to the last hunk.
+  " [C   Jump to the first hunk.
+
+" File browser in sidebar
+Plug 'git@github.com:scrooloose/nerdtree.git'
+  let g:NERDSpaceDelims = 1 " TODO: This does what?
+  let nerdtreeshowlinenumbers=1 " TODO: This does what?
+  let g:NERDTreeWinPos = "right"
+  " Locate current file in Nerdtree
+  map <leader>nf :NERDTreeFind<CR>
+  map <leader>n :NERDTreeToggle<CR> :NERDTreeMirror<CR>
+  augroup AuNERDTreeCmd " TODO: This does what?
+  let NERDTreeHijackNetrw=0
+  let NERDTreeHighlightCursorline = 1
+  let NERDTreeShowHidden = 1
+  let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '\.beam']
+  let NERDShutUp = 1 " so it doesn't complain about types it doesn't know
+  let NERDTreeQuitOnOpen=0 " quit NERDTree after opening a file
+  let NERDChristmasTree = 1 " colored NERD Tree
+  let NERDTreeMapActivateNode='<CR>' " map enter to activating a node
+
+Plug 'git@github.com:henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
+
+" Terminal in floating window
+Plug 'voldikss/vim-floaterm'
+  " Key bindings:
+  " fn F12
+
+  " Plug '/usr/local/opt/fzf'
+  " Plug 'junegunn/fzf.vim'
+
+" Auto-hides search highlights when not needed
+Plug 'haya14busa/incsearch.vim'
+  let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
+  let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
+  let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
+  map /  <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+  map n  <Plug>(incsearch-nohl-n)
+  map N  <Plug>(incsearch-nohl-N)
+  map *  <Plug>(incsearch-nohl-*)
+  map #  <Plug>(incsearch-nohl-#)
+  map g* <Plug>(incsearch-nohl-g*)
+  map g# <Plug>(incsearch-nohl-g#)
+
+
+" Plug 'mattn/webapi-vim' " TODO: Do I need this?
+Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
+Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
+Plug 'voldikss/vim-searchme' " Search under cursor with options
+Plug 'prabirshrestha/async.vim' " TODO: Do I need this?
+Plug 'HendrikPetertje/vimify'
+Plug 'tpope/vim-commentary'
+
+""
+"" Section: Navigation
+""
+Plug 'psliwka/vim-smoothie' " Smooth scrolling for vim
 Plug 'git@github.com:tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
 Plug 'git@github.com:terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
 Plug 'git@github.com:ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
-Plug 'git@github.com:keith/swift.vim.git' " Swift syntax highlighting
-Plug 'git@github.com:vim-ruby/vim-ruby.git' " Ruby syntax highlighting
-Plug 'git@github.com:henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
-Plug 'mattn/webapi-vim'
-Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
-Plug 'gfontenot/vim-xcode' " Create and build XCode projects without using the dreaded XCode
-Plug 'mileszs/ack.vim' " Search files, configured to work with ripgrep
-" Plug 'jerrymarino/SwiftPlayground.vim' " Disabled because it's broken / don't use it
-Plug 'git@github.com:benwoodward/SwiftPlayground.vim.git', { 'branch': 'regex-fix'}
-Plug 'othree/yajs.vim' " Most up to date JS highlighter, works well with React
-Plug 'mhartington/oceanic-next' " Best dark colorscheme
-Plug 'othree/html5.vim' " html5 syntax highlighting
-Plug 'maxmellon/vim-jsx-pretty' " Jsx syntax highlighting
-Plug 'elixir-editors/vim-elixir' " Elixir syntax highlighting
-Plug 'farmergreg/vim-lastplace' " Open file at last place edited
-Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
-Plug 'voldikss/vim-searchme' " Search under cursor with options
-Plug 'git://github.com/tommcdo/vim-lion.git'
-Plug 'maksimr/vim-jsbeautify'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'posva/vim-vue'
-Plug 'sbdchd/neoformat'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-Plug 'floobits/floobits-neovim'
-Plug '~/Dev/GitHub/CoVim-Neovim', {'branch': 'neovim'}
-Plug 'honza/vim-snippets'
-Plug 'mhinz/vim-mix-format'
-Plug 'liuchengxu/vista.vim'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'haya14busa/incsearch.vim'
-Plug 'plasticboy/vim-markdown'
-Plug 'godlygeek/tabular'
-Plug 'voldikss/vim-floaterm'
-Plug 'HendrikPetertje/vimify'
-Plug 'psliwka/vim-smoothie'
-Plug 'evanleck/vim-svelte'
-Plug 'tpope/vim-commentary'
-Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
-Plug 'sheerun/vim-polyglot'
 
+" Fuzzy search files, ctags and more
+Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
+  " TODO: Remove ctrlp when I get ctags working with vim-clap
+
+" Multi-protocol fuzzy finder
+Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
+  noremap <leader>F :Clap grep<CR>
+  noremap <leader>ff :Clap grep ++query=<cword><CR>
+  nnoremap <silent> <leader>t :Clap files<CR>
 
 
 " Add plugins to &runtimepath
@@ -291,107 +426,6 @@ nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
 
-""
-"" Section: Coc.nvim
-""
-let g:coc_global_extensions = [
-      \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
-      \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
-      \ 'coc-css', 'coc-json', 'coc-pyls', 'coc-yaml',
-      \ 'coc-snippets', 'coc-elixir'
-      \ ]
-
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<C-n>'
-
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<C-p>'
-
-" Use <C-j> and <C-k> to navigate the completion list
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-
-
-" Better display for messages
-set cmdheight=2
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
-" always show signcolumns
-set signcolumn=yes
-
-" Use `lp` and `ln` for navigate diagnostics
-nmap <silent> <leader>dp <Plug>(coc-diagnostic-prev)
-nmap <silent> <leader>dn <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
-nmap <silent> <leader>ld <Plug>(coc-definition)
-nmap <silent> <leader>lt <Plug>(coc-type-definition)
-nmap <silent> <leader>li <Plug>(coc-implementation)
-nmap <silent> <leader>lf <Plug>(coc-references)
-
-" Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Fix current line
-nmap <Leader>qf <Plug>(coc-fix-current)
-vmap <leader>fs <Plug>(coc-format-selected)
-nmap <leader>fs <Plug>(coc-format-selected)
-nmap <Leader>rn <Plug>(coc-rename)
-nmap <Leader>gd <Plug>(coc-definition)
-
-" Auto-scroll floating window
-nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
-nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
-
-" Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-
-
-
-""
-"" Section: Nerdtree
-""
-let g:NERDSpaceDelims = 1 " TODO: This does what?
-let nerdtreeshowlinenumbers=1 " TODO: This does what?
-let g:NERDTreeWinPos = "right"
-
-" Locate current file in Nerdtree
-map <leader>nf :NERDTreeFind<cr>
-map <leader>n :NERDTreeToggle<CR> :NERDTreeMirror<CR>
-augroup AuNERDTreeCmd " TODO: This does what?
-
-let NERDTreeHijackNetrw=0
-let NERDTreeHighlightCursorline = 1
-let NERDTreeShowHidden = 1
-let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '\.beam']
-
-" so it doesn't complain about types it doesn't know
-let NERDShutUp = 1
-
-" quit NERDTree after opening a file
-let NERDTreeQuitOnOpen=0
-
-" colored NERD Tree
-let NERDChristmasTree = 1
-
-" map enter to activating a node
-let NERDTreeMapActivateNode='<CR>'
-
 
 " Toggle between current and previous file
 nmap <Tab> :call LoadPreviousFile()<CR>
@@ -420,9 +454,6 @@ noremap <Leader>ss :<C-u>SearchCurrentText<CR>
 " Search selected text in default browser
 vnoremap <Leader>sv :<C-u>SearchVisualText<CR>
 
-let g:xcode_runner_command = 'VtrSendCommandToRunner! {cmd}'
-
-
 ""
 "" CtrlP
 ""
@@ -448,76 +479,8 @@ if executable('rg')
   let g:ctrlp_use_caching = 0
 endif
 
-""
-"" Section: Ack
-"" TODO: How do Ack, Ag, rg, CtrlP work together?
-""       Do I need Ack?
-" let g:ackprg = 'ag --nogroup --nocolor --column' " Use ag with Ack
-let g:ackprg = 'rg --vimgrep --no-heading --smart-case --ignore-file $HOME/.gitignore' " Use rg with Ack
-" map <leader>f :Ack<space>
-
-noremap F :Clap grep<CR>
-noremap ff :Clap grep ++query=<cword><CR>
-
-
-
-
-" TODO: Why has this stopped working?
-" Shift+Space - duplicate selected lines
-map <S-Space> y'>p
-vmap <S-Space> y'>p
-
-" Backspace / Delete tweaks:
-" delete whole words with Alt+Backspace
-" TODO: Why does this no longer work in Neovim?
-nmap <A-BS> ciw
-
-" delete to end of word with Alt+Delete
-imap <A-Del> <C-[>lce
-nmap <A-Del> ce
-
-" always enter insert after deletion
-nmap <BS> a<BS>;
-nmap <Del> i<Del>
-vmap <BS> <BS>i
-vmap <Del> <Del>i
-smap <BS> <BS>i
-smap <Del> <Del>i
-
-" Tweak cursor movement during Alt / Shift
-nmap <A-Right> w
-nmap <A-Left> b
-imap <S-M-Right> <C-[>lve<C-g>
-imap <S-M-Left> <C-[>hvb<C-g>
-nmap <S-M-Right> ve<C-g>
-nmap <S-M-Left> vb<C-g>
-vmap <S-M-Right> e
-vmap <S-M-Left> b
-smap <S-M-Right> <C-O>e
-smap <S-M-Left> <C-O>b
-
-set splitbelow
-set splitright
-
-" ;. - new file in vertical split
-imap <Leader>. <Esc>:new<CR><D-t>
-map <Leader>. <Esc>:new<CR><D-t>
-
-
-" ;h - same as above, but horizontal
-imap <Leader>h <Esc>:new<CR><D-t>
-map <Leader>h <Esc>:new<CR><D-t>
-
-" ;; - activate surround.vim plugin for current line or selection
-nmap <Leader><Leader> ^vg_S
-smap <Leader><Leader> <C-g>S
-vmap <Leader><Leader> S
-
-" remove trailing whitespace (don't use on binary files!!)
+" Remove trailing whitespace
 map <leader>fws :FixWhitespace<CR>
-
-" insert hashrocket, =>, with control-l
-imap <C-l> <Space>=><Space>
 
 ""
 "" Section: Filetypes
@@ -538,10 +501,6 @@ autocmd BufRead,BufNewFile *.jsx set filetype=javascript|set tabstop=2|set shift
 autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
 autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
 autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
-
-
-nmap <Leader>sj :SplitjoinSplit<cr>
-nmap <Leader>sk :SplitjoinJoin<cr>
 
 let g:session_autoload="no"
 let g:session_autosave="no"
@@ -575,23 +534,10 @@ set undofile
 set undolevels=1000
 set undoreload=10000
 
-" https://github.com/nathanaelkane/vim-indent-guides
-set ts=2 sw=2 et
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
-
 set smartcase
 
 " Set cursor to underscore in normal mode
 set guicursor+=n:hor20-Cursor/lCursor
-
-runtime macros/matchit.vim
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
 
 " upper/lower word
 nmap <leader>u mQviwU`Q
@@ -657,49 +603,18 @@ augroup END
 vmap <C-x> :!pbcopy<CR>
 vmap <C-c> :w !pbcopy<CR><CR>
 
-" map <c-f> :call JsBeautify()<cr>
-" " or
-" autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
-" " for json
-" autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
-" " for jsx
-" autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
-" " for html
-" autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
-" " for css or scss
-" autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
-
-
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Turn off auto-indendation before pasting
 set pastetoggle=<F3>
-
-map <leader>o :!open % -a "Xcode-beta"<enter>
 
 let g:mix_format_on_save = 1
 
 map Q :q<CR>
 map W :w<CR>
 
-" if executable('sourcekit-lsp')
-    " au User lsp_setup call lsp#register_server({
-        " \ 'name': 'sourcekit-lsp',
-        " \ 'cmd': {server_info->['sourcekit-lsp']},
-        " \ 'whitelist': ['swift'],
-        " \ })
-" else
-  " echohl ErrorMsg
-  " echom 'Sorry, `sourcekit-lsp` is not installed. See `:help vim-lsp-swift` for more details on setup.'
-  " echohl NONE
-" endif
-
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/vim-lsp.log')
-
 " for asyncomplete.vim log
 let g:asyncomplete_log_file = expand('~/asyncomplete.log')
-
 
 " when pairing some braces or quotes, put cursor between them
 inoremap <>   <><Left>
@@ -710,24 +625,7 @@ inoremap ""   ""<Left>
 inoremap ''   ''<Left>
 inoremap ``   ``<Left>
 
-
-" Incsearch {{{
-let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
-let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
-let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
-
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-" :h g:incsearch#auto_nohlsearch
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
-
-
+" TODO: Is this still needed?
 " Fzf {{{
   " use bottom positioned 20% height bottom split
   let g:fzf_layout = { 'down': '~20%' }
@@ -759,36 +657,6 @@ map g# <Plug>(incsearch-nohl-g#)
     nnoremap <C-g> :Rg<Cr>
   endif
 
-" disable header folding
-let g:vim_markdown_folding_disabled = 1
-
-" do not use conceal feature, the implementation is not so good
-let g:vim_markdown_conceal = 0
-
-let g:vim_markdown_strikethrough = 1
-
-
-function! s:goyo_enter()
-  set wrap
-  set linebreak
-  " set noshowmode
-  " set noshowcmd
-  set scrolloff=999
-  set filetype=markdown
-endfunction
-
-function! s:goyo_leave()
-  set nowrap
-  set nolinebreak
-  set showmode
-  set showcmd
-  set scrolloff=0
-  autocmd! BufRead
-endfunction
-
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
 let g:floaterm_width = float2nr(&columns * 0.7)
 let g:floaterm_height = float2nr((&lines - 2) * 0.6)
 let g:floaterm_position = 'center'
@@ -799,39 +667,6 @@ tnoremap <silent> <F12>           <C-\><C-n>:FloatermToggle<CR>
 
 highlight VertSplit guibg=NONE
 
-
-let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o -path '_build' -prune -o -path 'deps' -prune -o -path 'tags' -prune -o  -type f -print -o -type l -print 2> /dev/null"
-let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1 --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse  --margin=1,4'
-let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-
-function! FloatingFZF()
-  let buf = nvim_create_buf(v:false, v:true)
-  call setbufvar(buf, '&signcolumn', 'no')
-
-  let height = float2nr(10)
-  let width = float2nr(80)
-  let horizontal = float2nr((&columns - width) / 2)
-  let vertical = 1
-
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': vertical,
-        \ 'col': horizontal,
-        \ 'width': width,
-        \ 'height': height,
-        \ 'style': 'minimal'
-        \ }
-
-  call nvim_open_win(buf, v:true, opts)
-endfunction
-
-" nnoremap <silent> <leader>t :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
-
-nnoremap <silent> <leader>t :Clap files<CR>
-
-" set timeoutlen=100
-
 let g:spotify_token=$VIMIFY_SPOTIFY_TOKEN
 
-let g:vista_fzf_preview = ['right:50%']
 
