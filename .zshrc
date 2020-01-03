@@ -52,7 +52,7 @@ else
 fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
-alias nv="nvim"
+alias n="nvim"
 alias nn="nvim ."
 alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"

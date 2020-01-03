@@ -18,17 +18,17 @@ call plug#begin()
 ""
 
 " Switches between a single-line statement and a multi-line one
-Plug 'git@github.com:AndrewRadev/splitjoin.vim.git'
+Plug 'https://github.com/AndrewRadev/splitjoin.vim.git'
   nmap <Leader>sj :SplitjoinSplit<cr>
   nmap <Leader>sk :SplitjoinJoin<cr>
 
 " Emmet for Vim, make HTML without going mad
-Plug 'git@github.com:mattn/emmet-vim.git', { 'for': ['html', 'vue', 'javascript', 'css', 'svelte'] }
+Plug 'https://github.com/mattn/emmet-vim.git', { 'for': ['html', 'vue', 'javascript', 'css', 'svelte'] }
   xmap ga <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
 
 " Alignment plugin with smart key bindings
-Plug 'git@github.com:junegunn/vim-easy-align.git'
+Plug 'https://github.com/junegunn/vim-easy-align.git'
   " Key bindings:
   " ga
   "
@@ -47,23 +47,23 @@ Plug 'git@github.com:junegunn/vim-easy-align.git'
 "" Section: Syntax Tools
 ""
 
-Plug 'sheerun/vim-polyglot' " Syntax highlighting for multiple languages.
+Plug 'https://github.com/sheerun/vim-polyglot' " Syntax highlighting for multiple languages.
   " TODO: See whether I can remove other syntax plugins using this
 
-Plug 'git@github.com:vim-ruby/vim-ruby.git', { 'for': ['rb']} " Ruby syntax highlighting
-Plug 'othree/yajs.vim'           " Most up to date JS highlighter, works well with React
-Plug 'othree/html5.vim'          " html5 syntax highlighting
-Plug 'maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
-Plug 'maksimr/vim-jsbeautify'
-Plug 'mhartington/oceanic-next'  " Best dark colorscheme
-Plug 'elixir-editors/vim-elixir' " Elixir syntax highlighting
-Plug 'sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
-Plug 'evanleck/vim-svelte'       " Svelte highlighting
-Plug 'mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
-Plug 'plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
+Plug 'https://github.com/vim-ruby/vim-ruby.git', { 'for': ['rb']} " Ruby syntax highlighting
+Plug 'https://github.com/othree/yajs.vim'           " Most up to date JS highlighter, works well with React
+Plug 'https://github.com/othree/html5.vim'          " html5 syntax highlighting
+Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
+Plug 'https://github.com/maksimr/vim-jsbeautify'
+Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
+Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
+Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
+Plug 'https://github.com/evanleck/vim-svelte'       " Svelte highlighting
+Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
+Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
 
 " Intellisense for Neovim
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'https://github.com/neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
   let g:coc_global_extensions = [
         \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
         \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
@@ -111,19 +111,20 @@ Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
   nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
   nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
 
-Plug 'git@github.com:stephpy/vim-yaml.git', { 'for': ['yaml.yml'] } " YAML hightlighting
-Plug 'git@github.com:elzr/vim-json.git', { 'for': ['json']}         " JSON highlighter
-Plug 'git@github.com:bronson/vim-trailing-whitespace.git'           " Highlights trailing whitespace characters in red
+Plug 'https://github.com/stephpy/vim-yaml.git', { 'for': ['yaml.yml'] } " YAML hightlighting
+Plug 'https://github.com/elzr/vim-json.git', { 'for': ['json']}         " JSON highlighter
+Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highlights trailing whitespace characters in red
 
 
 
 ""
 "" Section: Interface enhancements
 ""
-Plug 'farmergreg/vim-lastplace' " Open file at last place edited
+Plug 'https://github.com/tyru/open-browser.vim'
+Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
 
 " Alternative to git-gutter, display git status for modified lines in gutter
-Plug 'mhinz/vim-signify'
+Plug 'https://github.com/mhinz/vim-signify'
   " `+`     This line was added.
   " `!`     This line was modified.
   " `_1`    The number of deleted lines below this sign. If the number is larger
@@ -142,7 +143,7 @@ Plug 'mhinz/vim-signify'
   " [C   Jump to the first hunk.
 
 " File browser in sidebar
-Plug 'git@github.com:scrooloose/nerdtree.git'
+Plug 'https://github.com/scrooloose/nerdtree.git'
   let g:NERDSpaceDelims = 1 " TODO: This does what?
   let nerdtreeshowlinenumbers=1 " TODO: This does what?
   let g:NERDTreeWinPos = "right"
@@ -159,10 +160,10 @@ Plug 'git@github.com:scrooloose/nerdtree.git'
   let NERDChristmasTree = 1 " colored NERD Tree
   let NERDTreeMapActivateNode='<CR>' " map enter to activating a node
 
-Plug 'git@github.com:henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
+Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
 
 " Terminal in floating window
-Plug 'voldikss/vim-floaterm'
+Plug 'https://github.com/voldikss/vim-floaterm'
   " Key bindings:
   " fn F12
 
@@ -170,7 +171,7 @@ Plug 'voldikss/vim-floaterm'
   " Plug 'junegunn/fzf.vim'
 
 " Auto-hides search highlights when not needed
-Plug 'haya14busa/incsearch.vim'
+Plug 'https://github.com/haya14busa/incsearch.vim'
   let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
   let g:incsearch#do_not_save_error_message_history = 1 " do not store incsearch errors in history
   let g:incsearch#consistent_n_direction            = 1 " when searching backward, do not invert meaning of n and N
@@ -187,26 +188,26 @@ Plug 'haya14busa/incsearch.vim'
 
 " Plug 'mattn/webapi-vim' " TODO: Do I need this?
 Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
-Plug 'ruanyl/vim-gh-line' " Open current file at current line on Github
-Plug 'voldikss/vim-searchme' " Search under cursor with options
-Plug 'prabirshrestha/async.vim' " TODO: Do I need this?
-Plug 'HendrikPetertje/vimify'
-Plug 'tpope/vim-commentary'
+Plug 'https://github.com/ruanyl/vim-gh-line' " Open current file at current line on Github
+Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with options
+Plug 'https://github.com/prabirshrestha/async.vim' " TODO: Do I need this?
+Plug 'https://github.com/HendrikPetertje/vimify'
+Plug 'https://github.com/tpope/vim-commentary'
 
 ""
 "" Section: Navigation
 ""
-Plug 'psliwka/vim-smoothie' " Smooth scrolling for vim
-Plug 'git@github.com:tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
-Plug 'git@github.com:terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
-Plug 'git@github.com:ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
+Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
+Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
+Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
+Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
 
 " Fuzzy search files, ctags and more
-Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
+Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
   " TODO: Remove ctrlp when I get ctags working with vim-clap
 
 " Multi-protocol fuzzy finder
-Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
+Plug 'https://github.com/liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
   noremap <leader>F :Clap grep<CR>
   noremap <leader>ff :Clap grep ++query=<cword><CR>
   nnoremap <silent> <leader>t :Clap files<CR>
@@ -448,11 +449,8 @@ map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 " vim-search-me
 " https://github.com/voldikss/vim-search-me
 "
-" Search word under cursor in default browser
-noremap <Leader>ss :<C-u>SearchCurrentText<CR>
-
-" Search selected text in default browser
-vnoremap <Leader>sv :<C-u>SearchVisualText<CR>
+nmap <silent> <Leader>s <Plug>SearchNormal
+vmap <silent> <Leader>s <Plug>SearchVisual
 
 ""
 "" CtrlP
