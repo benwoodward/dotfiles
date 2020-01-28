@@ -1,3 +1,6 @@
 [submodule "dotbot"]
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
+[submodule ".config/bat/syntaxes/svelte-sublime"]
+	path = .config/bat/syntaxes/svelte-sublime
+	url = git@github.com:corneliusio/svelte-sublime.git
