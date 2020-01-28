@@ -16,3 +16,4 @@ config/master.key
 node_modules
 .elixir_ls
 .gutctags
+.vimify.log

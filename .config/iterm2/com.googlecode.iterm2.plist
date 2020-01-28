@@ -778,13 +778,13 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>290 116 700 622 0 0 1280 777 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>622 361 796 486 0 0 1920 1057 </string>
+	<string>268 167 937 514 0 0 1280 777 </string>
 	<key>NSWindow Frame UKCrashReporter</key>
 	<string>80 193 592 584 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
 	<string>0 0 1280 777 0 0 1280 777 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>133 109 730 642 0 0 1280 777 </string>
+	<string>133 209 650 542 0 0 1280 777 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1403,7 +1403,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>Hack-Regular 15</string>
+			<string>HackNerdFontComplete-Regular 14</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1484,20 +1484,38 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
-		<string>3.3.20190616-nightly</string>
-		<string>3.3.20190929-nightly</string>
-		<string>3.3.20190822-nightly</string>
-		<string>3.3.20191004-nightly</string>
-		<string>3.3.20190529-nightly</string>
-		<string>3.3.20190920-nightly</string>
-		<string>3.3.20190626-nightly</string>
-		<string>3.2.8</string>
-		<string>3.3.20191101-nightly</string>
 		<string>3.3.20191023-nightly</string>
+		<string>3.3.20190929-nightly</string>
+		<string>3.3.20190626-nightly</string>
+		<string>3.3.20190616-nightly</string>
+		<string>3.3.20191120-nightly</string>
+		<string>3.3.20190822-nightly</string>
 		<string>3.3.20191111-nightly</string>
-		<string>3.3.20190930-nightly</string>
+		<string>3.3.20191121-nightly</string>
+		<string>3.3.20191113-nightly</string>
+		<string>3.3.20191224-nightly</string>
+		<string>3.3.20191114-nightly</string>
+		<string>3.3.20191004-nightly</string>
 		<string>3.3.20191015-nightly</string>
+		<string>3.3.20191115-nightly</string>
+		<string>3.3.20190930-nightly</string>
+		<string>3.3.20190920-nightly</string>
+		<string>3.2.8</string>
 		<string>3.3.20190829-nightly</string>
+		<string>3.3.20191118-nightly</string>
+		<string>3.3.20191127-nightly</string>
+		<string>3.3.20191220-nightly</string>
+		<string>3.3.20191101-nightly</string>
+		<string>3.3.20191226-nightly</string>
+		<string>3.3.20191202-nightly</string>
+		<string>3.3.20200112-nightly</string>
+		<string>3.3.20190529-nightly</string>
+		<string>3.3.20191214-nightly</string>
+		<string>3.3.20191215-nightly</string>
+	</array>
+	<key>NoSyncBFPRecents</key>
+	<array>
+		<string>Hack Nerd Font</string>
 	</array>
 	<key>NoSyncDoNotWarnBeforeMultilinePaste</key>
 	<true/>
@@ -1513,7 +1531,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>FA15FB41-83F0-4892-98C8-877743971BFE</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>156</integer>
+	<integer>189</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2230,27 +2248,6 @@
 			</dict>
 		</array>
 	</dict>
-	<key>NoSyncSearchHistory</key>
-	<array>
-		<string>markup</string>
-		<string>=====</string>
-		<string>react</string>
-		<string>&lt;templa</string>
-		<string>skipping</string>
-		<string>postgresadapter</string>
-		<string>ps -x</string>
-		<string>pos -x</string>
-		<string>.app</string>
-		<string>sudo apt install -y postgresql postgresql-contrib</string>
-	</array>
-	<key>NoSyncSearchHistory2</key>
-	<array>
-		<string>nextPageToken</string>
-		<string>do_parse</string>
-		<string>convert</string>
-		<string>sort</string>
-		<string>HelloW</string>
-	</array>
 	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
 	<real>496735375.29746997</real>
 	<key>NumberOfLinesForAccessibility</key>
@@ -2309,7 +2306,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-11-11T09:16:41Z</date>
+	<date>2020-01-28T18:01:17Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
@@ -2351,7 +2348,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.3.20191111-nightly</string>
+	<string>3.3.20200112-nightly</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>1</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

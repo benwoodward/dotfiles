@@ -1,6 +1,6 @@
 " TODO:
 " - Group settings/configs, functions, mappings etc.
-" - Divide sections with " ================ Section: Name ===========================
+"   - Modularise into files
 
 " Bootstrap Plug
 let autoload_plug_path = stdpath('data') . '/site/autoload/plug.vim'
@@ -61,6 +61,10 @@ Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. 
 Plug 'https://github.com/evanleck/vim-svelte'       " Svelte highlighting
 Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
 Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
+  let g:vim_markdown_folding_disabled = 1
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+
 
 " Intellisense for Neovim
 Plug 'https://github.com/neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -122,6 +126,15 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 Plug 'https://github.com/tyru/open-browser.vim'
 Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
+Plug 'rhysd/git-messenger.vim' " Show git blame for current line in floating window 
+  " <Leader>gm
+  " q	Close the popup window
+  " o	older. Back to older commit at the line
+  " O	Opposite to o. Forward to newer commit at the line
+  " d	Toggle diff hunks only related to current file in the commit
+  " D	Toggle all diff hunks in the commit
+  " ?	Show mappings help
+
 
 " Alternative to git-gutter, display git status for modified lines in gutter
 Plug 'https://github.com/mhinz/vim-signify'
@@ -191,8 +204,29 @@ Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
 Plug 'https://github.com/ruanyl/vim-gh-line' " Open current file at current line on Github
 Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with options
 Plug 'https://github.com/prabirshrestha/async.vim' " TODO: Do I need this?
-Plug 'https://github.com/HendrikPetertje/vimify'
+" Plug 'https://github.com/HendrikPetertje/vimify'
+" Plug 'https://github.com/benwoodward/vimify', { 'branch': 'playlists' }
+Plug '~/dev/oss/Forks/vim-plugins/vimify'
+  noremap <leader>sp :SpPlaylists<CR>
+
 Plug 'https://github.com/tpope/vim-commentary'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'                                " fuzzy search integration
+Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
+
+  "" FZF
+
+  " general
+  let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+  let $FZF_DEFAULT_OPTS="--reverse " " top to bottom
+
+  " use rg by default
+  if executable('rg')
+    let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+    set grepprg=rg\ --vimgrep
+    command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+  endif
 
 ""
 "" Section: Navigation
@@ -486,6 +520,7 @@ map <leader>fws :FixWhitespace<CR>
 ""
 
 au BufNewFile,BufRead *.es6 set filetype=javascript
+au BufNewFile,BufRead *.svelte set filetype=html
 au BufNewFile,BufRead *.slim set filetype=slim
 au BufNewFile,BufRead *.tsv,*.psv setf csv
 au BufRead,BufNewFile Gemfile* set filetype=ruby
@@ -667,4 +702,66 @@ highlight VertSplit guibg=NONE
 
 let g:spotify_token=$VIMIFY_SPOTIFY_TOKEN
 
+set foldlevelstart=99
+set nofoldenable
+
+" floating fzf window with borders
+function! CreateCenteredFloatingWindow()
+    let width = min([&columns - 4, max([80, &columns - 20])])
+    let height = min([&lines - 4, max([20, &lines - 10])])
+    let top = ((&lines - height) / 2) - 1
+    let left = (&columns - width) / 2
+    let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
+
+    let top = "╭" . repeat("─", width - 2) . "╮"
+    let mid = "│" . repeat(" ", width - 2) . "│"
+    let bot = "╰" . repeat("─", width - 2) . "╯"
+    let lines = [top] + repeat([mid], height - 2) + [bot]
+    let s:buf = nvim_create_buf(v:false, v:true)
+    call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
+    call nvim_open_win(s:buf, v:true, opts)
+    set winhl=Normal:Floating
+    let opts.row += 1
+    let opts.height -= 2
+    let opts.col += 2
+    let opts.width -= 4
+    call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+    au BufWipeout <buffer> exe 'bw '.s:buf
+endfunction
+
+" Files + devicons + floating fzf
+function! Fzf_dev()
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
+  function! s:files()
+    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
+    return s:prepend_icon(l:files)
+  endfunction
+
+  function! s:prepend_icon(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:filename = fnamemodify(l:candidate, ':p:t')
+      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
+      call add(l:result, printf('%s %s', l:icon, l:candidate))
+    endfor
+
+    return l:result
+  endfunction
+
+  function! s:edit_file(item)
+    let l:pos = stridx(a:item, ' ')
+    let l:file_path = a:item[pos+1:-1]
+    execute 'silent e' l:file_path
+  endfunction
+
+  call fzf#run({
+        \ 'source': <sid>files(),
+        \ 'sink':   function('s:edit_file'),
+        \ 'options': '-m --reverse ' . l:fzf_files_options,
+        \ 'down':    '40%',
+        \ 'window': 'call CreateCenteredFloatingWindow()'})
+
+endfunction
+
+nnoremap <silent> <leader>f :call Fzf_dev()<CR>
 

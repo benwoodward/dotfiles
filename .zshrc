@@ -21,7 +21,7 @@ export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password'
 export REALM_ADMIN_USERNAME=$(security find-generic-password -s 'realm admin username' -w)
 export REALM_ADMIN_PASSWORD=$(security find-generic-password -s 'realm admin password' -w)
 export BENW_DEMO_GMAIL_PASSWORD=$(security find-generic-password -s 'benw.demo password' -w)
-export VIMIFY_SPOTIFY_TOKEN=$(security find-generic-password -s 'benw.demo password' -w)
+export VIMIFY_SPOTIFY_TOKEN=$(security find-generic-password -s 'vimify spotify token' -w)
 export GIST_ID=$(security find-generic-password -s 'things-gist-id' -w)
 export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-token' -w)
 
@@ -54,6 +54,7 @@ fi
 # Personal aliases, overriding those provided by oh-my-zsh libs,
 alias n="nvim"
 alias nn="nvim ."
+alias nnc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
@@ -81,7 +82,6 @@ sort"
 
 alias tag-gems='ctags --recurse . `bundle show --paths`'
 alias ssh='TERM=xterm-256color ssh'
-alias nc='nvim ~/.config/nvim/init.vim'
 
 
 # zplug
@@ -362,3 +362,7 @@ node-project() {
   git commit -m "Initial commit"
 }
 
+
+source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
