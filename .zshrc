@@ -36,9 +36,7 @@ export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-to
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:/Users/$(whoami)/bin
 
-# rbenv initialisation
-# export PATH="$HOME/.rbenv/bin:$PATH"
-# eval "$(rbenv init -)"
+export FZF_DEFAULT_OPTS="--history='$HOME/.fzf_history'"
 
 # https://blog.jez.io/cli-code-review/
 export REVIEW_BASE='master'

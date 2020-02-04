@@ -212,9 +212,6 @@ Plug 'https://github.com/voldikss/vim-floaterm'
   " Key bindings:
   " fn F12
 
-  " Plug '/usr/local/opt/fzf'
-  " Plug 'junegunn/fzf.vim'
-
 " Auto-hides search highlights when not needed
 Plug 'https://github.com/haya14busa/incsearch.vim'
   let g:incsearch#auto_nohlsearch                   = 1 " auto unhighlight after searching
@@ -251,7 +248,7 @@ Plug 'ryanoasis/vim-devicons'                           " pretty icons everywher
   "" FZF
 
   " general
-  let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+  let g:fzf_layout = { 'window': 'call FloatingFZF()' }
   let $FZF_DEFAULT_OPTS="--reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
 
   " use rg by default
@@ -742,28 +739,22 @@ set nofoldenable
 au WinEnter * set nofoldenable
 au WinLeave * set nofoldenable
 
-" floating fzf window with borders
-function! CreateCenteredFloatingWindow()
-    let width = min([&columns - 4, max([80, &columns - 20])])
-    let height = min([&lines - 4, max([20, &lines - 10])])
-    let top = ((&lines - height) / 2) - 1
-    let left = (&columns - width) / 2
-    let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
 
-    let top = "╭" . repeat("─", width - 2) . "╮"
-    let mid = "│" . repeat(" ", width - 2) . "│"
-    let bot = "╰" . repeat("─", width - 2) . "╯"
-    let lines = [top] + repeat([mid], height - 2) + [bot]
-    let s:buf = nvim_create_buf(v:false, v:true)
-    call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
-    call nvim_open_win(s:buf, v:true, opts)
-    set winhl=Normal:Floating
-    let opts.row += 1
-    let opts.height -= 2
-    let opts.col += 2
-    let opts.width -= 4
-    call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-    au BufWipeout <buffer> exe 'bw '.s:buf
+  let height = &lines
+  let width = &columns
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': 0,
+        \ 'col': 0,
+        \ 'width': width,
+        \ 'height': height
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
 endfunction
 
 " Files + devicons + floating fzf
@@ -803,9 +794,9 @@ function! Fzf_dev()
   call fzf#run({
         \ 'source': <sid>files(),
         \ 'sink*':   function('s:edit_file'),
-        \ 'options': '-m --reverse ' . l:fzf_files_options,
+        \ 'options': '-m --preview-window=left:70%:noborder ' . l:fzf_files_options,
         \ 'down':    '40%',
-        \ 'window': 'call CreateCenteredFloatingWindow()'})
+        \ 'window': 'call FloatingFZF()'})
 
 endfunction
 
