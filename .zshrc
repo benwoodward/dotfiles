@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # TODO:
 # - Comment plugins with descriptions
 # - Remove unused zsh options once I know what they do
@@ -90,8 +97,9 @@ source $ZPLUG_HOME/init.zsh
 
 zplug "lukechilds/zsh-nvm"
 zplug "mafredri/zsh-async", from:github
-zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
-zplug 'zsh-users/zsh-autosuggestions'
+# zplug "sindresorhus/pure", use:pure.zsh, from:github, at:indestructible-pure, as:theme
+zplug "romkatv/powerlevel10k", as:theme, depth:1
+zplug 'zsh-users/zsh-autosuggestions', from:github, at:fixes/partial-accept-duplicate-word
 # zplug 'wfxr/forgit'
 zplug "changyuheng/fz", defer:2
 zplug "rupa/z", use:z.sh
@@ -114,10 +122,6 @@ ENHANCD_FILTER=fzf
 # zplug "hschne/fzf-git"
 
 zplug load
-
-# https://github.com/sindresorhus/pure#install
-autoload -U promptinit; promptinit
-prompt pure
 
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
@@ -366,3 +370,7 @@ node-project() {
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
