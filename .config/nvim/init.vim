@@ -126,7 +126,7 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 Plug 'https://github.com/tyru/open-browser.vim'
 Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
-Plug 'rhysd/git-messenger.vim' " Show git blame for current line in floating window 
+Plug 'rhysd/git-messenger.vim' " Show git blame for current line in floating window
   " <Leader>gm
   " q	Close the popup window
   " o	older. Back to older commit at the line
@@ -137,7 +137,7 @@ Plug 'rhysd/git-messenger.vim' " Show git blame for current line in floating win
 
 
 " Alternative to git-gutter, display git status for modified lines in gutter
-Plug 'https://github.com/mhinz/vim-signify'
+" Plug 'https://github.com/mhinz/vim-signify'
   " `+`     This line was added.
   " `!`     This line was modified.
   " `_1`    The number of deleted lines below this sign. If the number is larger
@@ -154,6 +154,38 @@ Plug 'https://github.com/mhinz/vim-signify'
 
   " ]C   Jump to the last hunk.
   " [C   Jump to the first hunk.
+Plug 'https://github.com/airblade/vim-gitgutter'
+  function! GitGutterNextHunkCycle()
+    let line = line('.')
+    silent! GitGutterNextHunk
+    if line('.') == line
+      1
+      GitGutterNextHunk
+    endif
+  endfunction
+
+  nmap ]h :call GitGutterNextHunkCycle()<CR>
+  nmap [h <Plug>(GitGutterPrevHunk)
+  nnoremap <leader>gg :let g:gitgutter_diff_base='HEAD~'<Left>
+  nnoremap <leader>ggm :let g:gitgutter_diff_base='master'<CR>
+  nnoremap <leader>ggh :let g:gitgutter_diff_base=''<CR>
+
+Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'oguzbilgic/vim-gdiff'
+  " Quickfix motions
+  nnoremap [q :cprevious<cr>
+  nnoremap ]q :cnext<cr>
+  nnoremap [Q :cfirst<cr>
+  nnoremap ]Q :clast<cr>
+
+function! CodeReview()
+  let g:gitgutter_diff_base='master'
+  :Gdiff master...
+  :GitGutter
+endfunction
+
+nnoremap <leader>cr :call CodeReview()<CR>
+
 
 " File browser in sidebar
 Plug 'https://github.com/scrooloose/nerdtree.git'
@@ -212,14 +244,15 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 Plug 'https://github.com/tpope/vim-commentary'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'                                " fuzzy search integration
+Plug 'junegunn/fzf.vim'
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
+  let g:webdevicons_conceal_nerdtree_brackets=1
 
   "" FZF
 
   " general
   let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
-  let $FZF_DEFAULT_OPTS="--reverse " " top to bottom
+  let $FZF_DEFAULT_OPTS="--reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
 
   " use rg by default
   if executable('rg')
@@ -242,9 +275,10 @@ Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
 
 " Multi-protocol fuzzy finder
 Plug 'https://github.com/liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
-  noremap <leader>F :Clap grep<CR>
+  noremap <leader>/ :Clap grep<CR>
   noremap <leader>ff :Clap grep ++query=<cword><CR>
   nnoremap <silent> <leader>t :Clap files<CR>
+  let g:clap_layout = { 'width': '67%', 'height': '33%', 'row': '13%', 'col': '17%' }
 
 
 " Add plugins to &runtimepath
@@ -486,6 +520,7 @@ map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 nmap <silent> <Leader>s <Plug>SearchNormal
 vmap <silent> <Leader>s <Plug>SearchVisual
 
+
 ""
 "" CtrlP
 ""
@@ -704,6 +739,8 @@ let g:spotify_token=$VIMIFY_SPOTIFY_TOKEN
 
 set foldlevelstart=99
 set nofoldenable
+au WinEnter * set nofoldenable
+au WinLeave * set nofoldenable
 
 " floating fzf window with borders
 function! CreateCenteredFloatingWindow()
@@ -731,8 +768,7 @@ endfunction
 
 " Files + devicons + floating fzf
 function! Fzf_dev()
-  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
-  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'" --expect=ctrl-v,ctrl-x'
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
 
   function! s:files()
     let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')

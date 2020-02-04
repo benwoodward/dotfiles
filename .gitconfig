@@ -67,9 +67,6 @@
   bn = !git rev-list HEAD | wc -l | tr -d ' '
   browse = "!f(){ open `git remote -v | awk '/fetch/{print $2}' | sed -Ee 's#(git@|git://)#http://#' -e 's@com:@com/@'`| head -n1; }; f"
 
-
-  pr = pull-request
-
   # list files which have changed since REVIEW_BASE
   # (REVIEW_BASE defaults to 'master' in my zshrc)
   #
@@ -80,9 +77,13 @@
   # REVIEW_BASE=HEAD^ git stat
   files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
 
+  review = !nvim +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+
   # Same as above, but with a diff stat instead of just names
   # (better for interactive use)
-  stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
+  pr-stat = !git diff --stat master $(git rev-parse --abbrev-ref HEAD)
+
+  elix-heatmap = !git heatmap -n 30 --filter 'grep -v \"priv/static\" | grep -v \"assets/package*\"'
 [push]
   default = current
 [web]
