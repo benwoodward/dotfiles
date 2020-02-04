@@ -249,7 +249,7 @@ Plug 'ryanoasis/vim-devicons'                           " pretty icons everywher
 
   " general
   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-  let $FZF_DEFAULT_OPTS="--reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
+  let $FZF_DEFAULT_OPTS="--history --reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
 
   " use rg by default
   if executable('rg')
@@ -758,7 +758,7 @@ function! FloatingFZF()
 endfunction
 
 " Files + devicons + floating fzf
-function! Fzf_dev()
+function! FzfFilePreview()
   let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
 
   function! s:files()
@@ -800,5 +800,5 @@ function! Fzf_dev()
 
 endfunction
 
-nnoremap <silent> <leader>e :call Fzf_dev()<CR>
+nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 
