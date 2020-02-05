@@ -240,9 +240,9 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 
 Plug 'https://github.com/tpope/vim-commentary'
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug '/usr/local/opt/fzf'
-Plug 'artemave/fzf.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
 let g:fzf_history_dir = './.fzf-history'
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
   let g:webdevicons_conceal_nerdtree_brackets=1
@@ -251,20 +251,70 @@ Plug 'ryanoasis/vim-devicons'                           " pretty icons everywher
 
   " general
   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-  let $FZF_DEFAULT_OPTS="--reverse --preview='(bat --style=numbers,changes --color always {2..-1} | head -200)' --preview-window=left:70%:noborder --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
 
-  " call fzf#run({
-  "       \ 'source': <sid>files(),
-  "       \ 'sink*':   function('s:edit_file'),
-  "       \ 'options': '-m --preview-window=left:70%:noborder ' . l:fzf_files_options,
-  "       \ 'down':    '40%',
-  "       \ 'window': 'call FloatingFZF()'})
-  " use rg by default
-  if executable('rg')
-    let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
-    set grepprg=rg\ --vimgrep
-    command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-  endif
+" Some ripgrep searching defaults
+function! RgCommand(ignore) abort
+  return 'rg' .
+    \ ' --hidden' .
+    \ ' --color ansi' .
+    \ ' --column' .
+    \ ' --line-number' .
+    \ ' --no-heading' .
+    \ ' --smart-case' .
+    \ ' ' . (a:ignore == 1 ? '--ignore' : '--no-ignore')
+endfunction
+
+" Adds prompt
+function! PreviewFlags(prompt) abort
+  return ' --prompt="' . a:prompt . '> "'
+endfunction
+
+" Ensure that only the 4th column delimited by : is filtered by FZF
+function! RgPreviewFlags(prompt) abort
+  return PreviewFlags(a:prompt) . ' --delimiter : --nth 4..'
+endfunction
+
+" Configs the preview
+function! Preview(flags) abort
+  return fzf#vim#with_preview({'options': a:flags})
+endfunction
+
+" Executes ripgrep with a preview
+function! RgWithPreview(ignore, args, prompt, bang) abort
+  let command = RgCommand(a:ignore).' '.shellescape(a:args)
+  call fzf#vim#grep(command, 1, Preview(RgPreviewFlags(a:prompt)), a:bang)
+endfunction
+
+" Defines search command for :Files
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+
+" Opens files search with preview
+function! FilesWithPreview(args, bang) abort
+  call fzf#vim#files(a:args, Preview(PreviewFlags('Files')), a:bang)
+endfunction
+
+command! -bang -nargs=* Rg call RgWithPreview(v:true, <q-args>, 'Grep', <bang>0)
+command! -bang -nargs=* Rgg call RgWithPreview(v:false, <q-args>, 'Global Grep', <bang>0)
+command! -bang -nargs=? -complete=dir Files call FilesWithPreview(<q-args>, <bang>0)
+
+" Open fuzzy files with leader \
+nnoremap <silent> <Leader>e :Files<CR>
+" Open fuzzy buffers with leader b
+nnoremap <silent> <Leader>b :Buffers<CR>
+" Open ripgrep
+nnoremap <silent> <Leader>/ :Rg<CR>
+
+" Allow pasting from system clipboard
+tnoremap <expr> <C-v> '<C-\><C-N>pi'
+
+" Cut selected lines to system clipboard
+vmap <C-x> :!pbcopy<CR>
+" Copy selected lines to system clipboad
+vmap <C-c> :w !pbcopy<CR><CR>
+" Copy visual selection to system clipboard
+noremap <silent> <leader>y :<CR>:let @a=@" \| execute "normal! vgvy" \| let res=system("pbcopy", @") \| let @"=@a<CR>
+
+
 
 ""
 "" Section: Navigation
@@ -273,18 +323,6 @@ Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
 Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
 Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
 Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
-
-" Fuzzy search files, ctags and more
-Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
-  " TODO: Remove ctrlp when I get ctags working with vim-clap
-
-" Multi-protocol fuzzy finder
-Plug 'https://github.com/liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
-  noremap <leader>/ :Clap grep<CR>
-  noremap <leader>ff :Clap grep ++query=<cword><CR>
-  nnoremap <silent> <leader>t :Clap files<CR>
-  let g:clap_layout = { 'width': '67%', 'height': '33%', 'row': '13%', 'col': '17%' }
-
 
 " Add plugins to &runtimepath
 call plug#end()
@@ -508,10 +546,6 @@ function! LoadPreviousFile()
   b#
 endfunction
 
-ino <Leader>e <esc>
-cno <Leader>e <c-c>
-vno <Leader>e <esc>
-
 " Open latest commit in browser
 map <Leader>lc :Gbrowse HEAD^{}<CR>
 
@@ -524,32 +558,6 @@ map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 "
 nmap <silent> <Leader>s <Plug>SearchNormal
 vmap <silent> <Leader>s <Plug>SearchVisual
-
-
-""
-"" CtrlP
-""
-" show hidden files in CtrlP
-let g:ctrlp_show_hidden = 1
-let g:ctrlp_root_markers = ['mix.exs', 'Gemfile']
-
-" Search ctags
-nmap <Leader>c :CtrlPTag<CR>
-
-" Search buffers
-nmap <Leader>r :CtrlPBuffer<CR>
-
-" Map CtrlP to <Leader>p
-let g:ctrlp_map = ''
-map <Leader>p :CtrlP<CR>
-
-" Use RipGrep with CtrlP
-" https://github.com/BurntSushi/ripgrep
-if executable('rg')
-  set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob "" --hidden'
-  let g:ctrlp_use_caching = 0
-endif
 
 " Remove trailing whitespace
 map <leader>fws :FixWhitespace<CR>
@@ -673,8 +681,6 @@ augroup plugin_initialize
     autocmd VimEnter * call FuckThatMatchParen()
 augroup END
 
-vmap <C-x> :!pbcopy<CR>
-vmap <C-c> :w !pbcopy<CR><CR>
 
 let g:python3_host_prog = '/usr/local/bin/python3'
 
@@ -697,13 +703,6 @@ inoremap []   []<Left>
 inoremap ""   ""<Left>
 inoremap ''   ''<Left>
 inoremap ``   ``<Left>
-
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep('rg --column --no-heading --line-number --color=always '.shellescape(<q-args>),
-  \ 1,
-  \ fzf#vim#with_preview(),
-  \ <bang>0)
 
 let g:floaterm_width = float2nr(&columns * 0.7)
 let g:floaterm_height = float2nr((&lines - 2) * 0.6)
@@ -737,6 +736,7 @@ function! FloatingFZF()
         \ 'height': height
         \ }
 
+  set winhl=Normal:Normal
   call nvim_open_win(buf, v:true, opts)
 endfunction
 
@@ -777,11 +777,11 @@ function! FzfFilePreview()
   call fzf#run({
         \ 'source': <sid>files(),
         \ 'sink*':   function('s:edit_file'),
-        \ 'options': '-m --preview-window=left:70%:noborder ' . l:fzf_files_options,
+        \ 'options': '-m --preview-window=right:70%:noborder ' . l:fzf_files_options,
         \ 'down':    '40%',
         \ 'window': 'call FloatingFZF()'})
 
 endfunction
 
-nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
+" nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 
