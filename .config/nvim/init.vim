@@ -127,7 +127,7 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 Plug 'https://github.com/tyru/open-browser.vim'
 Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
-Plug 'rhysd/git-messenger.vim' " Show git blame for current line in floating window
+Plug 'https://github.com/rhysd/git-messenger.vim' " Show git blame for current line in floating window
   " <Leader>gm
   " q	Close the popup window
   " o	older. Back to older commit at the line
@@ -241,17 +241,15 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 
 Plug 'https://github.com/tpope/vim-commentary'
 
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
+  let g:webdevicons_conceal_nerdtree_brackets=1
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_history_dir = './.fzf-history'
-Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
-  let g:webdevicons_conceal_nerdtree_brackets=1
 
   "" FZF
 
-  " general
-  let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 " Some ripgrep searching defaults
 function! RgCommand(ignore) abort
