@@ -28,7 +28,7 @@
                                     }
                                 ],
                                 "from": {
-                                  "key_code": "right_command"
+                                    "key_code": "right_command"
                                 },
                                 "to": [
                                     {
@@ -123,76 +123,76 @@
                     {
                         "description": "double left shift to cap_lock",
                         "manipulators": [
-                        {
-                          "type": "basic",
-                          "from": {
-                            "key_code": "left_shift",
-                            "modifiers": {
-                              "optional": [
-                                "any"
-                              ]
-                            }
-                          },
-                          "to": [
                             {
-                              "key_code": "caps_lock"
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "type": "variable_if",
-                              "name": "left_shift pressed",
-                              "value": 1
-                            },
-                            {
-                                "bundle_identifiers": [
-                                    "^com.googlecode.iterm2"
+                                "conditions": [
+                                    {
+                                        "name": "left_shift pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.googlecode.iterm2"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    }
                                 ],
-                                "type": "frontmost_application_unless"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "basic",
-                          "from": {
-                            "key_code": "left_shift",
-                            "modifiers": {
-                              "optional": [
-                                "any"
-                              ]
-                            }
-                          },
-                          "to": [
-                            {
-                              "set_variable": {
-                                "name": "left_shift pressed",
-                                "value": 1
-                              }
+                                "from": {
+                                    "key_code": "left_shift",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "caps_lock"
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                              "key_code": "left_shift"
+                                "from": {
+                                    "key_code": "left_shift",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "left_shift pressed",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
+                                        "key_code": "left_shift"
+                                    }
+                                ],
+                                "to_delayed_action": {
+                                    "to_if_canceled": [
+                                        {
+                                            "set_variable": {
+                                                "name": "left_shift pressed",
+                                                "value": 0
+                                            }
+                                        }
+                                    ],
+                                    "to_if_invoked": [
+                                        {
+                                            "set_variable": {
+                                                "name": "left_shift pressed",
+                                                "value": 0
+                                            }
+                                        }
+                                    ]
+                                },
+                                "type": "basic"
                             }
-                          ],
-                          "to_delayed_action": {
-                            "to_if_invoked": [
-                              {
-                                "set_variable": {
-                                  "name": "left_shift pressed",
-                                  "value": 0
-                                }
-                              }
-                            ],
-                            "to_if_canceled": [
-                              {
-                                "set_variable": {
-                                  "name": "left_shift pressed",
-                                  "value": 0
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
+                        ]
                     }
                 ]
             },
@@ -335,6 +335,52 @@
                     "ignore": false,
                     "manipulate_caps_lock_led": false,
                     "simple_modifications": []
+                },
+                {
+                    "disable_built_in_keyboard_if_exists": false,
+                    "fn_function_keys": [],
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": false,
+                        "product_id": 320,
+                        "vendor_id": 9456
+                    },
+                    "ignore": false,
+                    "manipulate_caps_lock_led": true,
+                    "simple_modifications": [
+                        {
+                            "from": {
+                                "key_code": "left_alt"
+                            },
+                            "to": {
+                                "key_code": "left_gui"
+                            }
+                        },
+                        {
+                            "from": {
+                                "key_code": "left_gui"
+                            },
+                            "to": {
+                                "key_code": "left_alt"
+                            }
+                        },
+                        {
+                            "from": {
+                                "key_code": "right_alt"
+                            },
+                            "to": {
+                                "key_code": "right_gui"
+                            }
+                        },
+                        {
+                            "from": {
+                                "key_code": "right_gui"
+                            },
+                            "to": {
+                                "key_code": "right_alt"
+                            }
+                        }
+                    ]
                 }
             ],
             "fn_function_keys": [
