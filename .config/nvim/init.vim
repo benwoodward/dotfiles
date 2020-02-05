@@ -241,7 +241,9 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 Plug 'https://github.com/tpope/vim-commentary'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+" Plug '/usr/local/opt/fzf'
+Plug 'artemave/fzf.vim'
+let g:fzf_history_dir = './.fzf-history'
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
   let g:webdevicons_conceal_nerdtree_brackets=1
 
@@ -249,7 +251,7 @@ Plug 'ryanoasis/vim-devicons'                           " pretty icons everywher
 
   " general
   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-  let $FZF_DEFAULT_OPTS="--history --reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
+  let $FZF_DEFAULT_OPTS="--reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
 
   " use rg by default
   if executable('rg')
@@ -539,7 +541,7 @@ map <Leader>p :CtrlP<CR>
 " https://github.com/BurntSushi/ripgrep
 if executable('rg')
   set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob "" --ignore-file $HOME/.ctrlp-ignore --hidden'
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob "" --hidden'
   let g:ctrlp_use_caching = 0
 endif
 
