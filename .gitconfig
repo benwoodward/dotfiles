@@ -35,7 +35,11 @@
 
   # shortcuts for commands
   s = status
-  d = diff
+  d = !git status -s \
+     | fzf --no-sort --reverse \
+       --preview 'git diff --color=always {+2} | diff-so-fancy' \
+       --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
+       --preview-window=right:60%:wrap
   df = diff --color --color-words --abbrev
   st = status -s
   dt = difftool

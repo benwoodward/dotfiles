@@ -84,7 +84,7 @@ Plug 'https://github.com/neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#in
   " Coc only does snippet and additional edit on confirm.
   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
   set cmdheight=2 " Better display for messages
-  set updatetime=300 " Smaller updatetime for CursorHold & CursorHoldI
+  set updatetime=200 " Smaller updatetime for CursorHold & CursorHoldI
   set shortmess+=c " don't give |ins-completion-menu| messages.
   set signcolumn=yes " always show signcolumns
   " Use `lp` and `ln` for navigate diagnostics
@@ -126,7 +126,9 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 "" Section: Interface enhancements
 ""
 Plug 'https://github.com/tyru/open-browser.vim'
-Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
+" Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
+" let g:lastplace_ignore_buftype = "quickfix,nofile,help"
+
 Plug 'https://github.com/rhysd/git-messenger.vim' " Show git blame for current line in floating window
   " <Leader>gm
   " q	Close the popup window
@@ -179,6 +181,8 @@ Plug 'oguzbilgic/vim-gdiff'
   nnoremap [Q :cfirst<cr>
   nnoremap ]Q :clast<cr>
 
+" Notes:
+" :GFiles? / :GF? will list modified files
 function! CodeReview()
   let g:gitgutter_diff_base='master'
   :Gdiff master...
