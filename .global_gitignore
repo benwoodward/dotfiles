@@ -17,3 +17,4 @@ node_modules
 .elixir_ls
 .gutctags
 .vimify.log
+.fzf-history

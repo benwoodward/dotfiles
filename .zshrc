@@ -36,7 +36,6 @@ export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-to
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:/Users/$(whoami)/bin
 
-export FZF_DEFAULT_OPTS="--history='$HOME/.fzf_history'"
 
 # https://blog.jez.io/cli-code-review/
 export REVIEW_BASE='master'
@@ -368,6 +367,12 @@ node-project() {
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS="--history='$HOME/.fzf_history'"
+export BAT_THEME="TwoDark"
+export FZF_COMPLETION_OPTS="--preview '(bat --color=always {} || cat {} || tree -C {}) 2> /dev/null | head -200'"
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*" --glob "!node_modules/*"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

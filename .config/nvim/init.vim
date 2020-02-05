@@ -251,8 +251,14 @@ Plug 'ryanoasis/vim-devicons'                           " pretty icons everywher
 
   " general
   let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-  let $FZF_DEFAULT_OPTS="--reverse --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
+  let $FZF_DEFAULT_OPTS="--reverse --preview='(bat --style=numbers,changes --color always {2..-1} | head -200)' --preview-window=left:70%:noborder --bind ctrl-y:preview-up,ctrl-e:preview-down,ctrl-d:preview-page-down,ctrl-u:preview-page-up" " top to bottom
 
+  " call fzf#run({
+  "       \ 'source': <sid>files(),
+  "       \ 'sink*':   function('s:edit_file'),
+  "       \ 'options': '-m --preview-window=left:70%:noborder ' . l:fzf_files_options,
+  "       \ 'down':    '40%',
+  "       \ 'window': 'call FloatingFZF()'})
   " use rg by default
   if executable('rg')
     let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
@@ -692,37 +698,12 @@ inoremap ""   ""<Left>
 inoremap ''   ''<Left>
 inoremap ``   ``<Left>
 
-" TODO: Is this still needed?
-" Fzf {{{
-  " use bottom positioned 20% height bottom split
-  let g:fzf_layout = { 'down': '~20%' }
-  let g:fzf_colors =
-  \ { 'fg':      ['fg', 'Normal'],
-    \ 'bg':      ['bg', 'Clear'],
-    \ 'hl':      ['fg', 'String'],
-    \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-    \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-    \ 'hl+':     ['fg', 'Statement'],
-    \ 'info':    ['fg', 'PreProc'],
-    \ 'prompt':  ['fg', 'Conditional'],
-    \ 'pointer': ['fg', 'Exception'],
-    \ 'marker':  ['fg', 'Keyword'],
-    \ 'spinner': ['fg', 'Label'],
-    \ 'header':  ['fg', 'Comment'] }
 
-    " keeping Rg command since the built-in one does not skip checking filenames
-  " for an in-file search...
-  command! -bang -nargs=* Rg
-   \ call fzf#vim#grep(
-   \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
-   \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
-   \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '§'),
-   \   <bang>0)
-
-  " only use FZF shortcuts in non diff-mode
-  if !&diff
-    nnoremap <C-g> :Rg<Cr>
-  endif
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep('rg --column --no-heading --line-number --color=always '.shellescape(<q-args>),
+  \ 1,
+  \ fzf#vim#with_preview(),
+  \ <bang>0)
 
 let g:floaterm_width = float2nr(&columns * 0.7)
 let g:floaterm_height = float2nr((&lines - 2) * 0.6)
