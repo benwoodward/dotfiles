@@ -5,6 +5,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
+
 # TODO:
 # - Comment plugins with descriptions
 # - Remove unused zsh options once I know what they do
@@ -366,9 +368,43 @@ node-project() {
 
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
 
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
+# Include git information in FZF preview
+export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always {})'
+
+# Theme for fzf
+# Base16 Chalk
+# Author: Chris Kempson (http://chriskempson.com)
+
+_gen_fzf_default_opts() {
+
+local color00='#151515'
+local color01='#202020'
+local color02='#303030'
+local color03='#505050'
+local color04='#b0b0b0'
+local color05='#d0d0d0'
+local color06='#e0e0e0'
+local color07='#f5f5f5'
+local color08='#fb9fb1'
+local color09='#eda987'
+local color0A='#ddb26f'
+local color0B='#acc267'
+local color0C='#12cfc0'
+local color0D='#6fc2ef'
+local color0E='#e1a3ee'
+local color0F='#deaf8f'
+
+export FZF_DEFAULT_OPTS="
+--color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C
+--color pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B
+"
+
+}
+
+_gen_fzf_default_opts
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

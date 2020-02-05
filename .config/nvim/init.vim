@@ -64,10 +64,11 @@ Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} 
   let g:vim_markdown_folding_disabled = 1
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
-
+Plug 'https://github.com/chrisbra/Colorizer'
 
 " Intellisense for Neovim
 Plug 'https://github.com/neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+
   let g:coc_global_extensions = [
         \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
         \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
@@ -256,7 +257,9 @@ Plug 'ryanoasis/vim-devicons'                           " pretty icons everywher
 function! RgCommand(ignore) abort
   return 'rg' .
     \ ' --hidden' .
-    \ ' --color ansi' .
+    \ ' --color=always' .
+    \ ' --colors "path:fg:190,220,255"' .
+    \ ' --colors "line:fg:128,128,128" ' .
     \ ' --column' .
     \ ' --line-number' .
     \ ' --no-heading' .
@@ -271,7 +274,7 @@ endfunction
 
 " Ensure that only the 4th column delimited by : is filtered by FZF
 function! RgPreviewFlags(prompt) abort
-  return PreviewFlags(a:prompt) . ' --delimiter : --nth 4..'
+  return PreviewFlags(a:prompt) . ' --delimiter : --nth 4.. --color hl:123,hl+:222'
 endfunction
 
 " Configs the preview
@@ -286,7 +289,7 @@ function! RgWithPreview(ignore, args, prompt, bang) abort
 endfunction
 
 " Defines search command for :Files
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+let $FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git"'
 
 " Opens files search with preview
 function! FilesWithPreview(args, bang) abort
@@ -297,6 +300,18 @@ command! -bang -nargs=* Rg call RgWithPreview(v:true, <q-args>, 'Grep', <bang>0)
 command! -bang -nargs=* Rgg call RgWithPreview(v:false, <q-args>, 'Global Grep', <bang>0)
 command! -bang -nargs=? -complete=dir Files call FilesWithPreview(<q-args>, <bang>0)
 
+" Don't use status line in FZF
+augroup FzfConfig
+  autocmd!
+  autocmd! FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+augroup END
+
+" Default FZF options with bindings to match layout and select all + none
+let $FZF_DEFAULT_OPTS = '--layout=default' .
+  \ ' --info inline' .
+  \ ' --bind ctrl-a:select-all,ctrl-d:deselect-all,tab:toggle+up,shift-tab:toggle+down'
+
 " Open fuzzy files with leader \
 nnoremap <silent> <Leader>e :Files<CR>
 " Open fuzzy buffers with leader b
@@ -306,6 +321,7 @@ nnoremap <silent> <Leader>/ :Rg<CR>
 
 " Allow pasting from system clipboard
 tnoremap <expr> <C-v> '<C-\><C-N>pi'
+
 
 " Cut selected lines to system clipboard
 vmap <C-x> :!pbcopy<CR>
@@ -402,6 +418,8 @@ set wildoptions+=pum
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
+let base16colorspace=256
+highlight Comment gui=italic
 
 " Set up theme
 let g:oceanic_next_terminal_bold = 1
@@ -736,7 +754,7 @@ function! FloatingFZF()
         \ 'height': height
         \ }
 
-  set winhl=Normal:Normal
+  set winhl=Normal:Floating
   call nvim_open_win(buf, v:true, opts)
 endfunction
 
