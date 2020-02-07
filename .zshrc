@@ -366,10 +366,15 @@ node-project() {
 }
 
 
-# https://stackoverflow.com/a/12179492
-diff-lines() {
-    local path=
-    local line=
+# file_1 hunk_1_line_no
+# file_1 hunk_2_line_no
+# file_1 hunk_3_line_no
+# file_2 hunk_1_line_no
+# file_2 hunk_2_line_no
+hunk-lines() {
+    local file_path=
+    local line_number=
+    local output=
     zmodload -s -F zsh/pcre C:pcre-match && setopt re_match_pcre
 
     while read; do
@@ -377,16 +382,14 @@ diff-lines() {
         if [[ $REPLY =~ '---\ (a/)?.*' ]]; then
             continue
         elif [[ $REPLY =~ '^\+\+\+\ (b\/)?([^\t]+.*)' ]]; then
-            path=${match[2]}
+            file_path=${match[2]}
         elif [[ $REPLY =~ '@@\ -[0-9]+(,[0-9]+)?\ \+([0-9]+)(,[0-9]+)?\ @@.*' ]]; then
-            line=${match[2]}
-        elif [[ $REPLY =~ '^($esc\[[0-9;]+m)*([\ +-])' ]]; then
-            echo "$path:$line"
-            if [[ ${match[2]} != - ]]; then
-                ((line++))
-            fi
+            line_number=${match[2]}
+            output="${output}\n${file_path} ${line_number}"
         fi
     done
+
+    echo "${output}"
 }
 
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
