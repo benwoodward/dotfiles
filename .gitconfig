@@ -97,15 +97,11 @@
 	email = benwoodward@users.noreply.github.com
 [github]
   user = benwoodward
-[color]
-	ui = true
-  uk = true
 [core]
   # editor = mvim -f --nomru -c \"au VimLeave * !open -a iTerm\"
   editor = subl -n -w
   excludesfile = ~/.gitignore
 	quotepath = false
-	pager = less -F -X
 [credential]
   helper = osxkeychain
 [grep]
@@ -121,15 +117,25 @@
   prune = true
 [http]
 	cookiefile = ~/.gitcookies
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
-[color "diff"]
-	meta = 11
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+; [color "diff-highlight"]
+; 	oldNormal = red bold
+; 	oldHighlight = red bold 52
+; 	newNormal = green bold
+; 	newHighlight = green bold 22
+; [color "diff"]
+; 	meta = 11
+; 	frag = magenta bold
+; 	commit = yellow bold
+; 	old = red bold
+; 	new = green bold
+; 	whitespace = red reverse
+[diff-so-fancy]
+	markEmptyLines = true
+	stripLeadingSymbols = true
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = always
+  pager = true

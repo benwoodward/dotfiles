@@ -1,12 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block, everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
-
 # TODO:
 # - Comment plugins with descriptions
 # - Remove unused zsh options once I know what they do
@@ -33,6 +24,7 @@ export BENW_DEMO_GMAIL_PASSWORD=$(security find-generic-password -s 'benw.demo p
 export VIMIFY_SPOTIFY_TOKEN=$(security find-generic-password -s 'vimify spotify token' -w)
 export GIST_ID=$(security find-generic-password -s 'things-gist-id' -w)
 export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-token' -w)
+export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base')
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -108,6 +100,11 @@ zplug "zpm-zsh/ls"
 zplug "zpm-zsh/dircolors-material"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "b4b4r07/enhancd", use:init.sh
+zplug "jimhester/per-directory-history", defer:1
+if zplug check "jimhester/per-directory-history"; then
+    HISTORY_BASE="${HOME}/.zsh_histories"
+    SAVEHIST=65535
+fi
 ENHANCD_FILTER=fzf
 
 # Disabled until I figure out these errors:
@@ -127,6 +124,21 @@ source ~/.zshrc.vimode
 
 # Load asdf version manager
 source /Users/$(whoami)/.asdf/asdf.sh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Include git information in FZF preview
+export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always {})'
+
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block, everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
 
 movtogif () {
     ffmpeg -i "$1" -vf scale=800:-1 -r 10 -f image2pipe -vcodec ppm - |\
@@ -153,7 +165,8 @@ HISTSIZE=100000
 SAVEHIST=$HISTSIZE
 
 # zplugin settings
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 export FZ_CMD=z
 
@@ -267,23 +280,34 @@ join-lines() {
   done
 }
 
-fzf-gfi-widget() { local result=$(gfi | join-lines); zle reset-prompt; LBUFFER+=$result }
-fzf-gh-widget()  { local result=$(gh  | join-lines); zle reset-prompt; LBUFFER+=$result }
-zle -N fzf-gfi-widget
-zle -N fzf-gh-widget
-bindkey '^gf' fzf-gfi-widget
-bindkey '^gh' fzf-gh-widget
-
 # https://github.com/zsh-users/zsh-autosuggestions autocomplete word by word
 bindkey '^e' forward-word
-bindkey '^r' autosuggest-accept # ctrl+r
+bindkey '^l' autosuggest-accept
 
 # completion
 bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move through the completion menu backwards
 
 # Fn-Up/Down arrow (PgUp/PgDown)
-bindkey "^[[5~" history-beginning-search-backward
-bindkey "^[[6~" history-beginning-search-forward
+bindkey "^k" history-beginning-search-backward
+bindkey "^j" history-beginning-search-forward
+
+HISTORY_START_WITH_GLOBAL=true
+PER_DIRECTORY_HISTORY_TOGGLE="^G"
+
+per-directory-history-edit() {
+    ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
+}
+zle -N per-directory-history-edit
+
+pick-from-other-history() {
+    per-directory-history-toggle-history
+    fzf-history-widget
+    per-directory-history-toggle-history
+}
+zle -N pick-from-other-history
+
+bindkey "]e" per-directory-history-edit
+bindkey "^r" pick-from-other-history
 
 # `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
 # the `.git` directory, listing directories first. The output gets piped into
@@ -365,12 +389,13 @@ node-project() {
   git commit -m "Initial commit"
 }
 
-
-# file_1 hunk_1_line_no
-# file_1 hunk_2_line_no
-# file_1 hunk_3_line_no
-# file_2 hunk_1_line_no
-# file_2 hunk_2_line_no
+# Prints file_name + line number for every hunk in a diff
+# Example output:
+#
+# .gitconfig 19
+# .gitignore 4
+# .zshrc 18
+# .zshrc 369
 hunk-lines() {
     local file_path=
     local line_number=
@@ -383,9 +408,13 @@ hunk-lines() {
             continue
         elif [[ $REPLY =~ '^\+\+\+\ (b\/)?([^\t]+.*)' ]]; then
             file_path=${match[2]}
-        elif [[ $REPLY =~ '@@\ -[0-9]+(,[0-9]+)?\ \+([0-9]+)(,[0-9]+)?\ @@.*' ]]; then
-            line_number=${match[2]}
-            output="${output}\n${file_path} ${line_number}"
+        elif [[ $REPLY =~ '@@\ -([0-9]*)+(,[0-9]+)?\ \+([0-9]+)(,[0-9]+)?\ @@.*' ]]; then
+            line_number=${match[1]}
+            if [ -z "$output" ]; then
+              output="${file_path} ${line_number}"
+            else
+              output="${output}\n${file_path} ${line_number}"
+            fi
         fi
     done
 
@@ -395,10 +424,6 @@ hunk-lines() {
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
 
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Include git information in FZF preview
-export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always {})'
 
 # Theme for fzf
 # Base16 Chalk
@@ -406,26 +431,29 @@ export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always {})'
 
 _gen_fzf_default_opts() {
 
-local color00='#151515'
-local color01='#202020'
-local color02='#303030'
-local color03='#505050'
-local color04='#b0b0b0'
-local color05='#d0d0d0'
-local color06='#e0e0e0'
-local color07='#f5f5f5'
-local color08='#fb9fb1'
-local color09='#eda987'
-local color0A='#ddb26f'
-local color0B='#acc267'
-local color0C='#12cfc0'
-local color0D='#6fc2ef'
-local color0E='#e1a3ee'
-local color0F='#deaf8f'
+local color00='#1B2B34'
+local color01='#343D46'
+local color02='#4F5B66'
+local color03='#65737E'
+local color04='#A7ADBA'
+local color05='#C0C5CE'
+local color06='#CDD3DE'
+local color07='#D8DEE9'
+local color08='#EC5f67'
+local color09='#F99157'
+local color0A='#FAC863'
+local color0B='#99C794'
+local color0C='#5FB3B3'
+local color0D='#6699CC'
+local color0E='#C594C5'
+local color0F='#AB7967'
 
 export FZF_DEFAULT_OPTS="
---color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C
---color pointer:#BF616A,info:#4C566A,spinner:#4C566A,header:#4C566A,prompt:#81A1C1,marker:#EBCB8B
+  --black
+  --border
+  --color=bg+:$color00,bg:$color00,spinner:$color0C,hl:$color0D
+  --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
+  --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
 "
 
 }

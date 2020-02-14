@@ -158,6 +158,7 @@ Plug 'https://github.com/rhysd/git-messenger.vim' " Show git blame for current l
   " ]C   Jump to the last hunk.
   " [C   Jump to the first hunk.
 Plug 'https://github.com/airblade/vim-gitgutter'
+  " <leader>hu " Undo hunk
   function! GitGutterNextHunkCycle()
     let line = line('.')
     silent! GitGutterNextHunk
@@ -211,6 +212,7 @@ Plug 'https://github.com/scrooloose/nerdtree.git'
   let NERDTreeMapActivateNode='<CR>' " map enter to activating a node
 
 Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
+  " :Reveal
 
 " Terminal in floating window
 Plug 'https://github.com/voldikss/vim-floaterm'
@@ -237,6 +239,13 @@ Plug 'https://github.com/haya14busa/incsearch.vim'
 Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
 Plug 'https://github.com/ruanyl/vim-gh-line' " Open current file at current line on Github
 Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with options
+  " vim-search-me
+  nmap <silent> <Leader>s <Plug>SearchNormal
+  vmap <silent> <Leader>s <Plug>SearchVisual
+  " Select text and type <Leader>s to do a web search
+  " <leader>saw in to search web for a word
+  " <leader>sa( to search web for the text wrapped in the bracket
+  " <leader>sas to search web for a sentence
 Plug 'https://github.com/prabirshrestha/async.vim' " TODO: Do I need this?
 " Plug 'https://github.com/HendrikPetertje/vimify'
 " Plug 'https://github.com/benwoodward/vimify', { 'branch': 'playlists' }
@@ -300,6 +309,7 @@ endfunction
 
 command! -bang -nargs=* Rg call RgWithPreview(v:true, <q-args>, 'Grep', <bang>0)
 command! -bang -nargs=* Rgg call RgWithPreview(v:false, <q-args>, 'Global Grep', <bang>0)
+command! -bang -nargs=* Rgv call RgWithPreview(v:true, <c-word>, 'Grep', <bang>0)
 command! -bang -nargs=? -complete=dir Files call FilesWithPreview(<q-args>, <bang>0)
 
 " Don't use status line in FZF
@@ -310,7 +320,7 @@ augroup FzfConfig
 augroup END
 
 " Default FZF options with bindings to match layout and select all + none
-let $FZF_DEFAULT_OPTS = '--layout=default' .
+let $FZF_DEFAULT_OPTS = '--layout=default --reverse' .
   \ ' --info inline' .
   \ ' --bind ctrl-a:select-all,ctrl-d:deselect-all,tab:toggle+up,shift-tab:toggle+down'
 
@@ -320,6 +330,7 @@ nnoremap <silent> <Leader>e :Files<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 " Open ripgrep
 nnoremap <silent> <Leader>/ :Rg<CR>
+nnoremap <silent> <Leader>f :Rg<CR>
 
 " Allow pasting from system clipboard
 tnoremap <expr> <C-v> '<C-\><C-N>pi'
@@ -573,11 +584,6 @@ map <Leader>lc :Gbrowse HEAD^{}<CR>
 map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 
 
-" vim-search-me
-" https://github.com/voldikss/vim-search-me
-"
-nmap <silent> <Leader>s <Plug>SearchNormal
-vmap <silent> <Leader>s <Plug>SearchVisual
 
 " Remove trailing whitespace
 map <leader>fws :FixWhitespace<CR>
@@ -696,6 +702,11 @@ function! g:FuckThatMatchParen ()
     endif
 endfunction
 
+
+
+
+
+
 augroup plugin_initialize
     autocmd!
     autocmd VimEnter * call FuckThatMatchParen()
@@ -711,6 +722,7 @@ let g:mix_format_on_save = 1
 
 map Q :q<CR>
 map W :w<CR>
+map E :e!<CR>
 
 " for asyncomplete.vim log
 let g:asyncomplete_log_file = expand('~/asyncomplete.log')
@@ -724,9 +736,13 @@ inoremap ""   ""<Left>
 inoremap ''   ''<Left>
 inoremap ``   ``<Left>
 
-let g:floaterm_width = float2nr(&columns * 0.7)
-let g:floaterm_height = float2nr((&lines - 2) * 0.6)
-let g:floaterm_position = 'center'
+let g:floaterm_width = 0.7
+let g:floaterm_height = 0.9
+let g:floaterm_position = 'topright'
+let g:floaterm_background = '#1B2B34'
+
+
+
 
 noremap  <silent> <F12>           :FloatermToggle<CR>
 noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>

@@ -21,4 +21,3 @@ Run dotbot installer to create symlinks for dotfiles:
 `$ ./install`
 
 Feel free to copy for your own personal use, or steal various configs.
-
