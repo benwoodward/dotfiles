@@ -125,6 +125,7 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/jiangmiao/auto-pairs'
 Plug 'https://github.com/tyru/open-browser.vim'
 Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
 let g:lastplace_ignore_buftype = "quickfix,nofile,help"
@@ -194,23 +195,6 @@ nnoremap <leader>cr :call CodeReview()<CR>
 
 
 let loaded_netrw = 0
-" File browser in sidebar
-" Plug 'https://github.com/scrooloose/nerdtree.git'
-  let g:NERDSpaceDelims = 1 " TODO: This does what?
-  let nerdtreeshowlinenumbers=1 " TODO: This does what?
-  let g:NERDTreeWinPos = "right"
-  " Locate current file in Nerdtree
-  " map <leader>nf :NERDTreeFind<CR>
-  " map <leader>n :NERDTreeToggle<CR> :NERDTreeMirror<CR>
-  augroup AuNERDTreeCmd " TODO: This does what?
-  let NERDTreeHijackNetrw=0
-  let NERDTreeHighlightCursorline = 1
-  let NERDTreeShowHidden = 1
-  let NERDTreeIgnore=['\.git','\.DS_Store','\.pdf', '\.beam']
-  let NERDShutUp = 1 " so it doesn't complain about types it doesn't know
-  let NERDTreeQuitOnOpen=0 " quit NERDTree after opening a file
-  let NERDChristmasTree = 1 " colored NERD Tree
-  let NERDTreeMapActivateNode='<CR>' " map enter to activating a node
 
 Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file in Finder
   " :Reveal
@@ -715,11 +699,6 @@ nnoremap <silent> <Leader>t :Tags<CR>
       endif
   endfunction
 
-
-
-
-
-
   augroup plugin_initialize
       autocmd!
       autocmd VimEnter * call FuckThatMatchParen()
@@ -740,22 +719,10 @@ nnoremap <silent> <Leader>t :Tags<CR>
   " for asyncomplete.vim log
   let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 
-  " when pairing some braces or quotes, put cursor between them
-  inoremap <>   <><Left>
-  inoremap ()   ()<Left>
-  inoremap {}   {}<Left>
-  inoremap []   []<Left>
-  inoremap ""   ""<Left>
-  inoremap ''   ''<Left>
-  inoremap ``   ``<Left>
-
   let g:floaterm_width = 0.7
   let g:floaterm_height = 0.9
   let g:floaterm_position = 'topright'
   let g:floaterm_background = '#1B2B34'
-
-
-
 
   noremap  <silent> <F12>           :FloatermToggle<CR>
   noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>
