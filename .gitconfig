@@ -40,7 +40,6 @@
        --preview 'git diff --color=always {+2} | diff-so-fancy' \
        --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
        --preview-window=right:60%:wrap
-  ; d = !git diff | hunk-lines | fzf --no-sort --reverse --preview 'git diff --unified=8 {+1} | filterdiff --lines={+2} | colordiff | sed "s/0;//g" | diff-so-fancy' --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up --preview-window=right:60%:wrap
   df = diff --color --color-words --abbrev
   st = status -s
   dt = difftool

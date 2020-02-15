@@ -51,7 +51,7 @@ fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
 alias n="nvim"
-alias nn="nvim ."
+alias nn="nvim '+call FzfFilePreview()' ."
 alias nnc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
@@ -166,7 +166,7 @@ SAVEHIST=$HISTSIZE
 
 # zplugin settings
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff"
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(history)
 
 export FZ_CMD=z
 
@@ -175,6 +175,13 @@ setopt hist_ignore_all_dups # remove older duplicate entries from history
 setopt hist_reduce_blanks # remove superfluous blanks from history items
 setopt inc_append_history # save history entries as soon as they are entered
 setopt share_history # share history between different instances of the shell
+
+setopt ignore_eof # don't kill session on ctrl-d
+
+no-op() {
+}
+zle -N no-op no-op
+bindkey "^d" no-op
 
 setopt auto_cd # cd by typing directory name if it's not a command
 
@@ -287,12 +294,10 @@ bindkey '^l' autosuggest-accept
 # completion
 bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move through the completion menu backwards
 
-# Fn-Up/Down arrow (PgUp/PgDown)
-bindkey "^k" history-beginning-search-backward
-bindkey "^j" history-beginning-search-forward
+bindkey "^p" history-beginning-search-backward
+bindkey "^n" history-beginning-search-forward
 
-HISTORY_START_WITH_GLOBAL=true
-PER_DIRECTORY_HISTORY_TOGGLE="^G"
+HISTORY_START_WITH_GLOBAL=false
 
 per-directory-history-edit() {
     ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
@@ -419,6 +424,23 @@ hunk-lines() {
     done
 
     echo "${output}"
+}
+
+_stage_hunk="git diff | filterdiff --lines={+2} -i 'a/{+1}' | echo"
+
+hunk-diff() {
+  git diff \
+  | hunk-lines \
+  | fzf --no-sort --reverse \
+    --preview 'git diff --unified=8 {+1} | filterdiff --lines={+2} | colordiff | sed "s/0;//g" | diff-so-fancy' \
+    --preview-window=right:60%:wrap \
+    --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
+    --bind=ctrl-d:preview-page-down --bind=ctrl-u:preview-page-up \
+    --bind "enter:execute:(echo {} | git diff --unified=8 {+1} | filterdiff --lines={+2} -i 'a/{+1}' | git apply --cached --whitespace=nowarn)"
+}
+
+hd() {
+  hunk-diff
 }
 
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
