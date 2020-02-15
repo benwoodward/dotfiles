@@ -193,14 +193,15 @@ endfunction
 nnoremap <leader>cr :call CodeReview()<CR>
 
 
+let loaded_netrw = 0
 " File browser in sidebar
-Plug 'https://github.com/scrooloose/nerdtree.git'
+" Plug 'https://github.com/scrooloose/nerdtree.git'
   let g:NERDSpaceDelims = 1 " TODO: This does what?
   let nerdtreeshowlinenumbers=1 " TODO: This does what?
   let g:NERDTreeWinPos = "right"
   " Locate current file in Nerdtree
-  map <leader>nf :NERDTreeFind<CR>
-  map <leader>n :NERDTreeToggle<CR> :NERDTreeMirror<CR>
+  " map <leader>nf :NERDTreeFind<CR>
+  " map <leader>n :NERDTreeToggle<CR> :NERDTreeMirror<CR>
   augroup AuNERDTreeCmd " TODO: This does what?
   let NERDTreeHijackNetrw=0
   let NERDTreeHighlightCursorline = 1
@@ -322,461 +323,473 @@ augroup END
 " Default FZF options with bindings to match layout and select all + none
 let $FZF_DEFAULT_OPTS = '--layout=default --reverse' .
   \ ' --info inline' .
-  \ ' --bind ctrl-a:select-all,ctrl-d:deselect-all,tab:toggle+up,shift-tab:toggle+down'
+  \ ' --bind ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down,tab:toggle+up,shift-tab:toggle+down' .
+  \ ' --preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
+
+let preview_file = '/Users/' . $USER . '/.config/preview/preview.sh'
+command! -bang -nargs=* Tags
+  \ call fzf#vim#tags(<q-args>, {
+  \      'window': 'call FloatingFZF()',
+  \      'options': '
+  \         --with-nth 1,2
+  \         --prompt "Tags> "
+  \         --preview-window="right:60%"
+  \         --preview ''' . preview_file . ' {}'''
+  \ }, <bang>0)
 
 " Open fuzzy files with leader \
-nnoremap <silent> <Leader>e :Files<CR>
+" nnoremap <silent> <Leader>e :Files<CR>
+nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 " Open fuzzy buffers with leader b
 nnoremap <silent> <Leader>b :Buffers<CR>
 " Open ripgrep
 nnoremap <silent> <Leader>/ :Rg<CR>
-nnoremap <silent> <Leader>f :Rg<CR>
+" Search ctags
+nnoremap <silent> <Leader>t :Tags<CR>
 
-" Allow pasting from system clipboard
-tnoremap <expr> <C-v> '<C-\><C-N>pi'
+  " Allow pasting from system clipboard
+  tnoremap <expr> <C-v> '<C-\><C-N>pi'
 
 
-" Cut selected lines to system clipboard
-vmap <C-x> :!pbcopy<CR>
-" Copy selected lines to system clipboad
-vmap <C-c> :w !pbcopy<CR><CR>
-" Copy visual selection to system clipboard
-noremap <silent> <leader>y :<CR>:let @a=@" \| execute "normal! vgvy" \| let res=system("pbcopy", @") \| let @"=@a<CR>
+  " Cut selected lines to system clipboard
+  vmap <C-x> :!pbcopy<CR>
+  " Copy selected lines to system clipboad
+  vmap <C-c> :w !pbcopy<CR><CR>
+  " Copy visual selection to system clipboard
+  noremap <silent> <leader>y :<CR>:let @a=@" \| execute "normal! vgvy" \| let res=system("pbcopy", @") \| let @"=@a<CR>
 
 
 
-""
-"" Section: Navigation
-""
-Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
-Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
-Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
-Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
+  ""
+  "" Section: Navigation
+  ""
+  Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
+  Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
+  Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
+  Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
 
-" Add plugins to &runtimepath
-call plug#end()
+  " Add plugins to &runtimepath
+  call plug#end()
 
 
-" Section: configs
+  " Section: configs
 
-" Change <Leader>
-nnoremap <SPACE> <Nop>
-map <Space> <Leader>
+  " Change <Leader>
+  nnoremap <SPACE> <Nop>
+  map <Space> <Leader>
 
 
 
-" Show line numbers
-set number
+  " Show line numbers
+  set number
 
 
-" Show line number for current line, and relative numbers for others
-" Toggle with F4
-if exists("+relativenumber")
-  if v:version >= 400
-   set number
-  endif
-  set relativenumber  " show relative line numbers
-  set numberwidth=3   " narrow number column
-  " cycles between relative / absolute / no numbering
-  if v:version >= 400
-   function! RelativeNumberToggle()
-     if (&number == 1 && &relativenumber == 1)
-       set nonumber
-       set relativenumber relativenumber?
-     elseif (&number == 0 && &relativenumber == 1)
-       set norelativenumber
-       set number number?
-     elseif (&number == 1 && &relativenumber == 0)
-       set norelativenumber
-       set nonumber number?
-     else
-       set number
-       set relativenumber relativenumber?
-     endif
-   endfunc
-  else
-   function! RelativeNumberToggle()
-     if (&relativenumber == 1)
-       set number number?
-     elseif (&number == 1)
-       set nonumber number?
-     else
-       set relativenumber relativenumber?
-     endif
-   endfunc
-  endif
-  nnoremap <F4> :call RelativeNumberToggle()<CR>
-  inoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
-  vnoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
-else                  " fallback
-  set number          " show line numbers
-  " inverts numbering
-  nnoremap <F4> :set number! number?<CR>
-endif
-
-
-" Show line and column number
-" set ruler
-
-" These two enable syntax highlighting
-set nocompatible
-syntax enable
-
-set nolazyredraw
-
-" Enable command line completion vertical menu
-set wildoptions+=pum
-
-" TODO: What does this do?
-let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-set termguicolors
-let base16colorspace=256
-highlight Comment gui=italic
-
-" Set up theme
-let g:oceanic_next_terminal_bold = 1
-let g:oceanic_next_terminal_italic = 1
-colorscheme OceanicNext
-
-scriptencoding utf-8
-
-" Enable filetype-specific indenting and plugins
-filetype plugin indent on
-
-" Neovim disallow changing 'enconding' option after initialization
-" see https://github.com/neovim/neovim/pull/2929 for more details
-if !has('nvim')
-  set encoding=utf-8  " Set default encoding to UTF-8
-endif
-
-" highlight the current line
-set cursorline
-
-" When scrolling off-screen do so 3 lines at a time, not 1
-" set scrolloff=3
-
-" Set temporary directory (don't litter local dir with swp/tmp files)
-set directory=/tmp/
-
-""
-"" Whitespace
-""
-set nowrap                        " don't wrap lines
-set linebreak
-set tabstop=2                     " a tab is two spaces
-set shiftwidth=2                  " an autoindent (with <<) is two spaces
-set expandtab                     " use spaces, not tabs
-set list                          " Show invisible characters
-set backspace=indent,eol,start    " backspace through everything in insert mode
-
-" List chars
-set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
-set listchars+=trail:.            " show trailing spaces as dots
-set listchars+=extends:>          " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the right of the screen
-set listchars+=precedes:<         " The character to show in the last column when wrap is
-                                  " off and the line continues beyond the left of the screen
-
-""
-"" Searching
-""
-set hlsearch    " highlight matches
-set incsearch   " incremental searching
-set ignorecase  " searches are case insensitive...
-set smartcase   " ... unless they contain at least one capital letter
-
-" Enable tab complete for commands.
-" first tab shows all matches. next tab starts cycling through the matches
-set wildmode=list:longest,full
-
-" Disable backup behavior
-set nobackup
-set nowritebackup
-set noswapfile
-
-""
-"" Wild settings
-""
-
-" Disable output and VCS files
-set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
-
-" Disable archive files
-set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
-
-" Ignore bundler and sass cache
-set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
-
-" Ignore librarian-chef, vagrant, test-kitchen and Berkshelf cache
-set wildignore+=*/tmp/librarian/*,*/.vagrant/*,*/.kitchen/*,*/vendor/cookbooks/*
-
-" Ignore rails temporary asset caches
-set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
-
-" Disable temp and backup files
-set wildignore+=*.swp,*~,._*
-
-" Don't search inside font files / svg graphics
-set wildignore+=*.svg
-
-" Ignore JS packages
-set wildignore+=*/node_modules
-
-" Backup and swap files
-set backupdir^=~/.vim/_backup//    " where to put backup files.
-set directory^=~/.vim/_temp//      " where to put swap files.
-
-""
-"" Section: CTags
-""
-set tags+=gems.tags
-set tags+=tags
-
-" g] <- show multiple
-" http://stackoverflow.com/a/33629584
-function! FollowTag()
-  if !exists("w:tagbrowse")
-    " vsplit
-    let w:tagbrowse=1
-  endif
-  execute "tag " . expand("<cword>")
-endfunction
-
-nnoremap <c-]> :call FollowTag()<CR>
-
-let g:gutentags_enabled = 1
-let g:gutentags_trace = 0
-let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".git", "node_modules", "*.vim/bundle/*"]
-let g:gutentags_file_list_command = '( rg --files --no-ignore lib | rg .ex ; rg --files --no-ignore deps | rg .ex ) | cat'
-
-" enable gtags module
-" let g:gutentags_modules = ['ctags', 'gtags_cscope']
-
-" config project root markers.
-let g:gutentags_project_root = ['.root']
-
-" generate datebases in my cache directory, prevent gtags files polluting my project
-" let g:gutentags_cache_dir = expand('~/.cache/tags')
-
-
-""
-"" Section: open-browser
-""
-let g:netrw_nogx = 1 " disable netrw's gx mapping.
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
-
-
-
-" Toggle between current and previous file
-nmap <Tab> :call LoadPreviousFile()<CR>
-
-function! LoadPreviousFile()
-  b#
-endfunction
-
-" Open latest commit in browser
-map <Leader>lc :Gbrowse HEAD^{}<CR>
-
-" Open current file at HEAD in browser
-map <Leader>flc :Gbrowse HEAD^{}:%<CR>
-
-
-
-" Remove trailing whitespace
-map <leader>fws :FixWhitespace<CR>
-
-""
-"" Section: Filetypes
-"" TODO: Add to 'augroup'?
-""
-
-au BufNewFile,BufRead *.es6 set filetype=javascript
-au BufNewFile,BufRead *.svelte set filetype=html
-au BufNewFile,BufRead *.slim set filetype=slim
-au BufNewFile,BufRead *.tsv,*.psv setf csv
-au BufRead,BufNewFile Gemfile* set filetype=ruby
-au BufRead,BufNewFile Dockerfile* set filetype=Dockerfile
-autocmd BufNewFile,BufRead Guardfile set filetype=ruby
-autocmd BufNewFile,BufRead *.md set filetype=markdown
-autocmd BufRead,BufNewFile *.scss set filetype=scss.css|set tabstop=2|set shiftwidth=2
-autocmd BufRead,BufNewFile *.rb set filetype=ruby tabstop=2|set shiftwidth=2
-autocmd BufRead,BufNewFile *. set tabstop=2|set shiftwidth=2|set expandtab
-autocmd BufRead,BufNewFile *.jsx set filetype=javascript|set tabstop=2|set shiftwidth=2|set expandtab
-autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
-autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
-autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
-
-let g:session_autoload="no"
-let g:session_autosave="no"
-
-
-""
-"" Section: Viewport Manipulation
-""
-
-" Adjust viewports to the same size
-map <Leader>= <C-w>=
-
-" https://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/
-" window
-nmap <leader>sw<left>  :topleft  vnew<CR>
-nmap <leader>sw<right> :botright vnew<CR>
-nmap <leader>sw<up>    :topleft  new<CR>
-nmap <leader>sw<down>  :botright new<CR>
-" buffer
-nmap <leader>s<left>   :leftabove  vnew<CR>
-nmap <leader>s<right>  :rightbelow vnew<CR>
-nmap <leader>s<up>     :leftabove  new<CR>
-nmap <leader>s<down>   :rightbelow new<CR>
-
-" http://flaviusim.com/blog/resizing-vim-window-splits-like-a-boss/
-nnoremap <silent> + :exe "vertical resize +4"<CR>
-nnoremap <silent> - :exe "vertical resize -4"<CR>
-
-set undodir=$HOME/.vim/undo
-set undofile
-set undolevels=1000
-set undoreload=10000
-
-set smartcase
-
-" Set cursor to underscore in normal mode
-set guicursor+=n:hor20-Cursor/lCursor
-
-" upper/lower word
-nmap <leader>u mQviwU`Q
-nmap <leader>l mQviwu`Q
-
-" upper/lower first char of word
-nmap <leader>U mQgewvU`Q
-nmap <leader>L mQgewvu`Q
-
-" Swap two words
-nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
-
-" find merge conflict markers
-nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
-
-" Map the arrow keys to be based on display lines, not physical lines
-map <Down> gj
-map <Up> gk
-
-" Toggle hlsearch with <leader>hs
-nmap <leader>hs :set hlsearch! hlsearch?<CR>
-
-" init.vim editing
-map <leader>- :e $HOME/.config/nvim/init.vim<CR>
-
-" source init.vim
-map <leader>v :source $HOME/.config/nvim/init.vim<CR>
-
-" Terminal
-" TODO: This does what?
-tnoremap ., <C-\><C-n>
-
-" Move up and down on visual lines"
-nnoremap k gk
-nnoremap j gj
-nnoremap gk k
-nnoremap gj j
-
-" MatchParen.vim causes lag.
-"
-" FUNCTIONS SORTED ON SELF TIME
-" count  total (s)   self (s)  function
-" 21              0.007059  <SNR>79_Highlight_Matching_Pair()
-"
-" https://stackoverflow.com/a/47361068
-"
-" Disable parentheses matching depends on system. This way we should address all cases (?)
-set noshowmatch
-" NoMatchParen " This doesnt work as it belongs to a plugin, which is only loaded _after_ all files are.
-" Trying disable MatchParen after loading all plugins
-"
-function! g:FuckThatMatchParen ()
-    if exists(":NoMatchParen")
-        :NoMatchParen
+  " Show line number for current line, and relative numbers for others
+  " Toggle with F4
+  if exists("+relativenumber")
+    if v:version >= 400
+     set number
     endif
-endfunction
+    set relativenumber  " show relative line numbers
+    set numberwidth=3   " narrow number column
+    " cycles between relative / absolute / no numbering
+    if v:version >= 400
+     function! RelativeNumberToggle()
+       if (&number == 1 && &relativenumber == 1)
+         set nonumber
+         set relativenumber relativenumber?
+       elseif (&number == 0 && &relativenumber == 1)
+         set norelativenumber
+         set number number?
+       elseif (&number == 1 && &relativenumber == 0)
+         set norelativenumber
+         set nonumber number?
+       else
+         set number
+         set relativenumber relativenumber?
+       endif
+     endfunc
+    else
+     function! RelativeNumberToggle()
+       if (&relativenumber == 1)
+         set number number?
+       elseif (&number == 1)
+         set nonumber number?
+       else
+         set relativenumber relativenumber?
+       endif
+     endfunc
+    endif
+    nnoremap <F4> :call RelativeNumberToggle()<CR>
+    inoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
+    vnoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
+  else                  " fallback
+    set number          " show line numbers
+    " inverts numbering
+    nnoremap <F4> :set number! number?<CR>
+  endif
+
+
+  " Show line and column number
+  " set ruler
+
+  " These two enable syntax highlighting
+  set nocompatible
+  syntax enable
+
+  set nolazyredraw
+
+  " Enable command line completion vertical menu
+  set wildoptions+=pum
+
+  " TODO: What does this do?
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+  let base16colorspace=256
+  highlight Comment gui=italic
+
+  " Set up theme
+  let g:oceanic_next_terminal_bold = 1
+  let g:oceanic_next_terminal_italic = 1
+  colorscheme OceanicNext
+
+  scriptencoding utf-8
+
+  " Enable filetype-specific indenting and plugins
+  filetype plugin indent on
+
+  " Neovim disallow changing 'enconding' option after initialization
+  " see https://github.com/neovim/neovim/pull/2929 for more details
+  if !has('nvim')
+    set encoding=utf-8  " Set default encoding to UTF-8
+  endif
+
+  " highlight the current line
+  set cursorline
+
+  " When scrolling off-screen do so 3 lines at a time, not 1
+  " set scrolloff=3
+
+  " Set temporary directory (don't litter local dir with swp/tmp files)
+  set directory=/tmp/
+
+  ""
+  "" Whitespace
+  ""
+  set nowrap                        " don't wrap lines
+  set linebreak
+  set tabstop=2                     " a tab is two spaces
+  set shiftwidth=2                  " an autoindent (with <<) is two spaces
+  set expandtab                     " use spaces, not tabs
+  set list                          " Show invisible characters
+  set backspace=indent,eol,start    " backspace through everything in insert mode
+
+  " List chars
+  set listchars=""                  " Reset the listchars
+  set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+  set listchars+=trail:.            " show trailing spaces as dots
+  set listchars+=extends:>          " The character to show in the last column when wrap is
+                                    " off and the line continues beyond the right of the screen
+  set listchars+=precedes:<         " The character to show in the last column when wrap is
+                                    " off and the line continues beyond the left of the screen
+
+  ""
+  "" Searching
+  ""
+  set hlsearch    " highlight matches
+  set incsearch   " incremental searching
+  set ignorecase  " searches are case insensitive...
+  set smartcase   " ... unless they contain at least one capital letter
+
+  " Enable tab complete for commands.
+  " first tab shows all matches. next tab starts cycling through the matches
+  set wildmode=list:longest,full
+
+  " Disable backup behavior
+  set nobackup
+  set nowritebackup
+  set noswapfile
+
+  ""
+  "" Wild settings
+  ""
+
+  " Disable output and VCS files
+  set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
+
+  " Disable archive files
+  set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+
+  " Ignore bundler and sass cache
+  set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
+
+  " Ignore librarian-chef, vagrant, test-kitchen and Berkshelf cache
+  set wildignore+=*/tmp/librarian/*,*/.vagrant/*,*/.kitchen/*,*/vendor/cookbooks/*
+
+  " Ignore rails temporary asset caches
+  set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
+
+  " Disable temp and backup files
+  set wildignore+=*.swp,*~,._*
+
+  " Don't search inside font files / svg graphics
+  set wildignore+=*.svg
+
+  " Ignore JS packages
+  set wildignore+=*/node_modules
+
+  " Backup and swap files
+  set backupdir^=~/.vim/_backup//    " where to put backup files.
+  set directory^=~/.vim/_temp//      " where to put swap files.
+
+  ""
+  "" Section: CTags
+  ""
+  set tags+=gems.tags
+  set tags+=tags
+
+  " g] <- show multiple
+  " http://stackoverflow.com/a/33629584
+  function! FollowTag()
+    if !exists("w:tagbrowse")
+      " vsplit
+      let w:tagbrowse=1
+    endif
+    execute "tag " . expand("<cword>")
+  endfunction
+
+  nnoremap <c-]> :call FollowTag()<CR>zt<c-y><c-y><c-y><c-y>
+
+  let g:gutentags_modules = ['ctags']
+  let g:gutentags_enabled = 1
+  let g:gutentags_trace = 0
+  let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".git", "node_modules", "*.vim/bundle/*"]
+  let g:gutentags_file_list_command = '( rg --files --no-ignore lib | rg .ex ; rg --files --no-ignore deps | rg .ex ) | cat'
+  let g:gutentags_ctags_extra_args = ['--excmd=number']
+  let g:gutentags_project_root = ['tags']
+  " config project root markers.
+  " let g:gutentags_project_root = ['.root']
+  " generate datebases in my cache directory, prevent gtags files polluting my project
+  " let g:gutentags_cache_dir = expand('~/.cache/tags')
+
+
+  ""
+  "" Section: open-browser
+  ""
+  let g:netrw_nogx = 1 " disable netrw's gx mapping.
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
+
+
+
+  " Toggle between current and previous file
+  nmap <Tab> :call LoadPreviousFile()<CR>
+
+  function! LoadPreviousFile()
+    b#
+  endfunction
+
+  " Open latest commit in browser
+  map <Leader>lc :Gbrowse HEAD^{}<CR>
+
+  " Open current file at HEAD in browser
+  map <Leader>flc :Gbrowse HEAD^{}:%<CR>
+
+
+
+  " Remove trailing whitespace
+  map <leader>fws :FixWhitespace<CR>
+
+  ""
+  "" Section: Filetypes
+  "" TODO: Add to 'augroup'?
+  ""
+
+  au BufNewFile,BufRead *.es6 set filetype=javascript
+  au BufNewFile,BufRead *.svelte set filetype=html
+  au BufNewFile,BufRead *.slim set filetype=slim
+  au BufNewFile,BufRead *.tsv,*.psv setf csv
+  au BufRead,BufNewFile Gemfile* set filetype=ruby
+  au BufRead,BufNewFile Dockerfile* set filetype=Dockerfile
+  autocmd BufNewFile,BufRead Guardfile set filetype=ruby
+  autocmd BufNewFile,BufRead *.md set filetype=markdown
+  autocmd BufRead,BufNewFile *.scss set filetype=scss.css|set tabstop=2|set shiftwidth=2
+  autocmd BufRead,BufNewFile *.rb set filetype=ruby tabstop=2|set shiftwidth=2
+  autocmd BufRead,BufNewFile *. set tabstop=2|set shiftwidth=2|set expandtab
+  autocmd BufRead,BufNewFile *.jsx set filetype=javascript|set tabstop=2|set shiftwidth=2|set expandtab
+  autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
+  autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
+  autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
+
+  let g:session_autoload="no"
+  let g:session_autosave="no"
+
+
+  ""
+  "" Section: Viewport Manipulation
+  ""
+
+  " Adjust viewports to the same size
+  map <Leader>= <C-w>=
+
+  " https://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/
+  " window
+  nmap <leader>sw<left>  :topleft  vnew<CR>
+  nmap <leader>sw<right> :botright vnew<CR>
+  nmap <leader>sw<up>    :topleft  new<CR>
+  nmap <leader>sw<down>  :botright new<CR>
+  " buffer
+  nmap <leader>s<left>   :leftabove  vnew<CR>
+  nmap <leader>s<right>  :rightbelow vnew<CR>
+  nmap <leader>s<up>     :leftabove  new<CR>
+  nmap <leader>s<down>   :rightbelow new<CR>
+
+  " http://flaviusim.com/blog/resizing-vim-window-splits-like-a-boss/
+  nnoremap <silent> + :exe "vertical resize +4"<CR>
+  nnoremap <silent> - :exe "vertical resize -4"<CR>
+
+  set undodir=$HOME/.vim/undo
+  set undofile
+  set undolevels=1000
+  set undoreload=10000
+
+  set smartcase
+
+  " Set cursor to underscore in normal mode
+  set guicursor+=n:hor20-Cursor/lCursor
+
+  " upper/lower word
+  nmap <leader>u mQviwU`Q
+  nmap <leader>l mQviwu`Q
+
+  " upper/lower first char of word
+  nmap <leader>U mQgewvU`Q
+  nmap <leader>L mQgewvu`Q
+
+  " Swap two words
+  nmap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR>`'
+
+  " find merge conflict markers
+  nmap <silent> <leader>fc <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+
+  " Map the arrow keys to be based on display lines, not physical lines
+  map <Down> gj
+  map <Up> gk
+
+  " Toggle hlsearch with <leader>hs
+  nmap <leader>hs :set hlsearch! hlsearch?<CR>
+
+  " init.vim editing
+  map <leader>- :e $HOME/.config/nvim/init.vim<CR>
+
+  " source init.vim
+  map <leader>v :source $HOME/.config/nvim/init.vim<CR>
+
+  " Terminal
+  " TODO: This does what?
+  tnoremap ., <C-\><C-n>
+
+  " Move up and down on visual lines"
+  nnoremap k gk
+  nnoremap j gj
+  nnoremap gk k
+  nnoremap gj j
+
+  " MatchParen.vim causes lag.
+  "
+  " FUNCTIONS SORTED ON SELF TIME
+  " count  total (s)   self (s)  function
+  " 21              0.007059  <SNR>79_Highlight_Matching_Pair()
+  "
+  " https://stackoverflow.com/a/47361068
+  "
+  " Disable parentheses matching depends on system. This way we should address all cases (?)
+  set noshowmatch
+  " NoMatchParen " This doesnt work as it belongs to a plugin, which is only loaded _after_ all files are.
+  " Trying disable MatchParen after loading all plugins
+  "
+  function! g:FuckThatMatchParen ()
+      if exists(":NoMatchParen")
+          :NoMatchParen
+      endif
+  endfunction
 
 
 
 
 
 
-augroup plugin_initialize
-    autocmd!
-    autocmd VimEnter * call FuckThatMatchParen()
-augroup END
+  augroup plugin_initialize
+      autocmd!
+      autocmd VimEnter * call FuckThatMatchParen()
+  augroup END
 
 
-let g:python3_host_prog = '/usr/local/bin/python3'
+  let g:python3_host_prog = '/usr/local/bin/python3'
 
-" Turn off auto-indendation before pasting
-set pastetoggle=<F3>
+  " Turn off auto-indendation before pasting
+  set pastetoggle=<F3>
 
-let g:mix_format_on_save = 1
+  let g:mix_format_on_save = 1
 
-map Q :q<CR>
-map W :w<CR>
-map E :e!<CR>
+  map Q :q<CR>
+  map W :w<CR>
+  map E :e!<CR>
 
-" for asyncomplete.vim log
-let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+  " for asyncomplete.vim log
+  let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 
-" when pairing some braces or quotes, put cursor between them
-inoremap <>   <><Left>
-inoremap ()   ()<Left>
-inoremap {}   {}<Left>
-inoremap []   []<Left>
-inoremap ""   ""<Left>
-inoremap ''   ''<Left>
-inoremap ``   ``<Left>
+  " when pairing some braces or quotes, put cursor between them
+  inoremap <>   <><Left>
+  inoremap ()   ()<Left>
+  inoremap {}   {}<Left>
+  inoremap []   []<Left>
+  inoremap ""   ""<Left>
+  inoremap ''   ''<Left>
+  inoremap ``   ``<Left>
 
-let g:floaterm_width = 0.7
-let g:floaterm_height = 0.9
-let g:floaterm_position = 'topright'
-let g:floaterm_background = '#1B2B34'
-
-
+  let g:floaterm_width = 0.7
+  let g:floaterm_height = 0.9
+  let g:floaterm_position = 'topright'
+  let g:floaterm_background = '#1B2B34'
 
 
-noremap  <silent> <F12>           :FloatermToggle<CR>
-noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>
-tnoremap <silent> <F12>           <C-\><C-n>:FloatermToggle<CR>
 
-highlight VertSplit guibg=NONE
 
-let g:spotify_token=$VIMIFY_SPOTIFY_TOKEN
+  noremap  <silent> <F12>           :FloatermToggle<CR>
+  noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>
+  tnoremap <silent> <F12>           <C-\><C-n>:FloatermToggle<CR>
 
-set foldlevelstart=99
-set nofoldenable
-au WinEnter * set nofoldenable
-au WinLeave * set nofoldenable
+  highlight VertSplit guibg=NONE
 
-function! FloatingFZF()
-  let buf = nvim_create_buf(v:false, v:true)
-  call setbufvar(buf, '&signcolumn', 'no')
+  let g:spotify_token=$VIMIFY_SPOTIFY_TOKEN
 
-  let height = &lines
-  let width = &columns
+  set foldlevelstart=99
+  set nofoldenable
+  au WinEnter * set nofoldenable
+  au WinLeave * set nofoldenable
 
-  let opts = {
-        \ 'relative': 'editor',
-        \ 'row': 0,
-        \ 'col': 0,
-        \ 'width': width,
-        \ 'height': height
-        \ }
+  function! FloatingFZF()
+    let buf = nvim_create_buf(v:false, v:true)
+    call setbufvar(buf, '&signcolumn', 'no')
 
-  set winhl=Normal:Floating
-  call nvim_open_win(buf, v:true, opts)
-endfunction
+    let height = &lines
+    let width = &columns
 
-" Files + devicons + floating fzf
+    let opts = {
+          \ 'relative': 'editor',
+          \ 'row': 0,
+          \ 'col': 0,
+          \ 'width': width,
+          \ 'height': height
+          \ }
+
+    set winhl=Normal:Floating
+    call nvim_open_win(buf, v:true, opts)
+  endfunction
+
+  " Files + devicons + floating fzf
 function! FzfFilePreview()
   let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
 
@@ -813,11 +826,10 @@ function! FzfFilePreview()
   call fzf#run({
         \ 'source': <sid>files(),
         \ 'sink*':   function('s:edit_file'),
-        \ 'options': '-m --preview-window=right:70%:noborder ' . l:fzf_files_options,
+        \ 'options': '-m --preview-window=right:70%:noborder --prompt Files\> ' . l:fzf_files_options,
         \ 'down':    '40%',
         \ 'window': 'call FloatingFZF()'})
 
 endfunction
 
-" nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 
