@@ -51,7 +51,8 @@ fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
 alias n="nvim"
-alias nn="nvim '+call FzfFilePreview()' ."
+alias nn="nvim ."
+alias ne="nvim '+call FzfFilePreview()' ."
 alias nnc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"

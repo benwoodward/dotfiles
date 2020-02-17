@@ -125,6 +125,55 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/janko/vim-test'
+Plug 'https://github.com/francoiscabrol/ranger.vim'
+let g:ranger_map_keys = 0
+nnoremap rr :Ranger<CR>
+Plug 'https://github.com/rbgrouleff/bclose.vim'
+Plug 'https://github.com/bfredl/nvim-miniyank'
+
+function FZFYankList() abort
+  function! KeyValue(key, val)
+    let line = join(a:val[0], '')
+    if (a:val[1] ==# 'V')
+      let line = line
+    endif
+    return a:key.' '.line
+  endfunction
+  return map(miniyank#read(), function('KeyValue'))
+endfunction
+
+function FZFYankHandler(opt, line) abort
+  let key = substitute(a:line, ' .*', '', '')
+  if !empty(a:line)
+    let yanks = miniyank#read()[key]
+    call miniyank#drop(yanks, a:opt)
+  endif
+endfunction
+
+command! YanksAfter call fzf#run(fzf#wrap('YanksAfter', {
+\ 'source':  FZFYankList(),
+\ 'sink':    function('FZFYankHandler', ['p']),
+\ 'options': '--no-sort --no-preview --prompt="Yanks-p> "',
+\ }))
+
+command! YanksBefore call fzf#run(fzf#wrap('YanksBefore', {
+\ 'source':  FZFYankList(),
+\ 'sink':    function('FZFYankHandler', ['P']),
+\ 'options': '--no-sort --no-preview --prompt="Yanks-P> "',
+\ }))
+
+
+map <leader>ya :YanksAfter<CR>
+map <leader>yb :YanksBefore<CR>
+
+" Plug 'https://github.com/svermeulen/vim-yoink'
+"   nmap ny <plug>(YoinkPostPasteSwapBack)
+"   nmap py <plug>(YoinkPostPasteSwapForward)
+
+"   " nmap p <plug>(YoinkPaste_p)
+
+"   nmap p <plug>(YoinkPaste_P)
 Plug 'https://github.com/jiangmiao/auto-pairs'
 Plug 'https://github.com/tyru/open-browser.vim'
 Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
@@ -543,7 +592,7 @@ nnoremap <silent> <Leader>t :Tags<CR>
     execute "tag " . expand("<cword>")
   endfunction
 
-  nnoremap <c-]> :call FollowTag()<CR>zt<c-y><c-y><c-y><c-y>
+  nnoremap <c-]> :call FollowTag()<CR>zt<c-y><c-y><c-y>
 
   let g:gutentags_modules = ['ctags']
   let g:gutentags_enabled = 1
@@ -679,6 +728,8 @@ nnoremap <silent> <Leader>t :Tags<CR>
   nnoremap j gj
   nnoremap gk k
   nnoremap gj j
+
+  nnoremap zu zt<c-y><c-y><c-y>
 
   " MatchParen.vim causes lag.
   "

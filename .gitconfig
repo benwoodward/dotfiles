@@ -34,7 +34,7 @@
   #caa = commit -a --amend -C HEAD
 
   # shortcuts for commands
-  s = status
+  s = status -s
   d = !git status -s \
      | fzf --no-sort --reverse \
        --preview 'git diff --color=always {+2} | diff-so-fancy' \
