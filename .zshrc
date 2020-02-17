@@ -129,7 +129,7 @@ source /Users/$(whoami)/.asdf/asdf.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Include git information in FZF preview
-export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always {})'
+export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.

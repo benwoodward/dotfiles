@@ -344,7 +344,6 @@ endfunction
 
 command! -bang -nargs=* Rg call RgWithPreview(v:true, <q-args>, 'Grep', <bang>0)
 command! -bang -nargs=* Rgg call RgWithPreview(v:false, <q-args>, 'Global Grep', <bang>0)
-command! -bang -nargs=* Rgv call RgWithPreview(v:true, <c-word>, 'Grep', <bang>0)
 command! -bang -nargs=? -complete=dir Files call FilesWithPreview(<q-args>, <bang>0)
 
 " Don't use status line in FZF
@@ -375,11 +374,13 @@ command! -bang -nargs=* Tags
 " nnoremap <silent> <Leader>e :Files<CR>
 nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 " Open fuzzy buffers with leader b
-nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
 " Open ripgrep
-nnoremap <silent> <Leader>/ :Rg<CR>
+nnoremap <silent> <leader>/ :Rg<CR>
+" Open ripgrep and search word under cursor
+nnoremap <silent> <leader>ff :Rg <C-R><C-W><CR>
 " Search ctags
-nnoremap <silent> <Leader>t :Tags<CR>
+nnoremap <silent> <leader>t :Tags<CR>
 
   " Allow pasting from system clipboard
   tnoremap <expr> <C-v> '<C-\><C-N>pi'
@@ -399,7 +400,8 @@ nnoremap <silent> <Leader>t :Tags<CR>
   ""
   Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
   Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
-  Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
+  " Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
+  Plug 'mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
   Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
 
   " Add plugins to &runtimepath
