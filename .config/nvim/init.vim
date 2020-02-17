@@ -766,7 +766,10 @@ nnoremap <silent> <Leader>t :Tags<CR>
 
   map Q :q<CR>
   map W :w<CR>
-  map E :e!<CR>
+  map R :e!<CR>
+  " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
+  map Y 5<c-y>
+  map E 5<c-e>
 
   " for asyncomplete.vim log
   let g:asyncomplete_log_file = expand('~/asyncomplete.log')
