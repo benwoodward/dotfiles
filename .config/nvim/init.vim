@@ -176,7 +176,8 @@ map <leader>yb :YanksBefore<CR>
 "   nmap p <plug>(YoinkPaste_P)
 Plug 'https://github.com/jiangmiao/auto-pairs'
 Plug 'https://github.com/tyru/open-browser.vim'
-Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
+" Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
+Plug 'https://github.com/zhimsel/vim-stay'
 let g:lastplace_ignore_buftype = "quickfix,nofile,help"
 
 Plug 'https://github.com/rhysd/git-messenger.vim' " Show git blame for current line in floating window
