@@ -34,15 +34,21 @@
   #caa = commit -a --amend -C HEAD
 
   # shortcuts for commands
-  s = status -s
+  s = status
+  ss = status -s
   d = !git status -s \
      | fzf --no-sort --reverse \
        --preview 'git diff --color=always {+2} | diff-so-fancy' \
        --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
        --bind=ctrl-d:preview-page-down --bind=ctrl-u:preview-page-up \
        --preview-window=right:70%
+  ds = !git diff --name-only --cached \
+     | fzf --no-sort --reverse \
+       --preview 'git diff --staged --color=always {} | diff-so-fancy' \
+       --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
+       --bind=ctrl-d:preview-page-down --bind=ctrl-u:preview-page-up \
+       --preview-window=right:70%
   df = diff --color --color-words --abbrev
-  st = status -s
   dt = difftool
   a = add
   co = checkout

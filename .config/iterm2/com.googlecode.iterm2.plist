@@ -1274,7 +1274,7 @@
 			<key>Character Encoding</key>
 			<integer>4</integer>
 			<key>Close Sessions On End</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
@@ -1667,7 +1667,7 @@
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>Right Option Key Sends</key>
 			<integer>0</integer>
 			<key>Rows</key>
@@ -1792,7 +1792,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>FA15FB41-83F0-4892-98C8-877743971BFE</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>208</integer>
+	<integer>210</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2567,11 +2567,13 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-02-13T06:17:21Z</date>
+	<date>2020-02-18T06:52:04Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
+	<key>SUUpdateGroupIdentifier</key>
+	<integer>1774717116</integer>
 	<key>SUUpdateRelaunchingMarker</key>
-	<false/>
+	<true/>
 	<key>SeparateStatusBarsPerPane</key>
 	<false/>
 	<key>ShowFullScreenTabBar</key>
