@@ -401,7 +401,7 @@ nnoremap <silent> <leader>t :Tags<CR>
   Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
   Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
   " Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
-  Plug 'mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
+  Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
   Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
 
   " Add plugins to &runtimepath
@@ -416,55 +416,27 @@ nnoremap <silent> <leader>t :Tags<CR>
 
 
 
-  " Show line numbers
-  set number
+set number
+set relativenumber  " show relative line numbers
+set numberwidth=3   " narrow number column
 
-
-  " Show line number for current line, and relative numbers for others
-  " Toggle with F4
-  if exists("+relativenumber")
-    if v:version >= 400
+" use Ctrl+L to toggle the line number counting method
+function! g:ToggleNuMode()
+  if &relativenumber == 1
      set number
-    endif
-    set relativenumber  " show relative line numbers
-    set numberwidth=3   " narrow number column
-    " cycles between relative / absolute / no numbering
-    if v:version >= 400
-     function! RelativeNumberToggle()
-       if (&number == 1 && &relativenumber == 1)
-         set nonumber
-         set relativenumber relativenumber?
-       elseif (&number == 0 && &relativenumber == 1)
-         set norelativenumber
-         set number number?
-       elseif (&number == 1 && &relativenumber == 0)
-         set norelativenumber
-         set nonumber number?
-       else
-         set number
-         set relativenumber relativenumber?
-       endif
-     endfunc
-    else
-     function! RelativeNumberToggle()
-       if (&relativenumber == 1)
-         set number number?
-       elseif (&number == 1)
-         set nonumber number?
-       else
-         set relativenumber relativenumber?
-       endif
-     endfunc
-    endif
-    nnoremap <F4> :call RelativeNumberToggle()<CR>
-    inoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
-    vnoremap <F4> <ESC>:call RelativeNumberToggle()<CR>
-  else                  " fallback
-    set number          " show line numbers
-    " inverts numbering
-    nnoremap <F4> :set number! number?<CR>
+     set norelativenumber
+  else
+     set number
+     set relativenumber
   endif
+endfunction
+nnoremap <silent><C-L> :call g:ToggleNuMode()<cr>
 
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
 
   " Show line and column number
   " set ruler
