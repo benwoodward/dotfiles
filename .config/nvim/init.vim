@@ -125,15 +125,24 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/andrewradev/sideways.vim'
+nnoremap msl :SidewaysLeft<cr>
+nnoremap msr :SidewaysRight<cr>
 Plug 'https://github.com/matze/vim-move'
-" <A-k>   Move current line/selection up
-" <A-j>   Move current line/selection down
-" <A-h>   Move current character/selection left
-" <A-l>   Move current character/selection right
+let g:move_map_keys = 0
+vmap <c-h> <Plug>MoveBlockLeft
+vmap <c-l> <Plug>MoveBlockRight
+nmap <c-h> <Plug>MoveLineLeft
+nmap <c-l> <Plug>MoveLineRight
+vmap <s-j> <Plug>MoveBlockDown
+vmap <s-k> <Plug>MoveBlockUp
+nmap <s-j> <Plug>MoveLineDown
+nmap <s-k> <Plug>MoveLineUp
+
 Plug 'https://github.com/janko/vim-test'
 Plug 'https://github.com/francoiscabrol/ranger.vim'
 let g:ranger_map_keys = 0
-nnoremap rr :Ranger<CR>
+nnoremap rr :FloatermNew ranger<CR>
 Plug 'https://github.com/rbgrouleff/bclose.vim'
 Plug 'https://github.com/bfredl/nvim-miniyank'
 
@@ -435,7 +444,7 @@ function! g:ToggleNuMode()
      set relativenumber
   endif
 endfunction
-nnoremap <silent><C-L> :call g:ToggleNuMode()<cr>
+nnoremap <leader>ln :call g:ToggleNuMode()<cr>
 
 augroup numbertoggle
   autocmd!
@@ -789,6 +798,9 @@ augroup END
   let g:floaterm_height = 0.9
   let g:floaterm_position = 'topright'
   let g:floaterm_background = '#1B2B34'
+  hi FloatermNF guibg='#1B2B34'
+  hi FloatermBorderNF guibg='#1B2B34' guifg=cyan
+
 
   noremap  <silent> <F12>           :FloatermToggle<CR>
   noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>
