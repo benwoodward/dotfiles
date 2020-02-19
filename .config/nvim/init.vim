@@ -125,6 +125,11 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/matze/vim-move'
+" <A-k>   Move current line/selection up
+" <A-j>   Move current line/selection down
+" <A-h>   Move current character/selection left
+" <A-l>   Move current character/selection right
 Plug 'https://github.com/janko/vim-test'
 Plug 'https://github.com/francoiscabrol/ranger.vim'
 let g:ranger_map_keys = 0
@@ -447,9 +452,6 @@ augroup END
 
   set nolazyredraw
 
-  " Enable command line completion vertical menu
-  set wildoptions+=pum
-
   " TODO: What does this do?
   let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
@@ -472,6 +474,29 @@ augroup END
   if !has('nvim')
     set encoding=utf-8  " Set default encoding to UTF-8
   endif
+
+set completeopt-=menu
+set completeopt+=menuone   " Show the completions UI even with only 1 item
+set completeopt-=longest   " Don't insert the longest common text
+set completeopt-=preview   " Hide the documentation preview window
+set completeopt+=noinsert  " Don't insert text automatically
+set completeopt-=noselect  " Highlight the first completion automatically
+set pumheight=15
+set wildmenu
+set wildignorecase
+  " neovim only
+if matchstr(execute('silent version'), 'NVIM v\zs[^\n-]*') >= '0.4.0'
+  set shada='20,<50,s10
+  set inccommand=nosplit
+  set wildoptions+=pum
+  set signcolumn=yes:2
+  set pumblend=10
+endif
+
+cnoremap <expr> <C-j>  pumvisible() ? '<Right>' : '<Down>'
+cnoremap <expr> <C-k>  pumvisible() ? '<Left>' : '<Up>'
+cnoremap <expr> <Up>   pumvisible() ? '<C-p>' : '<up>'
+cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
 
   " highlight the current line
   set cursorline
@@ -509,10 +534,6 @@ augroup END
   set incsearch   " incremental searching
   set ignorecase  " searches are case insensitive...
   set smartcase   " ... unless they contain at least one capital letter
-
-  " Enable tab complete for commands.
-  " first tab shows all matches. next tab starts cycling through the matches
-  set wildmode=list:longest,full
 
   " Disable backup behavior
   set nobackup
@@ -629,6 +650,22 @@ augroup END
   autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
   autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
   autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
+
+  augroup ParenColor
+  autocmd!
+  autocmd VimEnter,BufWinEnter *
+    \ if index(['html', 'htmldjango', 'tex', 'mma', 'vue'], &filetype) < 0 |
+      \ syntax match paren1 /[{}]/   | hi paren1 guifg=#FF00FF |
+      \ syntax match paren2 /[()]/   | hi paren2 guifg=#DF8700 |
+      \ syntax match paren3 /[<>]/   | hi paren3 guifg=#0087FF |
+      \ syntax match paren4 /[\[\]]/ | hi paren4 guifg=#00FF5F |
+    \ endif
+augroup END
+
+augroup UserChecktime
+  autocmd!
+  autocmd FocusGained * checktime
+augroup END
 
   let g:session_autoload="no"
   let g:session_autosave="no"
