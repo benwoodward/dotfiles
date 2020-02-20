@@ -34,7 +34,7 @@
   #caa = commit -a --amend -C HEAD
 
   # shortcuts for commands
-  st = status
+  ss = status
   s = status -s
   d = !git status -s \
      | fzf --no-sort --reverse \
@@ -109,6 +109,7 @@
   editor = subl -n -w
   excludesfile = ~/.gitignore
 	quotepath = false
+	pager = diff-so-fancy | less --tabs=1,5 -R
 [credential]
   helper = osxkeychain
 [grep]
@@ -124,21 +125,10 @@
   prune = true
 [http]
 	cookiefile = ~/.gitcookies
-; [color "diff-highlight"]
-; 	oldNormal = red bold
-; 	oldHighlight = red bold 52
-; 	newNormal = green bold
-; 	newHighlight = green bold 22
-; [color "diff"]
-; 	meta = 11
-; 	frag = magenta bold
-; 	commit = yellow bold
-; 	old = red bold
-; 	new = green bold
-; 	whitespace = red reverse
 [diff-so-fancy]
 	markEmptyLines = true
 	stripLeadingSymbols = true
+	changeHunkIndicators = false
 [color]
   diff = auto
   status = auto

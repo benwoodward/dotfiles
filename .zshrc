@@ -129,7 +129,7 @@ source /Users/$(whoami)/.asdf/asdf.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Include git information in FZF preview
-export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
+export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes,header --color=always --wrap=never {})'
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -297,6 +297,8 @@ bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move t
 
 bindkey "^p" history-beginning-search-backward
 bindkey "^n" history-beginning-search-forward
+
+bindkey -r "^j"
 
 HISTORY_START_WITH_GLOBAL=false
 

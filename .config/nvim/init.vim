@@ -132,12 +132,15 @@ Plug 'https://github.com/matze/vim-move'
 let g:move_map_keys = 0
 vmap <c-h> <Plug>MoveBlockLeft
 vmap <c-l> <Plug>MoveBlockRight
+
 nmap <c-h> <Plug>MoveLineLeft
 nmap <c-l> <Plug>MoveLineRight
-vmap <s-j> <Plug>MoveBlockDown
-vmap <s-k> <Plug>MoveBlockUp
-nmap <s-j> <Plug>MoveLineDown
-nmap <s-k> <Plug>MoveLineUp
+
+vmap <c-j> <Plug>MoveBlockDown
+vmap <c-k> <Plug>MoveBlockUp
+
+nmap <c-j> <Plug>MoveLineDown
+nmap <c-k> <Plug>MoveLineUp
 
 Plug 'https://github.com/janko/vim-test'
 Plug 'https://github.com/francoiscabrol/ranger.vim'
@@ -806,9 +809,9 @@ augroup END
   " for asyncomplete.vim log
   let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 
-  let g:floaterm_width = 0.7
+  let g:floaterm_width = 0.9
   let g:floaterm_height = 0.9
-  let g:floaterm_position = 'topright'
+  let g:floaterm_position = 'center'
   let g:floaterm_background = '#1B2B34'
   hi FloatermNF guibg='#1B2B34'
   hi FloatermBorderNF guibg='#1B2B34' guifg=cyan
