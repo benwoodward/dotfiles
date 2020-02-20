@@ -314,7 +314,8 @@ let g:fzf_history_dir = './.fzf-history'
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 " Some ripgrep searching defaults
-function! RgCommand(ignore) abort
+function! RgCommand(ignore, current_file) abort
+  let glob = '--glob ' . expand("%:t")
   return 'rg' .
     \ ' --hidden' .
     \ ' --color=always' .
@@ -324,6 +325,7 @@ function! RgCommand(ignore) abort
     \ ' --line-number' .
     \ ' --no-heading' .
     \ ' --smart-case' .
+    \ ' ' . (a:current_file == 1 ? glob : '') .
     \ ' ' . (a:ignore == 1 ? '--ignore' : '--no-ignore')
 endfunction
 
@@ -344,7 +346,12 @@ endfunction
 
 " Executes ripgrep with a preview
 function! RgWithPreview(ignore, args, prompt, bang) abort
-  let command = RgCommand(a:ignore).' '.shellescape(a:args)
+  let command = RgCommand(a:ignore, v:false).' '.shellescape(a:args)
+  call fzf#vim#grep(command, 1, Preview(RgPreviewFlags(a:prompt)), a:bang)
+endfunction
+
+function! RgCurrentFileWithPreview(ignore, args, prompt, bang) abort
+  let command = RgCommand(a:ignore, v:true).' '.shellescape(a:args)
   call fzf#vim#grep(command, 1, Preview(RgPreviewFlags(a:prompt)), a:bang)
 endfunction
 
@@ -357,6 +364,7 @@ function! FilesWithPreview(args, bang) abort
 endfunction
 
 command! -bang -nargs=* Rg call RgWithPreview(v:true, <q-args>, 'Grep', <bang>0)
+command! -bang -nargs=* Rgcf call RgCurrentFileWithPreview(v:true, <q-args>, 'Grep', <bang>0)
 command! -bang -nargs=* Rgg call RgWithPreview(v:false, <q-args>, 'Global Grep', <bang>0)
 command! -bang -nargs=? -complete=dir Files call FilesWithPreview(<q-args>, <bang>0)
 
@@ -391,6 +399,10 @@ nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 " Open ripgrep
 nnoremap <silent> <leader>/ :Rg<CR>
+" Open ripgrep
+nnoremap <silent> <leader>f/ :Rgcf<CR>
+" Open ripgrep and search word under cursor
+nnoremap <silent> <leader>cff :Rgcf <C-R><C-W><CR>
 " Open ripgrep and search word under cursor
 nnoremap <silent> <leader>ff :Rg <C-R><C-W><CR>
 " Search ctags
