@@ -514,6 +514,74 @@
                     {
                         "manipulators": [
                             {
+                                "description": "Map ⇧^] to forward in Brave/Chrome",
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.google.Chrome",
+                                            "^com.brave.Browser"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "close_bracket",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_control",
+                                            "left_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "close_bracket",
+                                        "modifiers": [
+                                            "left_command"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "manipulators": [
+                            {
+                                "description": "Map ⇧^[ to back in Brave/Chrome",
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.google.Chrome",
+                                            "^com.brave.Browser"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "open_bracket",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_control",
+                                            "left_shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "open_bracket",
+                                        "modifiers": [
+                                            "left_command"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "manipulators": [
+                            {
                                 "description": "Map ^] to next tab in Brave/Chrome",
                                 "conditions": [
                                     {

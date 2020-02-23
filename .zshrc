@@ -50,7 +50,7 @@ else
 fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
-alias n="nvim"
+alias n="nvim -cStart"
 alias ne="nvim '+call FzfFilePreview()' ."
 alias vc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"

@@ -56,6 +56,7 @@ Plug 'https://github.com/othree/html5.vim'          " html5 syntax highlighting
 Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
 Plug 'https://github.com/maksimr/vim-jsbeautify'
 Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
+Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
 Plug 'https://github.com/evanleck/vim-svelte'       " Svelte highlighting
@@ -164,13 +165,7 @@ fun! Startscreen()
   execute ":" . linenumber
 endfun
 
-
-"##########################################################
-" Auto command
-augroup startscreen
-	autocmd!
-	autocmd VimEnter * call Startscreen()
-augroup end
+command! Start call Startscreen()
 
 Plug 'https://github.com/unblevable/quick-scope'
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -199,10 +194,6 @@ nmap <c-j> <Plug>MoveLineDown
 nmap <c-k> <Plug>MoveLineUp
 
 Plug 'https://github.com/janko/vim-test'
-Plug 'https://github.com/francoiscabrol/ranger.vim'
-let g:ranger_map_keys = 0
-nnoremap rr :FloatermNew ranger<CR>
-Plug 'https://github.com/rbgrouleff/bclose.vim'
 Plug 'https://github.com/bfredl/nvim-miniyank'
 
 function FZFYankList() abort
@@ -324,6 +315,7 @@ Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file 
 
 " Terminal in floating window
 Plug 'https://github.com/voldikss/vim-floaterm'
+nnoremap rr :FloatermNew fff<CR>
   " Key bindings:
   " fn F12
 
@@ -354,7 +346,7 @@ Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with optio
   " <leader>saw in to search web for a word
   " <leader>sa( to search web for the text wrapped in the bracket
   " <leader>sas to search web for a sentence
-Plug 'https://github.com/prabirshrestha/async.vim' " TODO: Do I need this?
+" Plug 'https://github.com/prabirshrestha/async.vim' " TODO: Do I need this?
 " Plug 'https://github.com/HendrikPetertje/vimify'
 " Plug 'https://github.com/benwoodward/vimify', { 'branch': 'playlists' }
 Plug '~/dev/oss/Forks/vim-plugins/vimify'
@@ -543,6 +535,8 @@ augroup END
   let g:oceanic_next_terminal_bold = 1
   let g:oceanic_next_terminal_italic = 1
   colorscheme OceanicNext
+" Use OceanicNext colours for SearchCurrent
+autocmd BufEnter * highlight SearchCurrent ctermbg=209 ctermfg=237 guibg=#f99157 guifg=#343d46
 
   scriptencoding utf-8
 
@@ -859,8 +853,8 @@ augroup END
   map <c-w> :w<CR>
   map R :e!<CR>
   " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
-  map Y 5<c-y>
-  map E 5<c-e>
+  " map Y 5<c-y>
+  " map E 5<c-e>
   " Swap ^ and 0 because I use ^ 99% of the time
   noremap 0 ^
   noremap ^ 0

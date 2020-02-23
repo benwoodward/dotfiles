@@ -8,7 +8,6 @@
 - `Ctrl`+`b` Scroll page backwards (move up in the file).
 
 ## C
-- `c` stands for “change” will not do anything on its own, but acts as a modifier to other commands. Here are some common commands handy for editing front end code.
 - `cw` Stands for change word. This will delete the word your cursor is over and enter into insert mode. Note that if you are not on the first character of the word it will only change from where your cursor is until the end of the word. This might seem annoying at first but is actually an amazing feature once you understand movements.
 - `cit` Change all text in between a set of tags i.e foo will delete foo and put you insert mode.
 - `ci(` Change all text in between a set of parenthesis.
@@ -48,8 +47,6 @@
 - `:ea 5m` Jump to five minutes ago. Seriously.
 - `:ea 1h` Jump to 1 hour ago.
 - `:ea 14h 30m` Jump to 14 hours and 30 minutes ago. Ok you get the point.
-- `:e filename` Open file in the current window.
-- `:e .` Open file explorer in current directory.
 
 ## F
 - `f` is for finding things so it doesn’t do anything on it’s own. It will jump to the next character you type after f. It can be combined with c,d,y to change, cut, and copy sections of text.
@@ -80,11 +77,7 @@
 - `gq` Format selected text.
 
 ## H
-- `h` Move cursor one character to the left.
-- `4h` Move cursor four characters to the left.
 - `dh` Delete character to the left of cursor.
-- `:h` Opens up vim help in a new window.
-- `:h` a Opens vim help to documentation on the a key.
 - `:h i_CTRL-R` Opens vim help to documentation on pressing control and r while in insert mode.
 - `H` Move cursor to first (highest) line in window.
 
@@ -244,8 +237,6 @@ y stands for copy, I mean yank. It doesn’t do anything by itself. It is very s
 - `/&lt;p&gt;` Forward search for the next opening paragraph tag.
 - `/&#92;` Forward search for the next space.
 - `/^}` Forward search for closing bracket of a css class, if the css class is closed at the beginning of a new line i.e.
-- `?` Backwards search.
-- `?http` Search backwards for the string http.
 
 ## Misc
 - `$` Go to the end of the line.
