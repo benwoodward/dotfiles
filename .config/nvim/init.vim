@@ -60,8 +60,8 @@ Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
 Plug 'https://github.com/evanleck/vim-svelte'       " Svelte highlighting
 Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
-Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
-  let g:vim_markdown_folding_disabled = 1
+" Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
+"   let g:vim_markdown_folding_disabled = 1
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'https://github.com/chrisbra/Colorizer'
@@ -121,10 +121,66 @@ Plug 'https://github.com/elzr/vim-json.git', { 'for': ['json']}         " JSON h
 Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highlights trailing whitespace characters in red
 
 
-
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/vim-pandoc/vim-pandoc-syntax'
+augroup pandoc_syntax
+  au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
+augroup END
+
+fun! Startscreen()
+	" Don't run if:
+	" - there are commandline arguments;
+	" - the buffer isn't empty (e.g. cmd | vi -);
+	" - we're not invoked as vim or gvim;
+	" - we're starting in insert mode.
+	if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
+		return
+	endif
+
+	" Start a new buffer...
+	enew
+
+	" ...and set some options for it
+	setlocal
+		\ bufhidden=wipe
+		\ buftype=nofile
+		\ nobuflisted
+		\ nocursorcolumn
+		\ nocursorline
+		\ nolist
+		\ nonumber
+		\ noswapfile
+		\ norelativenumber
+
+
+  e ~/.config/nvim/files/vim_tips.md
+  set buftype=
+  set filetype=markdown.pandoc
+  set concealcursor=n
+  set wrap
+  let linenumber = execute(':ruby puts Random.rand(287)')
+  execute ":" . linenumber
+endfun
+
+
+"##########################################################
+" Auto command
+augroup startscreen
+	autocmd!
+	autocmd VimEnter * call Startscreen()
+augroup end
+
+Plug 'https://github.com/unblevable/quick-scope'
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+augroup END
+
 Plug 'https://github.com/andrewradev/sideways.vim'
 nnoremap msl :SidewaysLeft<cr>
 nnoremap msr :SidewaysRight<cr>
@@ -238,7 +294,7 @@ Plug 'https://github.com/airblade/vim-gitgutter'
 
   nmap ]h :call GitGutterNextHunkCycle()<CR>
   nmap [h <Plug>(GitGutterPrevHunk)
-  nnoremap <leader>gg :let g:gitgutter_diff_base='HEAD~'<Left>
+  nnoremap <leader>gg :let g:gitgutter_diff_base='HEAD~'<CR>
   nnoremap <leader>ggm :let g:gitgutter_diff_base='master'<CR>
   nnoremap <leader>ggh :let g:gitgutter_diff_base=''<CR>
 
@@ -339,12 +395,12 @@ endfunction
 
 " Ensure that only the 4th column delimited by : is filtered by FZF
 function! RgPreviewFlags(prompt) abort
-  return PreviewFlags(a:prompt) . ' --delimiter : --nth 4.. --color hl:123,hl+:222'
+  return PreviewFlags(a:prompt) . ' --delimiter : --nth 4.. --color hl:123,hl+:222 '
 endfunction
 
 " Configs the preview
 function! Preview(flags) abort
-  return fzf#vim#with_preview({'options': a:flags})
+  return fzf#vim#with_preview({'options': a:flags}, 'right:70%:noborder')
 endfunction
 
 " Executes ripgrep with a preview
@@ -391,7 +447,7 @@ command! -bang -nargs=* Tags
   \      'options': '
   \         --with-nth 1,2
   \         --prompt "Tags> "
-  \         --preview-window="right:60%"
+  \         --preview-window="right:70%:noborder"
   \         --preview ''' . preview_file . ' {}'''
   \ }, <bang>0)
 
@@ -459,7 +515,7 @@ function! g:ToggleNuMode()
      set relativenumber
   endif
 endfunction
-nnoremap <leader>ln :call g:ToggleNuMode()<cr>
+nnoremap <c-l> :call g:ToggleNuMode()<cr>
 
 augroup numbertoggle
   autocmd!
@@ -666,7 +722,7 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   au BufRead,BufNewFile Gemfile* set filetype=ruby
   au BufRead,BufNewFile Dockerfile* set filetype=Dockerfile
   autocmd BufNewFile,BufRead Guardfile set filetype=ruby
-  autocmd BufNewFile,BufRead *.md set filetype=markdown
+  " autocmd BufNewFile,BufRead *.md set filetype=markdown
   autocmd BufRead,BufNewFile *.scss set filetype=scss.css|set tabstop=2|set shiftwidth=2
   autocmd BufRead,BufNewFile *.rb set filetype=ruby tabstop=2|set shiftwidth=2
   autocmd BufRead,BufNewFile *. set tabstop=2|set shiftwidth=2|set expandtab
@@ -766,6 +822,7 @@ augroup END
   nnoremap gj j
 
   nnoremap zu zt<c-y><c-y><c-y>
+  nnoremap zd zb<c-e><c-e><c-e>
 
   " MatchParen.vim causes lag.
   "
@@ -791,7 +848,6 @@ augroup END
       autocmd VimEnter * call FuckThatMatchParen()
   augroup END
 
-
   let g:python3_host_prog = '/usr/local/bin/python3'
 
   " Turn off auto-indendation before pasting
@@ -799,12 +855,15 @@ augroup END
 
   let g:mix_format_on_save = 1
 
-  map Q :q<CR>
-  map W :w<CR>
+  map <c-q> :q<CR>
+  map <c-w> :w<CR>
   map R :e!<CR>
   " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
   map Y 5<c-y>
   map E 5<c-e>
+  " Swap ^ and 0 because I use ^ 99% of the time
+  noremap 0 ^
+  noremap ^ 0
 
   " for asyncomplete.vim log
   let g:asyncomplete_log_file = expand('~/asyncomplete.log')

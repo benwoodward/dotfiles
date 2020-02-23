@@ -51,12 +51,10 @@ fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
 alias n="nvim"
-alias nn="nvim ."
 alias ne="nvim '+call FzfFilePreview()' ."
-alias nnc='nvim ~/.config/nvim/init.vim'
+alias vc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
-alias ohmyzsh="nvim ~/.oh-my-zsh"
 alias g='git'
 alias ll='ls -al'
 
@@ -129,7 +127,7 @@ source /Users/$(whoami)/.asdf/asdf.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Include git information in FZF preview
-export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes,header --color=always --wrap=never {})'
+export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -205,6 +203,19 @@ zstyle ':completion:hist-complete:*' completer _history
 
 # Display message when no matches are found
 zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - CTRL-O to open with `open` command,
+#   - CTRL-E or Enter key to open with the $EDITOR
+fe() {
+  local out file key
+  IFS=$'\n' out=("$(fzf-tmux --query="$1" --exit-0 --expect=ctrl-o,ctrl-e)")
+  key=$(head -1 <<< "$out")
+  file=$(head -2 <<< "$out" | tail -1)
+  if [ -n "$file" ]; then
+    [ "$key" = ctrl-o ] && open "$file" || ${EDITOR:-vim} "$file"
+  fi
+}
 
 # fh - fuzzy search in your command history and execute selected command
 fh() {
@@ -479,6 +490,8 @@ export FZF_DEFAULT_OPTS="
   --color=bg+:$color00,bg:$color00,spinner:$color0C,hl:$color0D
   --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
   --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
+  --preview-window='right:70%'
+  --bind ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down,tab:toggle+up,shift-tab:toggle+down
 "
 
 }
