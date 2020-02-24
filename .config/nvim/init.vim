@@ -314,7 +314,7 @@ Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file 
   " :Reveal
 
 " Terminal in floating window
-Plug 'https://github.com/voldikss/vim-floaterm'
+Plug 'https://github.com/voldikss/vim-floaterm', { 'branch': 'master' }
 nnoremap rr :FloatermNew fff<CR>
   " Key bindings:
   " fn F12
@@ -358,7 +358,6 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 Plug 'https://github.com/tpope/vim-commentary'
 
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
-  let g:webdevicons_conceal_nerdtree_brackets=1
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_history_dir = './.fzf-history'
@@ -453,7 +452,7 @@ nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 " Open ripgrep
 nnoremap <silent> <leader>/ :Rg<CR>
-" Open ripgrep
+" Open ripgrep current file only
 nnoremap <silent> <leader>f/ :Rgcf<CR>
 " Open ripgrep and search word under cursor
 nnoremap <silent> <leader>cff :Rgcf <C-R><C-W><CR>
@@ -607,7 +606,7 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   ""
   "" Searching
   ""
-  set hlsearch    " highlight matches
+  set nohlsearch  " don't highlight matches by default
   set incsearch   " incremental searching
   set ignorecase  " searches are case insensitive...
   set smartcase   " ... unless they contain at least one capital letter
@@ -858,8 +857,8 @@ endfunction
 
   let g:mix_format_on_save = 1
 
-  map <c-q> :q<CR>
-  map <c-w> :w<CR>
+  nnoremap <leader>q :q<CR>
+  nnoremap <leader>w :w<CR>
   map R :e!<CR>
   " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
   " map Y 5<c-y>
@@ -867,9 +866,6 @@ endfunction
   " Swap ^ and 0 because I use ^ 99% of the time
   noremap 0 ^
   noremap ^ 0
-
-  " for asyncomplete.vim log
-  let g:asyncomplete_log_file = expand('~/asyncomplete.log')
 
   let g:floaterm_width = 0.9
   let g:floaterm_height = 0.9
@@ -913,11 +909,54 @@ endfunction
 
   " Files + devicons + floating fzf
 function! FzfFilePreview()
-  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {3..-1} | head -200" --expect=ctrl-v,ctrl-x'
+  let s:files_status = {}
+
+  function! s:cacheGitStatus()
+    let l:gitcmd = 'git -c color.status=false -C ' . $PWD . ' status -s'
+    let l:statusesStr = system(l:gitcmd)
+    let l:statusesSplit = split(l:statusesStr, '\n')
+    for l:statusLine in l:statusesSplit
+      let l:fileStatus = split(l:statusLine, ' ')[0]
+      let l:fileName = split(l:statusLine, ' ')[1]
+      let s:files_status[l:fileName] = l:fileStatus
+    endfor
+  endfunction
 
   function! s:files()
+    call s:cacheGitStatus()
     let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
-    return s:prepend_icon(l:files)
+    return s:prepend_indicators(l:files)
+  endfunction
+
+  function! s:prepend_indicators(candidates)
+    return s:prepend_git_status(s:prepend_icon(a:candidates))
+  endfunction
+
+  function! s:prepend_git_status(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:status = ''
+      let l:icon = split(l:candidate, ' ')[0]
+      let l:filePathWithIcon = split(l:candidate, ' ')[1]
+
+      let l:pos = strridx(l:filePathWithIcon, ' ')
+      let l:file_path = l:filePathWithIcon[pos+1:-1]
+      if has_key(s:files_status, l:file_path)
+        let l:status = s:files_status[l:file_path]
+        call add(l:result, printf('%s %s %s', l:status, l:icon, l:file_path))
+      else
+        " printf statement contains a load-bearing unicode space
+        " the file path is extracted from the list item using {3..-1},
+        " this breaks if there is a different number of spaces, which
+        " means if we add a space in the following printf it breaks.
+        " using a unicode space preserves the spacing in the fzf list
+        " without breaking the {3..-1} index
+        call add(l:result, printf('%s %s %s', ' ', l:icon, l:file_path))
+      endif
+    endfor
+
+    return l:result
   endfunction
 
   function! s:prepend_icon(candidates)
@@ -939,7 +978,7 @@ function! FzfFilePreview()
                  \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
 
     for l:item in a:lines[1:]
-      let l:pos = stridx(l:item, ' ')
+      let l:pos = strridx(l:item, ' ')
       let l:file_path = l:item[pos+1:-1]
       execute 'silent '. l:cmd . ' ' . l:file_path
     endfor

@@ -220,8 +220,7 @@ If you wanted to increment a set of numbers in a line of text like .icon-1 { bac
 - `yT>` Copies from current cursor postion to the previous > on the same line.
 - `yf>` Copies from current cursor postion up to and including the next > on the same line.
 - `yF>` Copies from current cursor postion up to and including the previous > on the same line.
-- `ctrl`+`y` Scroll up by 1 line.
-- `12``ctrl`+`y` Scroll up 12 lines.
+- `12ctrl`+`y` Scroll up 12 lines.
 
 ## Z
 - `z<CR>` Redraws the screen so that your cursor line is at the top of the window. Same as zt.
