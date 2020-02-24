@@ -338,6 +338,9 @@ Plug 'https://github.com/haya14busa/incsearch.vim'
 " Plug 'mattn/webapi-vim' " TODO: Do I need this?
 Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
 Plug 'https://github.com/ruanyl/vim-gh-line' " Open current file at current line on Github
+" Default key mapping for a blob view: <leader>gh
+" Default key mapping for a blame view: <leader>gb
+" Default key mapping for repo view: <leader>go
 Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with options
   " vim-search-me
   nmap <silent> <Leader>s <Plug>SearchNormal
@@ -795,6 +798,12 @@ augroup END
   " Map the arrow keys to be based on display lines, not physical lines
   map <Down> gj
   map <Up> gk
+
+" Disable Searchant highlight when incsearch.vim highlights also disable
+autocmd CursorMoved * call SearchantStop()
+function SearchantStop()
+  :execute "normal \<Plug>SearchantStop"
+endfunction
 
   " Toggle hlsearch with <leader>hs
   nmap <leader>hs :set hlsearch! hlsearch?<CR>

@@ -211,8 +211,6 @@ If you wanted to increment a set of numbers in a line of text like .icon-1 { bac
 - `3x` Delete 3 characters.
 
 ## Y
-y stands for copy, I mean yank. It doesn’t do anything by itself. It is very similar to c and d in how it can be used.
-- `yy` Copies current line.
 - `"xyy` Copies current line into register x.
 - `"jY` Copies current line into register j. If you like “Y” to work from the cursor to the end of line (which is more logical, but not Vi-compatible) use `:map Y y$`.
 - `:12,112y` Copies lines 12 through 112.
