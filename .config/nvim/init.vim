@@ -857,8 +857,8 @@ endfunction
 
   let g:mix_format_on_save = 1
 
-  nnoremap <leader>q :q<CR>
-  nnoremap <leader>w :w<CR>
+  nnoremap Q :q<CR>
+  nnoremap W :w<CR>
   map R :e!<CR>
   " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
   " map Y 5<c-y>
@@ -907,7 +907,13 @@ endfunction
     call nvim_open_win(buf, v:true, opts)
   endfunction
 
-  " Files + devicons + floating fzf
+" TODO: Update to work with streaming, + any fixes from original thread:
+"
+" https://github.com/ryanoasis/vim-devicons/issues/106#issuecomment-354629715
+" https://coreyja.com/vim-fzf-with-devicons/
+" https://www.reddit.com/r/neovim/comments/f8ouv3/i_added_a_git_status_column_to_udanmikitas_fzf/finpwoa/
+"
+" Files + devicons + floating fzf
 function! FzfFilePreview()
   let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {3..-1} | head -200" --expect=ctrl-v,ctrl-x'
   let s:files_status = {}

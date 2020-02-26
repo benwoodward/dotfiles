@@ -50,12 +50,6 @@
 
 ## F
 - `f` is for finding things so it doesn’t do anything on it’s own. It will jump to the next character you type after f. It can be combined with c,d,y to change, cut, and copy sections of text.
-- `fr` Jumps to the next r on the (same line only).
-- `ft` Jumps to the next t on the (same line only).
-- `f,` Jumps to the next , on the (same line only).
-- `Fr` Jumps to the previous r (same line only).
-- `Ft` Jumps to the previous t (same line only).
-- `F,` Jumps to the previous , (same line only).
 - `2df"` delete from cursor through two occurences of “.
 - `ctrl`+`f` Scrolls one full page forward.
 

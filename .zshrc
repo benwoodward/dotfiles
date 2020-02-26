@@ -56,10 +56,58 @@ alias vc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
 alias g='git'
-alias ll='ls -al'
 
-# list recent directories
-alias lsr='ls -td -- */ | head -n 5'
+# list recursive files, ordered by creation date
+alias lsr="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 | rev | cut -d ' ' -f 1,2,4,5 | rev"
+alias lsrs="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 -r | rev | cut -d ' ' -f 1,2,4,5 | rev"
+
+relative-date() {
+  while read input_string; do
+    local file_path=`echo $input_string | cut -d ' ' -f 5`
+    local ls_date=`echo $input_string | cut -d ' ' -f 1,2,3,4`
+    # Accepts date in format found in `ls` output, and converts to epoch
+    local date="$(date -j -f "%d %b %H:%M:%S %Y" "$ls_date" +"%s")"
+    local now="$(date +"%s")"
+    local time_diff=$((now - date))
+
+    if ((time_diff > 24*60*60)); then
+      date_string=`printf "%.0f days ago" time_diff/((24*60*60))`
+    elif ((time_diff > 60*60)); then
+      date_string=`printf "%.0f hours ago" time_diff/((60*60))`;
+    elif ((time_diff > 60)); then
+      date_string=`printf "%.0f minutes ago" time_diff/60`;
+    else
+      date_string=`printf "%s seconds ago" $time_diff`;
+    fi
+
+    date_string=${(r:18:)date_string}
+
+    echo "$date:$date_string:\e[32m$file_path\e[m\n"
+  done
+}
+zle -N relative-date
+
+function list-new-files() {
+  find . -type f \
+    -not \( -wholename './.git*' -prune \) \
+    -not \( -wholename './tags*' -prune \) \
+    -exec ls -lTU {} \; | rev | cut -d ' ' -f 1,2,3,4,5 | rev | relative-date \
+      | sort -k 1 -r \
+      | rev \
+      | cut -d ':' -f 1,2 \
+      | rev \
+      | sed 's/://g'
+}
+zle -N list-new-files
+
+function new-files() {
+if [ "$1" != "" ]
+then
+  list-new-files | head -n "$1"
+else
+  list-new-files
+fi
+}
 
 # list recently modified files recursively
 alias recent-files-recursive="find . -exec stat -f '%m%t%Sm %N' {} + | sort -n | cut -f2- | head -n 50"
@@ -87,15 +135,13 @@ source $ZPLUG_HOME/init.zsh
 
 zplug "lukechilds/zsh-nvm"
 zplug "mafredri/zsh-async", from:github
-# zplug "sindresorhus/pure", use:pure.zsh, from:github, at:indestructible-pure, as:theme
 zplug "romkatv/powerlevel10k", as:theme, depth:1
 zplug 'zsh-users/zsh-autosuggestions', from:github, at:fixes/partial-accept-duplicate-word
-# zplug 'wfxr/forgit'
+zplug 'wfxr/forgit'
 zplug "changyuheng/fz", defer:2
 zplug "rupa/z", use:z.sh
 zplug "kiurchv/asdf.plugin.zsh", defer:2
 zplug "supercrabtree/k"
-zplug "zpm-zsh/ls"
 zplug "zpm-zsh/dircolors-material"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "b4b4r07/enhancd", use:init.sh
@@ -312,6 +358,7 @@ bindkey "^n" history-beginning-search-forward
 bindkey -r "^j"
 
 HISTORY_START_WITH_GLOBAL=false
+PER_DIRECTORY_HISTORY_TOGGLE="^G"
 
 per-directory-history-edit() {
     ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
@@ -455,6 +502,10 @@ hunk-diff() {
 
 hd() {
   hunk-diff
+}
+
+ff() {
+  fff
 }
 
 source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
