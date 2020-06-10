@@ -51,6 +51,7 @@ Plug 'https://github.com/sheerun/vim-polyglot' " Syntax highlighting for multipl
   " TODO: See whether I can remove other syntax plugins using this
 
 Plug 'https://github.com/vim-ruby/vim-ruby.git', { 'for': ['rb']} " Ruby syntax highlighting
+Plug 'https://github.com/henrik/vim-ruby-runner'
 Plug 'https://github.com/othree/yajs.vim'           " Most up to date JS highlighter, works well with React
 Plug 'https://github.com/othree/html5.vim'          " html5 syntax highlighting
 Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
@@ -59,22 +60,25 @@ Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
 Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
-Plug 'https://github.com/evanleck/vim-svelte'       " Svelte highlighting
+Plug 'evanleck/vim-svelte'
+let g:svelte_indent_script = 0
+
 Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
 " Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
 "   let g:vim_markdown_folding_disabled = 1
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'https://github.com/chrisbra/Colorizer'
+" :ColorToggle
+
+Plug 'https://github.com/honza/vim-snippets'
 
 " Intellisense for Neovim
-Plug 'https://github.com/neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
   let g:coc_global_extensions = [
-        \ 'coc-emoji', 'coc-eslint', 'coc-prettier',
-        \ 'coc-tsserver', 'coc-tslint', 'coc-tslint-plugin',
-        \ 'coc-css', 'coc-json', 'coc-pyls', 'coc-yaml',
-        \ 'coc-snippets', 'coc-elixir'
+        \ 'coc-eslint', 'coc-prettier',
+        \ 'coc-json', 'coc-yaml',
+        \ 'coc-snippets', 'coc-elixir', 'coc-svelte'
         \ ]
   let g:coc_snippet_next = '<C-n>' " Use <C-j> for jump to next placeholder, it's default of coc.nvim
   let g:coc_snippet_prev = '<C-p>' " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
@@ -114,7 +118,7 @@ Plug 'https://github.com/neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#in
   nmap <Leader>rn <Plug>(coc-rename)
   nmap <Leader>gd <Plug>(coc-definition)
   " Auto-scroll floating window
-  nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
+  " nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
   nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
 
 Plug 'https://github.com/stephpy/vim-yaml.git', { 'for': ['yaml.yml'] } " YAML hightlighting
@@ -125,35 +129,38 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/itchyny/vim-cursorword'
+Plug 'https://github.com/dhruvasagar/vim-zoom'
+" <C-W>m to toggle zoom in and out for the split
 Plug 'https://github.com/vim-pandoc/vim-pandoc-syntax'
 augroup pandoc_syntax
   au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
 augroup END
 
 fun! Startscreen()
-	" Don't run if:
-	" - there are commandline arguments;
-	" - the buffer isn't empty (e.g. cmd | vi -);
-	" - we're not invoked as vim or gvim;
-	" - we're starting in insert mode.
-	if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
-		return
-	endif
+  " Don't run if:
+  " - there are commandline arguments;
+  " - the buffer isn't empty (e.g. cmd | vi -);
+  " - we're not invoked as vim or gvim;
+  " - we're starting in insert mode.
+  if argc() || line2byte('$') != -1 || v:progname !~? '^[-gmnq]\=vim\=x\=\%[\.exe]$' || &insertmode
+    return
+  endif
 
-	" Start a new buffer...
-	enew
+  " Start a new buffer...
+  enew
 
-	" ...and set some options for it
-	setlocal
-		\ bufhidden=wipe
-		\ buftype=nofile
-		\ nobuflisted
-		\ nocursorcolumn
-		\ nocursorline
-		\ nolist
-		\ nonumber
-		\ noswapfile
-		\ norelativenumber
+  " ...and set some options for it
+  setlocal
+    \ bufhidden=wipe
+    \ buftype=nofile
+    \ nobuflisted
+    \ nocursorcolumn
+    \ nocursorline
+    \ nolist
+    \ nonumber
+    \ noswapfile
+    \ norelativenumber
 
 
   e ~/.config/nvim/files/vim_tips.md
@@ -242,16 +249,19 @@ Plug 'https://github.com/jiangmiao/auto-pairs'
 Plug 'https://github.com/tyru/open-browser.vim'
 " Plug 'https://github.com/farmergreg/vim-lastplace' " Open file at last place edited
 Plug 'https://github.com/zhimsel/vim-stay'
+" Run :CleanViewdir if having current working dir weirdness problems
 let g:lastplace_ignore_buftype = "quickfix,nofile,help"
+set viewoptions=cursor,folds,slash,unix " XXX: Important!
+set viewoptions-=options " XXX: Important!
 
 Plug 'https://github.com/rhysd/git-messenger.vim' " Show git blame for current line in floating window
   " <Leader>gm
-  " q	Close the popup window
-  " o	older. Back to older commit at the line
-  " O	Opposite to o. Forward to newer commit at the line
-  " d	Toggle diff hunks only related to current file in the commit
-  " D	Toggle all diff hunks in the commit
-  " ?	Show mappings help
+  " q Close the popup window
+  " o older. Back to older commit at the line
+  " O Opposite to o. Forward to newer commit at the line
+  " d Toggle diff hunks only related to current file in the commit
+  " D Toggle all diff hunks in the commit
+  " ? Show mappings help
 
 
 " Alternative to git-gutter, display git status for modified lines in gutter
@@ -314,8 +324,9 @@ Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file 
   " :Reveal
 
 " Terminal in floating window
-Plug 'https://github.com/voldikss/vim-floaterm', { 'branch': 'master' }
-nnoremap rr :FloatermNew fff<CR>
+" Plug 'https://github.com/voldikss/vim-floaterm', { 'branch': 'master' }
+Plug '~/dev/oss/forks/vim-plugins/vim-floaterm'
+nnoremap <c-f> :FloatermNew lf<CR>
   " Key bindings:
   " fn F12
 
@@ -335,12 +346,19 @@ Plug 'https://github.com/haya14busa/incsearch.vim'
   map g# <Plug>(incsearch-nohl-g#)
 
 
-" Plug 'mattn/webapi-vim' " TODO: Do I need this?
+Plug 'https://github.com/machakann/vim-highlightedyank'
+Plug 'https://github.com/mattn/webapi-vim' " Required by gist-vim
 Plug 'https://github.com/mattn/gist-vim' " Post selected code to Gist
 Plug 'https://github.com/ruanyl/vim-gh-line' " Open current file at current line on Github
 " Default key mapping for a blob view: <leader>gh
 " Default key mapping for a blame view: <leader>gb
 " Default key mapping for repo view: <leader>go
+" Open latest commit in browser
+map <Leader>lc :Gbrowse HEAD^{}<CR>
+
+" Open current file at HEAD in browser
+map <Leader>flc :Gbrowse HEAD^{}:%<CR>
+
 Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with options
   " vim-search-me
   nmap <silent> <Leader>s <Plug>SearchNormal
@@ -358,9 +376,12 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 Plug 'https://github.com/tpope/vim-commentary'
 
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
+
 Plug 'junegunn/fzf', { 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 let g:fzf_history_dir = './.fzf-history'
+Plug 'pbogut/fzf-mru.vim'
+let g:fzf_mru_no_sort = 1
 
   "" FZF
 
@@ -394,7 +415,7 @@ endfunction
 
 " Configs the preview
 function! Preview(flags) abort
-  return fzf#vim#with_preview({'options': a:flags}, 'right:70%:noborder')
+  return fzf#vim#with_preview({'options': a:flags}, 'up:70%:noborder')
 endfunction
 
 " Executes ripgrep with a preview
@@ -432,7 +453,7 @@ augroup END
 let $FZF_DEFAULT_OPTS = '--layout=default --reverse' .
   \ ' --info inline' .
   \ ' --bind ctrl-e:preview-down,ctrl-y:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down,tab:toggle+up,shift-tab:toggle+down' .
-  \ ' --preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
+  \ ' --preview "bat --theme="OneHalfDark" --style=changes,grid --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
 
 let preview_file = '/Users/' . $USER . '/.config/preview/preview.sh'
 command! -bang -nargs=* Tags
@@ -445,16 +466,17 @@ command! -bang -nargs=* Tags
   \         --preview ''' . preview_file . ' {}'''
   \ }, <bang>0)
 
-" Open fuzzy files with leader \
-" nnoremap <silent> <Leader>e :Files<CR>
+" Search project for file to edit
 nnoremap <silent> <leader>e :call FzfFilePreview()<CR>
+" Search recent files for file to edit
+nnoremap <silent> <leader>r :FZFMru --preview="bat --color always --style changes,grid {}" --preview-window="right:50%:noborder"<CR>
 " Open fuzzy buffers with leader b
 nnoremap <silent> <leader>b :Buffers<CR>
 " Open ripgrep
 nnoremap <silent> <leader>/ :Rg<CR>
 " Open ripgrep current file only
 nnoremap <silent> <leader>f/ :Rgcf<CR>
-" Open ripgrep and search word under cursor
+" Open ripgrep and search word under cursor, current file only
 nnoremap <silent> <leader>cff :Rgcf <C-R><C-W><CR>
 " Open ripgrep and search word under cursor
 nnoremap <silent> <leader>ff :Rg <C-R><C-W><CR>
@@ -494,7 +516,10 @@ nnoremap <silent> <leader>t :Tags<CR>
   map <Space> <Leader>
 
 
+" autocmd VimEnter * silent! lcd %:p:h
+map <leader>c :lcd $PWD<CR>
 
+set noautochdir
 set number
 set relativenumber  " show relative line numbers
 set numberwidth=3   " narrow number column
@@ -520,9 +545,14 @@ augroup END
   " Show line and column number
   " set ruler
 
+  scriptencoding utf-8
+  " Enable filetype-specific indenting and plugins
+  filetype plugin on
+  filetype plugin indent on
   " These two enable syntax highlighting
   set nocompatible
   syntax enable
+  syntax on
 
   set nolazyredraw
 
@@ -539,11 +569,6 @@ augroup END
   colorscheme OceanicNext
 " Use OceanicNext colours for SearchCurrent
 autocmd BufEnter * highlight SearchCurrent ctermbg=209 ctermfg=237 guibg=#f99157 guifg=#343d46
-
-  scriptencoding utf-8
-
-  " Enable filetype-specific indenting and plugins
-  filetype plugin indent on
 
   " Neovim disallow changing 'enconding' option after initialization
   " see https://github.com/neovim/neovim/pull/2929 for more details
@@ -579,6 +604,7 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
 
   " When scrolling off-screen do so 3 lines at a time, not 1
   " set scrolloff=3
+  " set scroll=4
 
   " Set temporary directory (don't litter local dir with swp/tmp files)
   set directory=/tmp/
@@ -591,6 +617,7 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   set tabstop=2                     " a tab is two spaces
   set shiftwidth=2                  " an autoindent (with <<) is two spaces
   set expandtab                     " use spaces, not tabs
+  match Error /\t/                  " Highlight tabs as errors (red)
   set list                          " Show invisible characters
   set backspace=indent,eol,start    " backspace through everything in insert mode
 
@@ -669,8 +696,9 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   let g:gutentags_modules = ['ctags']
   let g:gutentags_enabled = 1
   let g:gutentags_trace = 0
-  let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".git", "node_modules", "*.vim/bundle/*"]
-  let g:gutentags_file_list_command = '( rg --files --no-ignore lib | rg .ex ; rg --files --no-ignore deps | rg .ex ) | cat'
+  " let g:gutentags_ctags_exclude = ['*.min.js', '*.min.css', 'build', '_build', 'vendor', '.git', 'node_modules', '*.vim/bundle/*']
+  " let g:gutentags_file_list_command = '( rg --files --no-ignore lib | rg .ex ; rg --files --no-ignore deps | rg .ex) | cat'
+  let g:gutentags_file_list_command = 'rg --files'
   let g:gutentags_ctags_extra_args = ['--excmd=number']
   let g:gutentags_project_root = ['tags']
   " config project root markers.
@@ -695,14 +723,6 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
     b#
   endfunction
 
-  " Open latest commit in browser
-  map <Leader>lc :Gbrowse HEAD^{}<CR>
-
-  " Open current file at HEAD in browser
-  map <Leader>flc :Gbrowse HEAD^{}:%<CR>
-
-
-
   " Remove trailing whitespace
   map <leader>fws :FixWhitespace<CR>
 
@@ -712,7 +732,7 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   ""
 
   au BufNewFile,BufRead *.es6 set filetype=javascript
-  au BufNewFile,BufRead *.svelte set filetype=html
+  " au BufNewFile,BufRead *.svelte set filetype=svelte
   au BufNewFile,BufRead *.slim set filetype=slim
   au BufNewFile,BufRead *.tsv,*.psv setf csv
   au BufRead,BufNewFile Gemfile* set filetype=ruby
@@ -726,6 +746,7 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   autocmd BufRead,BufNewFile *.erb setlocal tabstop=4|set shiftwidth=4|set expandtab
   autocmd BufRead,BufNewFile *.py set filetype=python tabstop=4|set shiftwidth=4|set expandtab
   autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
+  au FileType css,scss setl iskeyword+=-
 
   augroup ParenColor
   autocmd!
@@ -756,19 +777,21 @@ augroup END
 
   " https://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/
   " window
-  nmap <leader>sw<left>  :topleft  vnew<CR>
-  nmap <leader>sw<right> :botright vnew<CR>
-  nmap <leader>sw<up>    :topleft  new<CR>
-  nmap <leader>sw<down>  :botright new<CR>
+  nmap <leader>sw<c-h>  :topleft  vnew<CR>
+  nmap <leader>sw<c-l> :botright vnew<CR>
+  nmap <leader>sw<c-u>    :topleft  new<CR>
+  nmap <leader>sw<c-j>  :botright new<CR>
   " buffer
-  nmap <leader>s<left>   :leftabove  vnew<CR>
-  nmap <leader>s<right>  :rightbelow vnew<CR>
-  nmap <leader>s<up>     :leftabove  new<CR>
-  nmap <leader>s<down>   :rightbelow new<CR>
+  nmap <leader>s<c-h>  :leftabove  vnew<CR>
+  nmap <leader>s<c-l>  :rightbelow vnew<CR>
+  nmap <leader>s<c-u>  :leftabove  new<CR>
+  nmap <leader>s<c-j>  :rightbelow new<CR>
 
   " http://flaviusim.com/blog/resizing-vim-window-splits-like-a-boss/
   nnoremap <silent> + :exe "vertical resize +4"<CR>
   nnoremap <silent> - :exe "vertical resize -4"<CR>
+  nnoremap <s-up> :exe "resize +4"<CR>
+  nnoremap <s-down> :exe "resize -4"<CR>
 
   set undodir=$HOME/.vim/undo
   set undofile
@@ -778,7 +801,7 @@ augroup END
   set smartcase
 
   " Set cursor to underscore in normal mode
-  set guicursor+=n:hor20-Cursor/lCursor
+  " set guicursor+=n:hor20-Cursor/lCursor
 
   " upper/lower word
   nmap <leader>u mQviwU`Q
@@ -858,7 +881,7 @@ endfunction
   let g:mix_format_on_save = 1
 
   nnoremap Q :q<CR>
-  nnoremap W :w<CR>
+  nnoremap <leader>w :w<CR>
   map R :e!<CR>
   " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
   " map Y 5<c-y>
@@ -915,7 +938,7 @@ endfunction
 "
 " Files + devicons + floating fzf
 function! FzfFilePreview()
-  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {3..-1} | head -200" --expect=ctrl-v,ctrl-x'
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=changes,grid --color always {3..-1} | head -200" --expect=ctrl-v,ctrl-x'
   let s:files_status = {}
 
   function! s:cacheGitStatus()

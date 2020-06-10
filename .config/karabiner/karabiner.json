@@ -16,16 +16,19 @@
                 },
                 "rules": [
                     {
+                        "description": "double right command to switch apps",
                         "manipulators": [
                             {
-                                "description": "Remap Command-Tab to ⌃⌘⇥ so it is still accessible",
+                                "conditions": [
+                                    {
+                                        "name": "right_command pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "from": {
-                                    "key_code": "tab",
+                                    "key_code": "right_command",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_command",
-                                            "left_control"
-                                        ],
                                         "optional": [
                                             "any"
                                         ]
@@ -40,19 +43,11 @@
                                     }
                                 ],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "manipulators": [
+                            },
                             {
-                                "description": "Disable Cmd+Tab",
                                 "from": {
-                                    "key_code": "tab",
+                                    "key_code": "right_command",
                                     "modifiers": {
-                                        "mandatory": [
-                                            "left_command"
-                                        ],
                                         "optional": [
                                             "any"
                                         ]
@@ -60,12 +55,33 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "out",
-                                        "modifiers": [
-                                            "command"
-                                        ]
+                                        "set_variable": {
+                                            "name": "right_command pressed",
+                                            "value": 1
+                                        }
+                                    },
+                                    {
+                                        "key_code": "right_command"
                                     }
                                 ],
+                                "to_delayed_action": {
+                                    "to_if_canceled": [
+                                        {
+                                            "set_variable": {
+                                                "name": "right_command pressed",
+                                                "value": 0
+                                            }
+                                        }
+                                    ],
+                                    "to_if_invoked": [
+                                        {
+                                            "set_variable": {
+                                                "name": "right_command pressed",
+                                                "value": 0
+                                            }
+                                        }
+                                    ]
+                                },
                                 "type": "basic"
                             }
                         ]
@@ -184,30 +200,6 @@
                         ]
                     },
                     {
-                        "description": "Change opt-command to ctrl in Things",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.culturedcode.ThingsMac"
-                                        ],
-                                        "type": "frontmost_application_if"
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "right_command"
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "right_control"
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "double left shift to cap_lock",
                         "manipulators": [
                             {
@@ -284,7 +276,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Disable Cmd+W in iTerm2",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -293,6 +284,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Disable Cmd+W in iTerm2",
                                 "from": {
                                     "key_code": "w",
                                     "modifiers": {
@@ -316,7 +308,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^G to ⌘G in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -326,6 +317,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^G to ⌘G in Brave/Chrome",
                                 "from": {
                                     "key_code": "g",
                                     "modifiers": {
@@ -349,7 +341,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^/ to ⌘F in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -359,6 +350,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^/ to ⌘F in Brave/Chrome",
                                 "from": {
                                     "key_code": "slash",
                                     "modifiers": {
@@ -382,7 +374,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^n to ⌘G in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -392,6 +383,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^n to ⌘G in Brave/Chrome",
                                 "from": {
                                     "key_code": "n",
                                     "modifiers": {
@@ -415,7 +407,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^R to ⌘R in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -425,6 +416,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^R to ⌘R in Brave/Chrome",
                                 "from": {
                                     "key_code": "r",
                                     "modifiers": {
@@ -448,7 +440,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^W to ⌘W in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -458,6 +449,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^W to ⌘W in Brave/Chrome",
                                 "from": {
                                     "key_code": "w",
                                     "modifiers": {
@@ -481,7 +473,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^Q to ⌘W in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -491,6 +482,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^Q to ⌘W in Brave/Chrome",
                                 "from": {
                                     "key_code": "q",
                                     "modifiers": {
@@ -514,7 +506,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ⇧^] to forward in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -524,6 +515,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ⇧^] to forward in Brave/Chrome",
                                 "from": {
                                     "key_code": "close_bracket",
                                     "modifiers": {
@@ -548,7 +540,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ⇧^[ to back in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -558,6 +549,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ⇧^[ to back in Brave/Chrome",
                                 "from": {
                                     "key_code": "open_bracket",
                                     "modifiers": {
@@ -582,7 +574,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^] to next tab in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -592,6 +583,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^] to next tab in Brave/Chrome",
                                 "from": {
                                     "key_code": "close_bracket",
                                     "modifiers": {
@@ -615,7 +607,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^[ to previous tab in Brave/Chrome",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -625,6 +616,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^[ to previous tab in Brave/Chrome",
                                 "from": {
                                     "key_code": "open_bracket",
                                     "modifiers": {
@@ -649,7 +641,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^T in Brave/Chrome to new tab",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -659,6 +650,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^T in Brave/Chrome to new tab",
                                 "from": {
                                     "key_code": "t",
                                     "modifiers": {
@@ -682,7 +674,6 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map ^f in Brave/Chrome to ⌘f",
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
@@ -692,6 +683,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
+                                "description": "Map ^f in Brave/Chrome to ⌘f",
                                 "from": {
                                     "key_code": "f",
                                     "modifiers": {
@@ -829,14 +821,6 @@
                             },
                             "to": {
                                 "key_code": "left_control"
-                            }
-                        },
-                        {
-                            "from": {
-                                "key_code": "left_control"
-                            },
-                            "to": {
-                                "key_code": "caps_lock"
                             }
                         }
                     ]
@@ -1007,6 +991,14 @@
             "simple_modifications": [
                 {
                     "from": {
+                        "key_code": "application"
+                    },
+                    "to": {
+                        "key_code": "fn"
+                    }
+                },
+                {
+                    "from": {
                         "key_code": "caps_lock"
                     },
                     "to": {
@@ -1018,7 +1010,7 @@
                         "key_code": "left_control"
                     },
                     "to": {
-                        "key_code": "right_shift"
+                        "key_code": "keypad_0"
                     }
                 }
             ],

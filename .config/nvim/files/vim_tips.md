@@ -1,3 +1,5 @@
+- `/<c-r>"` *Paste yanked text into search*
+
 ## A
 - **`a`** *Enter into insert mode after the character your cursor is on. *
 - `A` Enter into insert mode at the end of the current line.
@@ -60,7 +62,7 @@
 - `g,` Go forward in the change list.
 - `4g,` Go forward 4 spots on the change list.
 - `gg=G` or `1G=G` format the entire file.
-- `gn` Grab the next match from last search and visually select it.
+- `gn` **Grab the next match from last search and visually select it.**
 - `gi` Go into insert mode at the end of the last insert you did.
 - `ge` Go to the end of the previous word.
 - `gp` Pastes just like p but leave the cursor after the pasted text.
@@ -105,8 +107,6 @@
 - `M` Move cursor to middle of window.
 
 ## N
-- `n` Moves forward to next match of a search pattern.
-- `N` Moves backwards to previous match of a search pattern.
 - `gn` Search forward for the last used search pattern.
 
 ## O
@@ -255,9 +255,3 @@ Remember <C- means the control key. So <C-b> would translate to pressing control
 - `ctrl`+`e` Scroll forwards one full line.
 - `ctrl`+`y` Scroll backwards one full line.
 
-## Folding
-Before use folding in Vim, you need to enable this feature:
-- `zR` Open all
-- `zM` Close all
-- `za` Open fold under cursor
-- `zo` Close fold under cursor

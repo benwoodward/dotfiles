@@ -24,12 +24,14 @@ export BENW_DEMO_GMAIL_PASSWORD=$(security find-generic-password -s 'benw.demo p
 export VIMIFY_SPOTIFY_TOKEN=$(security find-generic-password -s 'vimify spotify token' -w)
 export GIST_ID=$(security find-generic-password -s 'things-gist-id' -w)
 export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-token' -w)
-export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base')
+export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
+export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
+export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
+export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$PATH:/Users/$(whoami)/bin
-
 
 # https://blog.jez.io/cli-code-review/
 export REVIEW_BASE='master'
@@ -50,12 +52,21 @@ else
 fi
 
 # Personal aliases, overriding those provided by oh-my-zsh libs,
-alias n="nvim -cStart"
+alias nt="nvim -cStart"
+alias n="nvim"
+alias nn="nvim ."
 alias ne="nvim '+call FzfFilePreview()' ."
+alias nl="nvim '+FloatermNew lf' ."
 alias vc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
-alias reload="source ~/.zshrc"
+alias reload="exec zsh"
 alias g='git'
+alias ls='exa'
+alias ll='exa -l'
+alias lll='exa -l | less'
+alias lla='exa -la'
+alias llt='exa -T'
+alias llfu='exa -bghHliS --git'
 
 # list recursive files, ordered by creation date
 alias lsr="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 | rev | cut -d ' ' -f 1,2,4,5 | rev"
@@ -109,6 +120,38 @@ else
 fi
 }
 
+# Improved version by /u/OneTurnMove
+# https://www.reddit.com/r/commandline/comments/f9t88w/maczshonly_i_wrote_a_couple_of_zsh_functions_to/fiue7wp/
+# relative_date(){
+#     local -A stat
+#     zstat -H stat $1
+#     local -i time_diff=$((EPOCHSECONDS  - stat[mtime]))
+#     if ((time_diff > 24*60*60)); then
+#         printf -v REPLY '%.0f days ago' time_diff/((24*60*60))
+#     elif ((time_diff > 60*60)); then
+#         printf -v REPLY "%.0f hours ago" time_diff/((60*60))
+#     elif ((time_diff > 60)); then
+#         printf -v REPLY "%.0f minutes ago" time_diff/60
+#     else
+#         printf -v REPLY "%s seconds ago" $time_diff
+#     fi
+# }
+# list-files(){
+#     setopt extendedglob
+#     zmodload zsh/stat b:zstat
+#     local -a results
+#     if (($1)); then
+#         results=( (^(.git*|.tags*)/)#^(.git*|.tags*)(.om[1,$1]) )
+#     else
+#         results=( (^(.git*|.tags*)/)#^(.git*|.tags*)(.om) )
+#     fi
+#     for result in $results; do
+#         local REPLY
+#         relative-date $result
+#         print "${(r:18:)REPLY} \e[32m$result\e[0m"
+#    done
+# }
+
 # list recently modified files recursively
 alias recent-files-recursive="find . -exec stat -f '%m%t%Sm %N' {} + | sort -n | cut -f2- | head -n 50"
 
@@ -128,6 +171,8 @@ sort"
 alias tag-gems='ctags --recurse . `bundle show --paths`'
 alias ssh='TERM=xterm-256color ssh'
 
+autoload -U select-word-style
+select-word-style bash
 
 # zplug
 export ZPLUG_HOME=/usr/local/opt/zplug
@@ -136,14 +181,14 @@ source $ZPLUG_HOME/init.zsh
 zplug "lukechilds/zsh-nvm"
 zplug "mafredri/zsh-async", from:github
 zplug "romkatv/powerlevel10k", as:theme, depth:1
-zplug 'zsh-users/zsh-autosuggestions', from:github, at:fixes/partial-accept-duplicate-word
+zplug 'zsh-users/zsh-autosuggestions', from:github, at:fixes/partial-accept-duplicate-word, defer:2
 zplug 'wfxr/forgit'
 zplug "changyuheng/fz", defer:2
 zplug "rupa/z", use:z.sh
 zplug "kiurchv/asdf.plugin.zsh", defer:2
-zplug "supercrabtree/k"
 zplug "zpm-zsh/dircolors-material"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "zdharma/fast-syntax-highlighting"
 zplug "b4b4r07/enhancd", use:init.sh
 zplug "jimhester/per-directory-history", defer:1
 if zplug check "jimhester/per-directory-history"; then
@@ -174,7 +219,8 @@ source /Users/$(whoami)/.asdf/asdf.sh
 
 # Include git information in FZF preview
 export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
-
+export BAT_STYLE=changes,header,grid
+export FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git"'
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -347,6 +393,7 @@ join-lines() {
 
 # https://github.com/zsh-users/zsh-autosuggestions autocomplete word by word
 bindkey '^e' forward-word
+bindkey '^b' backward-kill-word
 bindkey '^l' autosuggest-accept
 
 # completion
@@ -360,10 +407,10 @@ bindkey -r "^j"
 HISTORY_START_WITH_GLOBAL=false
 PER_DIRECTORY_HISTORY_TOGGLE="^G"
 
-per-directory-history-edit() {
+edit-history() {
     ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
 }
-zle -N per-directory-history-edit
+zle -N edit-history
 
 pick-from-other-history() {
     per-directory-history-toggle-history
@@ -372,7 +419,7 @@ pick-from-other-history() {
 }
 zle -N pick-from-other-history
 
-bindkey "]e" per-directory-history-edit
+bindkey "^h" edit-history
 bindkey "^r" pick-from-other-history
 
 # `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
@@ -380,10 +427,10 @@ bindkey "^r" pick-from-other-history
 # `less` with options to preserve color and line numbers, unless the output is
 # small enough for one screen.
 tree-better() {
-  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNXn;
 }
 tree-better-dirs() {
-  tree -dC -a -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+  tree -dC -a -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNXn;
     # -a show hidden dirs
 }
 
@@ -551,3 +598,4 @@ _gen_fzf_default_opts
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+

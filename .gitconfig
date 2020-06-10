@@ -26,6 +26,9 @@
   # they are grouped by common prefixes, so I don't
   # confuse what I want done by accident.
   c = commit
+  # https://preslav.me/2020/03/01/use-the-git-history/
+  code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -10"
+  cc = "!git code-changes"
   # commit with a message
   cm = commit -m
   cma = commit -a -m
@@ -55,8 +58,8 @@
   b = branch
   l = log
   f = fetch
-  r = reset
   rb = rebase
+  r = reset
 
   # merging
   m = merge

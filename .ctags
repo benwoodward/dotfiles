@@ -80,6 +80,10 @@
 --exclude=test
 --exclude=__test__
 --exclude=build
+--exclude=_build
+--exclude=priv
+--exclude=priv/static
+--exclude=.elixir_ls
 --exclude=dist
 --exclude=*.bundle.*
 
