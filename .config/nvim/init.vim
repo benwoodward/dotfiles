@@ -60,7 +60,7 @@ Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
 Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
-Plug 'evanleck/vim-svelte'
+Plug 'https://github.com/evanleck/vim-svelte'
 let g:svelte_indent_script = 0
 
 Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
@@ -373,7 +373,7 @@ Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with optio
 Plug '~/dev/oss/Forks/vim-plugins/vimify'
   noremap <leader>sp :SpPlaylists<CR>
 
-Plug 'https://github.com/tpope/vim-commentary'
+Plug 'https://github.com/npearson72/vim-context-commentstring'
 
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
 
