@@ -748,17 +748,6 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   autocmd BufRead,BufNewFile *.vue set filetype=vue tabstop=2|set shiftwidth=2
   au FileType css,scss setl iskeyword+=-
 
-  augroup ParenColor
-  autocmd!
-  autocmd VimEnter,BufWinEnter *
-    \ if index(['html', 'htmldjango', 'tex', 'mma', 'vue'], &filetype) < 0 |
-      \ syntax match paren1 /[{}]/   | hi paren1 guifg=#FF00FF |
-      \ syntax match paren2 /[()]/   | hi paren2 guifg=#DF8700 |
-      \ syntax match paren3 /[<>]/   | hi paren3 guifg=#0087FF |
-      \ syntax match paren4 /[\[\]]/ | hi paren4 guifg=#00FF5F |
-    \ endif
-augroup END
-
 augroup UserChecktime
   autocmd!
   autocmd FocusGained * checktime
