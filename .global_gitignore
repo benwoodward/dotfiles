@@ -19,3 +19,7 @@ node_modules
 .vimify.log
 .fzf-history
 .fzf_history
+
+# Override for rg to exclude stuff from fzf results
+.ignore
+

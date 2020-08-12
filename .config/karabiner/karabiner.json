@@ -650,39 +650,6 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
-                                "description": "Map ^T in Brave/Chrome to new tab",
-                                "from": {
-                                    "key_code": "t",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "left_control"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "t",
-                                        "modifiers": [
-                                            "left_command"
-                                        ]
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.google.Chrome",
-                                            "^com.brave.Browser"
-                                        ],
-                                        "type": "frontmost_application_if"
-                                    }
-                                ],
                                 "description": "Map ^f in Brave/Chrome to ⌘f",
                                 "from": {
                                     "key_code": "f",

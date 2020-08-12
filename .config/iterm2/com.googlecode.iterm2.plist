@@ -983,6 +983,8 @@
 	<string>~/Downloads</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{712, 448}</string>
+	<key>NSOverlayScrollersFallBackForAccessoryViews</key>
+	<false/>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
@@ -1750,24 +1752,34 @@
 		<string>3.3.20200112-nightly</string>
 		<string>3.3.20190822-nightly</string>
 		<string>3.3.20191118-nightly</string>
+		<string>3.3.20200424-nightly</string>
 		<string>3.3.20190529-nightly</string>
 		<string>3.3.20191114-nightly</string>
 		<string>3.3.20200304-nightly</string>
+		<string>3.3.20200403-nightly</string>
 		<string>3.3.20190829-nightly</string>
+		<string>3.3.20200613-nightly</string>
+		<string>3.4.20200630-nightly</string>
+		<string>3.3.20200427-nightly</string>
 		<string>3.3.20191015-nightly</string>
 		<string>3.3.20200217-nightly</string>
 		<string>3.3.20190920-nightly</string>
 		<string>3.3.20191023-nightly</string>
+		<string>3.3.20200423-nightly</string>
 		<string>3.3.20191224-nightly</string>
 		<string>3.3.20191113-nightly</string>
 		<string>3.3.20191101-nightly</string>
+		<string>3.3.20200426-nightly</string>
 		<string>3.3.20191121-nightly</string>
 		<string>3.3.20191220-nightly</string>
 		<string>3.3.20191215-nightly</string>
+		<string>3.3.20200422-nightly</string>
 		<string>3.3.20190626-nightly</string>
 		<string>3.3.20200129-nightly</string>
 		<string>3.2.8</string>
 		<string>3.3.20191202-nightly</string>
+		<string>3.3.20200425-nightly</string>
+		<string>3.3.20200430-nightly</string>
 		<string>3.3.20191226-nightly</string>
 		<string>3.3.20191120-nightly</string>
 		<string>3.3.20200310-nightly</string>
@@ -1791,12 +1803,14 @@
 		<key>screenFrame</key>
 		<string>{{0, 0}, {1280, 800}}</string>
 		<key>topLeft</key>
-		<string>{264, 680}</string>
+		<string>{271, 716}</string>
 	</dict>
 	<key>NoSyncInstallationId</key>
 	<string>FA15FB41-83F0-4892-98C8-877743971BFE</string>
+	<key>NoSyncLastOSVersion</key>
+	<string>Version 10.15.2 (Build 19C57)</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>219</integer>
+	<integer>276</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -1930,6 +1944,14 @@
 				<key>isTerminal</key>
 				<true/>
 				<key>name</key>
+				<string>selectionLength</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
 				<string>path</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
@@ -1949,6 +1971,14 @@
 				<string>triggerName</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<false/>
+				<key>name</key>
+				<string>parentSession</string>
+				<key>nonterminalContext</key>
+				<integer>1</integer>
 			</dict>
 			<dict>
 				<key>isTerminal</key>
@@ -2067,6 +2097,14 @@
 				<true/>
 				<key>name</key>
 				<string>tmuxStatusLeft</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
+				<string>selection</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
 			</dict>
@@ -2564,6 +2602,8 @@
 	</dict>
 	<key>PrefsCustomFolder</key>
 	<string>~/.config/iterm2</string>
+	<key>PreventEscapeSequenceFromClearingHistory</key>
+	<false/>
 	<key>Print In Black And White</key>
 	<true/>
 	<key>QuitWhenAllWindowsClosed</key>
@@ -2577,11 +2617,11 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-03-28T05:37:19Z</date>
+	<date>2020-07-07T04:26:20Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
-	<integer>429658307</integer>
+	<integer>3998110960</integer>
 	<key>SUUpdateRelaunchingMarker</key>
 	<false/>
 	<key>SeparateStatusBarsPerPane</key>
@@ -2621,7 +2661,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.3.20200310-nightly</string>
+	<string>3.4.20200630-nightly</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>1</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

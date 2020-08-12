@@ -59,6 +59,7 @@ alias ne="nvim '+call FzfFilePreview()' ."
 alias nl="nvim '+FloatermNew lf' ."
 alias vc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
+alias gc="nvim ~/.gitconfig"
 alias reload="exec zsh"
 alias g='git'
 alias ls='exa'
@@ -186,15 +187,15 @@ zplug 'wfxr/forgit'
 zplug "changyuheng/fz", defer:2
 zplug "rupa/z", use:z.sh
 zplug "kiurchv/asdf.plugin.zsh", defer:2
-zplug "zpm-zsh/dircolors-material"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zdharma/fast-syntax-highlighting"
 zplug "b4b4r07/enhancd", use:init.sh
-zplug "jimhester/per-directory-history", defer:1
+zplug "jimhester/per-directory-history", defer:1, from:github, at:master
 if zplug check "jimhester/per-directory-history"; then
     HISTORY_BASE="${HOME}/.zsh_histories"
     SAVEHIST=65535
 fi
+zplug "marlonrichert/zsh-autocomplete", from:github, at:dev
 ENHANCD_FILTER=fzf
 
 # Disabled until I figure out these errors:
@@ -208,6 +209,7 @@ ENHANCD_FILTER=fzf
 # zplug "hschne/fzf-git"
 
 zplug load
+add-zsh-hook -d preexec .autocomplete.async.stop-pending-request
 
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
@@ -287,7 +289,8 @@ zstyle ':completion:*' group-name '' # group results by category
 # zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
+zstyle ':autocomplete:space:*' magic expand-history
+zstyle ':autocomplete:tab:*' completion select
 
 # History completion
 zle -C hist-complete complete-word _generic
@@ -405,7 +408,7 @@ bindkey "^n" history-beginning-search-forward
 bindkey -r "^j"
 
 HISTORY_START_WITH_GLOBAL=false
-PER_DIRECTORY_HISTORY_TOGGLE="^G"
+PER_DIRECTORY_HISTORY_TOGGLE="^g"
 
 edit-history() {
     ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
@@ -554,10 +557,6 @@ hd() {
 ff() {
   fff
 }
-
-source /Users/ben/Library/Preferences/org.dystroy.broot/launcher/bash/br
-
-
 
 # Theme for fzf
 # Base16 Chalk

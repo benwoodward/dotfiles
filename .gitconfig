@@ -26,12 +26,13 @@
   # they are grouped by common prefixes, so I don't
   # confuse what I want done by accident.
   c = commit
+  uncommit = "reset HEAD~"
   # https://preslav.me/2020/03/01/use-the-git-history/
   code-changes = "!git log --format=format: --name-only | egrep -v '^$' | sort | uniq -c | sort -rg | head -10"
   cc = "!git code-changes"
   # commit with a message
   cm = commit -m
-  cma = commit -a -m
+  # cma = commit -a -m
   # amending the previous commit
   # camd = commit --amend
   #caa = commit -a --amend -C HEAD
@@ -123,6 +124,7 @@
   required = true
 	process = git-lfs filter-process
 [init]
+	templatedir = /Users/ben/.git-templates
   ; templatedir = ~/.git_template
 [fetch]
   prune = true

@@ -18,7 +18,7 @@ call plug#begin()
 ""
 
 " Switches between a single-line statement and a multi-line one
-Plug 'https://github.com/AndrewRadev/splitjoin.vim.git'
+Plug 'https://github.com/AndrewRadev/splitjoin.vim.git', {'branch': 'master'}
   nmap <Leader>sj :SplitjoinSplit<cr>
   nmap <Leader>sk :SplitjoinJoin<cr>
 
@@ -61,7 +61,8 @@ Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result un
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
 Plug 'https://github.com/evanleck/vim-svelte'
-let g:svelte_indent_script = 0
+let g:svelte_indent_script = 1
+let g:svelte_indent_style = 0
 
 Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
 " Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
@@ -95,6 +96,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " Use `lp` and `ln` for navigate diagnostics
   nmap <silent> <leader>dp <Plug>(coc-diagnostic-prev)
   nmap <silent> <leader>dn <Plug>(coc-diagnostic-next)
+  nmap <silent> <leader>pe <Plug>(coc-diagnostic-prev-error)
+  nmap <silent> <leader>ne <Plug>(coc-diagnostic-next-error)
   " Remap keys for gotos
   nmap <silent> <leader>ld <Plug>(coc-definition)
   nmap <silent> <leader>lt <Plug>(coc-type-definition)
@@ -129,6 +132,7 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'danilamihailov/beacon.nvim'
 Plug 'https://github.com/itchyny/vim-cursorword'
 Plug 'https://github.com/dhruvasagar/vim-zoom'
 " <C-W>m to toggle zoom in and out for the split
@@ -373,6 +377,9 @@ Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with optio
 Plug '~/dev/oss/Forks/vim-plugins/vimify'
   noremap <leader>sp :SpPlaylists<CR>
 
+Plug 'https://github.com/tpope/vim-commentary/'
+autocmd FileType svelte setlocal formatoptions+=ro " Start a new line with comment string
+" Modifies commentstring dynamically, makes commenting possible in multi-language files like components
 Plug 'https://github.com/npearson72/vim-context-commentstring'
 
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
@@ -568,7 +575,8 @@ augroup END
   let g:oceanic_next_terminal_italic = 1
   colorscheme OceanicNext
 " Use OceanicNext colours for SearchCurrent
-autocmd BufEnter * highlight SearchCurrent ctermbg=209 ctermfg=237 guibg=#f99157 guifg=#343d46
+autocmd BufEnter * highlight SearchCurrent ctermbg=35 ctermfg=29 guibg=#00d75f guifg=#00875f
+autocmd BufEnter * highlight Search ctermbg=29 ctermfg=16 guibg=#00875f guifg=#1B2B34
 
   " Neovim disallow changing 'enconding' option after initialization
   " see https://github.com/neovim/neovim/pull/2929 for more details
