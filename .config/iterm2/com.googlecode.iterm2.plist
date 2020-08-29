@@ -1656,6 +1656,8 @@
 				<key>Red Component</key>
 				<real>0.0</real>
 			</dict>
+			<key>Minimum Contrast</key>
+			<real>0.27918590198863635</real>
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Name</key>
@@ -1763,6 +1765,7 @@
 		<string>3.3.20200427-nightly</string>
 		<string>3.3.20191015-nightly</string>
 		<string>3.3.20200217-nightly</string>
+		<string>3.4.20200719-nightly</string>
 		<string>3.3.20190920-nightly</string>
 		<string>3.3.20191023-nightly</string>
 		<string>3.3.20200423-nightly</string>
@@ -1810,7 +1813,7 @@
 	<key>NoSyncLastOSVersion</key>
 	<string>Version 10.15.2 (Build 19C57)</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>276</integer>
+	<integer>284</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2188,6 +2191,14 @@
 				<true/>
 				<key>name</key>
 				<string>style</string>
+				<key>nonterminalContext</key>
+				<integer>0</integer>
+			</dict>
+			<dict>
+				<key>isTerminal</key>
+				<true/>
+				<key>name</key>
+				<string>currentTab.currentSession.jobPid</string>
 				<key>nonterminalContext</key>
 				<integer>0</integer>
 			</dict>
@@ -2617,11 +2628,11 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-07-07T04:26:20Z</date>
+	<date>2020-08-21T01:40:11Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>
-	<integer>3998110960</integer>
+	<integer>1456795192</integer>
 	<key>SUUpdateRelaunchingMarker</key>
 	<false/>
 	<key>SeparateStatusBarsPerPane</key>
@@ -2645,7 +2656,7 @@
 	<key>TabViewType</key>
 	<integer>0</integer>
 	<key>UKCrashReporterLastCrashReportDate</key>
-	<real>1555194624</real>
+	<real>1596611072</real>
 	<key>UseBorder</key>
 	<false/>
 	<key>VisualIndicatorForEsc</key>
@@ -2661,7 +2672,7 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>3.4.20200630-nightly</string>
+	<string>3.4.20200719-nightly</string>
 	<key>kCPKSelectionViewPreferredModeKey</key>
 	<integer>1</integer>
 	<key>kCPKSelectionViewShowHSBTextFieldsKey</key>

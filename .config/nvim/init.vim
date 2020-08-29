@@ -60,7 +60,7 @@ Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
 Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
-Plug 'https://github.com/evanleck/vim-svelte'
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
 let g:svelte_indent_script = 1
 let g:svelte_indent_style = 0
 
@@ -132,6 +132,10 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+
+" === Vim airline ==== "
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'danilamihailov/beacon.nvim'
 Plug 'https://github.com/itchyny/vim-cursorword'
 Plug 'https://github.com/dhruvasagar/vim-zoom'
@@ -328,8 +332,7 @@ Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file 
   " :Reveal
 
 " Terminal in floating window
-" Plug 'https://github.com/voldikss/vim-floaterm', { 'branch': 'master' }
-Plug '~/dev/oss/forks/vim-plugins/vim-floaterm'
+Plug 'https://github.com/voldikss/vim-floaterm'
 nnoremap <c-f> :FloatermNew lf<CR>
   " Key bindings:
   " fn F12
@@ -453,7 +456,7 @@ command! -bang -nargs=? -complete=dir Files call FilesWithPreview(<q-args>, <ban
 augroup FzfConfig
   autocmd!
   autocmd! FileType fzf set laststatus=0 noshowmode noruler
-    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+    \| autocmd BufLeave <buffer> set laststatus=2 noshowmode noruler
 augroup END
 
 " Default FZF options with bindings to match layout and select all + none
@@ -893,6 +896,7 @@ endfunction
   let g:floaterm_background = '#1B2B34'
   hi FloatermNF guibg='#1B2B34'
   hi FloatermBorderNF guibg='#1B2B34' guifg=cyan
+  let g:floaterm_gitcommit='vsplit'
 
 
   noremap  <silent> <F12>           :FloatermToggle<CR>
@@ -1019,4 +1023,51 @@ function! FzfFilePreview()
 
 endfunction
 
+set noshowcmd  " to get rid of display of last command
+set noshowmode  " to get rid of thing like --INSERT--
+set laststatus=2
 
+" Vim airline theme
+let g:airline_theme='space'
+" Enable extensions
+let g:airline_extensions = ['branch', 'hunks', 'coc']
+
+" Update section z to just have line number
+let g:airline_section_z = airline#section#create(['linenr'])
+
+" Do not draw separators for empty sections (only for the active window) >
+let g:airline_skip_empty_sections = 1
+
+" Smartly uniquify buffers names with similar filename, suppressing common parts of paths.
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+" Custom setup that removes filetype/whitespace from default vim airline bar
+let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
+
+" Customize vim airline per filetype
+" 'list'      - Only show file type plus current line number out of total
+let g:airline_filetype_overrides = {
+  \ 'list': [ '%y', '%l/%L'],
+  \ }
+
+" Enable powerline fonts
+let g:airline_powerline_fonts = 1
+
+" Enable caching of syntax highlighting groups
+let g:airline_highlighting_cache = 1
+
+" Define custom airline symbols
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" Don't show git changes to current file in airline
+let g:airline#extensions#hunks#enabled=0
+
+" Shift+Space - duplicate selected lines
+map <Leader>d y'>p
+vmap <Leader>d y'>p
+
+
+set winblend=0
+set pumblend=0
