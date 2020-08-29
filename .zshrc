@@ -153,6 +153,7 @@ alias ssh='TERM=xterm-256color ssh'
 
 autoload -U select-word-style
 select-word-style bash
+WORDCHARS=$WORDCHARS:s:/:
 
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
