@@ -278,6 +278,15 @@ hd() {
   hunk-diff
 }
 
+# fd - fuzzy search recursive directories, and cd to into selected
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+
 # https://github.com/zsh-users/zsh-autosuggestions autocomplete word by word
 bindkey '^E' forward-word
 bindkey '^B' backward-kill-word
