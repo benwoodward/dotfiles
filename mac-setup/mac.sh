@@ -103,8 +103,7 @@ fancy_echo "Updating Homebrew formulae ..."
 brew update --force # https://github.com/Homebrew/brew/issues/1151
 brew bundle --file=- <<EOF
 tap "universal-ctags/universal-ctags"
-tap "caskroom/cask"
-tap "heroku/brew"
+tap "homebrew/cask"
 
 # Unix
 brew "universal-ctags", args: ["HEAD"]
@@ -112,12 +111,6 @@ brew "git"
 brew "openssl"
 brew "neovim"
 brew "zsh"
-
-# Heroku
-brew "heroku/brew/heroku"
-
-# GitHub
-brew "hub"
 
 # Image manipulation
 brew "imagemagick"
@@ -129,17 +122,13 @@ cask "gpg-suite"
 
 # Databases
 brew "postgres", restart_service: :changed
+brew "asdf"
 EOF
 
 fix_brew_permissions
 
-fancy_echo "Update heroku binary ..."
-brew unlink heroku
-brew link --force heroku
-
 fancy_echo "Configuring asdf version manager ..."
 if [ ! -d "$HOME/.asdf" ]; then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.5.0
   append_to_zshrc "source ~/.asdf/asdf.sh" 1
 fi
 
@@ -156,7 +145,7 @@ add_or_update_asdf_plugin() {
 }
 
 # shellcheck disable=SC1090
-source "$HOME/.asdf/asdf.sh"
+source "$(brew --prefix asdf)/asdf.sh"
 add_or_update_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 add_or_update_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
 add_or_update_asdf_plugin "erlang" "https://github.com/asdf-vm/asdf-erlang.git"
@@ -179,10 +168,6 @@ bundle config --global jobs $((number_of_cores - 1))
 fancy_echo "Installing latest Node ..."
 bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs"
-
-# Fix zsh permissions
-# fancy_echo "Fixing zsh permissions ..."
-# /bin/zsh -i -c 'compaudit | xargs sudo chmod g-w'
 
 # TODO: Copy minimal icons to iTerm via command
 # https://superuser.com/a/1343756

@@ -36,18 +36,6 @@ zinit light-mode for kiurchv/asdf.plugin.zsh
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
-export GITHUB_TOKEN=$(security find-generic-password -s 'hub github token' -w)
-export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
-export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
-export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
-export REALM_ADMIN_USERNAME=$(security find-generic-password -s 'realm admin username' -w)
-export REALM_ADMIN_PASSWORD=$(security find-generic-password -s 'realm admin password' -w)
-export BENW_DEMO_GMAIL_PASSWORD=$(security find-generic-password -s 'benw.demo password' -w)
-export VIMIFY_SPOTIFY_TOKEN=$(security find-generic-password -s 'vimify spotify token' -w)
-export GIST_ID=$(security find-generic-password -s 'things-gist-id' -w)
-export GITHUB_THINGS_TOKEN=$(security find-generic-password -s 'github-things-token' -w)
-export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
-export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
 export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
 export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
 
@@ -158,9 +146,6 @@ WORDCHARS=$WORDCHARS:s:/:
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
 
-# Load asdf version manager
-source /Users/$(whoami)/.asdf/asdf.sh
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Include git information in FZF preview
@@ -174,8 +159,6 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-source ~/.zsh/powerlevel10k/powerlevel10k.zsh-theme
 
 TERM=xterm-256color
 ZSH_AUTOSUGGEST_STRATEGY=(history)
@@ -311,3 +294,9 @@ zstyle ':completion:*' group-name '' # group results by category
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
+
+# Load asdf version manager
+. /usr/local/opt/asdf/asdf.sh
+
+export PATH="$HOME/.bin:$PATH"
+source /Users/ben/.asdf/asdf.sh
