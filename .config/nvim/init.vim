@@ -513,7 +513,8 @@ nnoremap <silent> <leader>t :Tags<CR>
   Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
   " Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
   Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
-  Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
+  " Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
+  Plug 'ludovicchabant/vim-gutentags', { 'commit': '31c0ead' }
 
   " Add plugins to &runtimepath
   call plug#end()

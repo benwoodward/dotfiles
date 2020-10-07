@@ -10,6 +10,7 @@ fi
 source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
+autoload -Uz compinit && compinit
 
 # Load a few important annexes, without Turbo
 # (this is currently required for annexes)
@@ -36,8 +37,13 @@ zinit light-mode for kiurchv/asdf.plugin.zsh
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
-export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
-export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
+# export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
+# export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
+export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
+export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
+export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
+export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
+export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
 
 # Personal aliases
 alias nt="nvim -cStart"
@@ -290,9 +296,17 @@ bindkey "^d" no-op
 
 zstyle ':completion:*' menu select # select completions with arrow keys
 zstyle ':completion:*' group-name '' # group results by category
-# zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
+zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|?=** r:|?=**'
+zstyle ':completion:*' matcher-list 'm:ss=ß m:ue=ü m:ue=Ü m:oe=ö m:oe=Ö m:ae=ä m:ae=Ä m:{a-zA-Zöäüa-zÖÄÜ}={A-Za-zÖÄÜA-Zöäü}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+setopt MENU_COMPLETE
+setopt no_list_ambiguous
+setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
+setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
+
 
 
 # Load asdf version manager
