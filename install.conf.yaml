@@ -17,6 +17,7 @@
     ~/.gitconfig: .gitconfig
     ~/.gitignore: .global_gitignore
     ~/.ctags: .ctags
+    ~/.p10k.zsh: .p10k.zsh
     ~/Library/Preferences/com.mizage.Divvy.plist: Library/Preferences/com.mizage.Divvy.plist
 
 - shell:
