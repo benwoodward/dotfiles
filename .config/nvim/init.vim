@@ -47,19 +47,21 @@ Plug 'https://github.com/junegunn/vim-easy-align.git'
 "" Section: Syntax Tools
 ""
 
-Plug 'https://github.com/sheerun/vim-polyglot' " Syntax highlighting for multiple languages.
-  " TODO: See whether I can remove other syntax plugins using this
+Plug 'https://github.com/pangloss/vim-javascript'
+Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 
 Plug 'https://github.com/vim-ruby/vim-ruby.git', { 'for': ['rb']} " Ruby syntax highlighting
 Plug 'https://github.com/henrik/vim-ruby-runner'
-Plug 'https://github.com/othree/yajs.vim'           " Most up to date JS highlighter, works well with React
+" Plug 'https://github.com/othree/yajs.vim'           " Most up to date JS highlighter, works well with React
 Plug 'https://github.com/othree/html5.vim'          " html5 syntax highlighting
-Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
-Plug 'https://github.com/maksimr/vim-jsbeautify'
+" Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
+" Plug 'https://github.com/maksimr/vim-jsbeautify'
 Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
 Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
-Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
+" Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
+
+autocmd FileType svelte setlocal formatoptions+=ro " Start a new line with comment string
 Plug 'evanleck/vim-svelte', {'branch': 'main'}
 let g:svelte_indent_script = 1
 let g:svelte_indent_style = 0
@@ -333,7 +335,7 @@ Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file 
 
 " Terminal in floating window
 Plug 'https://github.com/voldikss/vim-floaterm'
-nnoremap <c-f> :FloatermNew lf<CR>
+nnoremap <c-f> :FloatermNew ranger<CR>
   " Key bindings:
   " fn F12
 
@@ -381,7 +383,6 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
   noremap <leader>sp :SpPlaylists<CR>
 
 Plug 'https://github.com/tpope/vim-commentary/'
-autocmd FileType svelte setlocal formatoptions+=ro " Start a new line with comment string
 " Modifies commentstring dynamically, makes commenting possible in multi-language files like components
 Plug 'https://github.com/npearson72/vim-context-commentstring'
 
@@ -399,7 +400,7 @@ let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 " Some ripgrep searching defaults
 function! RgCommand(ignore, current_file) abort
-  let glob = '--glob ' . expand("%:t")
+  let glob = '--glob ' . expand("%:t") " exclude current file
   return 'rg' .
     \ ' --hidden' .
     \ ' --color=always' .
@@ -440,7 +441,7 @@ function! RgCurrentFileWithPreview(ignore, args, prompt, bang) abort
 endfunction
 
 " Defines search command for :Files
-let $FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git"'
+let $FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git" --iglob "!node_modules"'
 
 " Opens files search with preview
 function! FilesWithPreview(args, bang) abort
@@ -560,6 +561,8 @@ augroup END
   " Enable filetype-specific indenting and plugins
   filetype plugin on
   filetype plugin indent on
+  set noautoindent
+  set cinoptions+=+1
   " These two enable syntax highlighting
   set nocompatible
   syntax enable
@@ -838,8 +841,6 @@ endfunction
   map <leader>v :source $HOME/.config/nvim/init.vim<CR>
 
   " Terminal
-  " TODO: This does what?
-  tnoremap ., <C-\><C-n>
 
   " Move up and down on visual lines"
   nnoremap k gk
@@ -879,7 +880,7 @@ endfunction
   " Turn off auto-indendation before pasting
   set pastetoggle=<F3>
 
-  let g:mix_format_on_save = 1
+  let g:mix_format_on_save = 0
 
   nnoremap Q :q<CR>
   nnoremap <leader>w :w<CR>
@@ -927,7 +928,6 @@ endfunction
           \ 'width': width,
           \ 'height': height
           \ }
-
     set winhl=Normal:Floating
     call nvim_open_win(buf, v:true, opts)
   endfunction
@@ -940,6 +940,49 @@ endfunction
 "
 " Files + devicons + floating fzf
 function! FzfFilePreview()
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -200" --expect=ctrl-v,ctrl-x'
+
+  function! s:files()
+    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
+    return s:prepend_icon(l:files)
+  endfunction
+
+  function! s:prepend_icon(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:filename = fnamemodify(l:candidate, ':p:t')
+      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
+      call add(l:result, printf('%s %s', l:icon, l:candidate))
+    endfor
+
+    return l:result
+  endfunction
+
+  function! s:edit_file(lines)
+    if len(a:lines) < 2 | return | endif
+
+    let l:cmd = get({'ctrl-x': 'split',
+                 \ 'ctrl-v': 'vertical split',
+                 \ 'ctrl-t': 'tabe'}, a:lines[0], 'e')
+
+    for l:item in a:lines[1:]
+      let l:pos = stridx(l:item, ' ')
+      let l:file_path = l:item[pos+1:-1]
+      execute 'silent '. l:cmd . ' ' . l:file_path
+    endfor
+  endfunction
+
+  call fzf#run({
+        \ 'source': <sid>files(),
+        \ 'sink*':   function('s:edit_file'),
+        \ 'options': '-m --preview-window=right:70%:noborder --prompt Files\> ' . l:fzf_files_options,
+        \ 'down':    '40%',
+        \ 'window': 'call FloatingFZF()'})
+
+endfunction
+
+" Files + devicons + floating fzf
+function! FzfFilePreviewWithGitStatus()
   let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=changes,grid --color always {3..-1} | head -200" --expect=ctrl-v,ctrl-x'
   let s:files_status = {}
 

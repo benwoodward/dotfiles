@@ -37,8 +37,8 @@ zinit light-mode for kiurchv/asdf.plugin.zsh
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
-# export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
-# export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
+export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
+export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
 export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
 export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
 export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
@@ -54,6 +54,7 @@ alias nl="nvim '+FloatermNew lf' ."
 alias vc='nvim ~/.config/nvim/init.vim'
 alias zc="nvim ~/.zshrc"
 alias gc="nvim ~/.gitconfig"
+alias rc="nvim ~/.config/ranger/rc.conf"
 alias reload="exec zsh"
 alias g='git'
 alias ls='exa'
@@ -147,7 +148,8 @@ alias ssh='TERM=xterm-256color ssh'
 
 autoload -U select-word-style
 select-word-style bash
-WORDCHARS=$WORDCHARS:s:/:
+unset WORDCHARS
+WORDCHARS=$WORDCHARS:s:/-:
 
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
@@ -298,9 +300,9 @@ zstyle ':completion:*' menu select # select completions with arrow keys
 zstyle ':completion:*' group-name '' # group results by category
 zstyle ':completion:::::' completer _expand _complete _ignored _approximate # enable approximate matches for completion
 zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
 zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+l:|?=** r:|?=**'
-zstyle ':completion:*' matcher-list 'm:ss=ß m:ue=ü m:ue=Ü m:oe=ö m:oe=Ö m:ae=ä m:ae=Ä m:{a-zA-Zöäüa-zÖÄÜ}={A-Za-zÖÄÜA-Zöäü}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list 'm:ss=ß m:ue=ü m:ue=Ü m:oe=ö m:oe=Ö m:ae=ä m:ae=Ä m:{a-zA-Zöäüa-zÖÄÜ}={A-Za-zÖÄÜA-Zöäü}'
 
 setopt MENU_COMPLETE
 setopt no_list_ambiguous
@@ -313,4 +315,5 @@ setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
 . /usr/local/opt/asdf/asdf.sh
 
 export PATH="$HOME/.bin:$PATH"
+export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 source /Users/ben/.asdf/asdf.sh
