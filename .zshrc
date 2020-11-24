@@ -308,6 +308,8 @@ setopt MENU_COMPLETE
 setopt no_list_ambiguous
 setopt COMPLETE_IN_WORD    # Complete from both ends of a word.
 setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
+setopt nonomatch           # Makes globbing work
+setopt extendedglob        # Enable extended wildcard options for globbing
 
 
 

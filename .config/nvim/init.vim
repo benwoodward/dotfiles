@@ -56,7 +56,8 @@ Plug 'https://github.com/henrik/vim-ruby-runner'
 Plug 'https://github.com/othree/html5.vim'          " html5 syntax highlighting
 " Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
 " Plug 'https://github.com/maksimr/vim-jsbeautify'
-Plug 'https://github.com/mhartington/oceanic-next'  " Best dark colorscheme
+Plug 'https://github.com/mhartington/oceanic-next', {'commit': '08158eec24cd154afd1623686aeb336fad580be7'}  " Best dark colorscheme
+Plug 'https://github.com/rakr/vim-one'              " Light colorscheme
 Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 " Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
@@ -510,7 +511,7 @@ nnoremap <silent> <leader>t :Tags<CR>
   ""
   "" Section: Navigation
   ""
-  Plug 'https://github.com/psliwka/vim-smoothie' " Smooth scrolling for vim
+  Plug 'https://github.com/subnut/vim-smoothie' " Smooth scrolling for vim
   Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
   " Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
   Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
@@ -580,7 +581,17 @@ augroup END
   " Set up theme
   let g:oceanic_next_terminal_bold = 1
   let g:oceanic_next_terminal_italic = 1
+  " set bg=dark
   colorscheme OceanicNext
+
+function! LightTheme()
+  set bg=light
+  colorscheme one
+  let g:airline_theme = 'one'
+endfunction
+
+map <leader>lt :call LightTheme()<CR>
+
 " Use OceanicNext colours for SearchCurrent
 autocmd BufEnter * highlight SearchCurrent ctermbg=35 ctermfg=29 guibg=#00d75f guifg=#00875f
 autocmd BufEnter * highlight Search ctermbg=29 ctermfg=16 guibg=#00875f guifg=#1B2B34
@@ -888,6 +899,8 @@ endfunction
   " TODO: Create a PR for vim-smoothie to make these scroll using smoothie logic
   " map Y 5<c-y>
   " map E 5<c-e>
+  silent! map <unique> gg         <Plug>(Smoothie_gg)
+  silent! map <unique> G          <Plug>(Smoothie_G)
   " Swap ^ and 0 because I use ^ 99% of the time
   noremap 0 ^
   noremap ^ 0
