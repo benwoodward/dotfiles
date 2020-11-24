@@ -44,6 +44,8 @@ export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
 export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
 export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
 export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
+export SPACES_ACCESS_KEY_ID=$(security find-generic-password -s 'spaces access key id' -w)
+export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
 
 # Personal aliases
 alias nt="nvim -cStart"

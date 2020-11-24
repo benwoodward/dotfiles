@@ -511,7 +511,7 @@ nnoremap <silent> <leader>t :Tags<CR>
   ""
   "" Section: Navigation
   ""
-  Plug 'https://github.com/subnut/vim-smoothie' " Smooth scrolling for vim
+  Plug 'https://github.com/subnut/vim-smoothie', {'branch': 'devel'} " Smooth scrolling for vim
   Plug 'https://github.com/tpope/vim-surround.git' " Easily surround things with things, e.g. string -> 'string'
   " Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
   Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
