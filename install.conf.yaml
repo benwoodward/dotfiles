@@ -11,6 +11,7 @@
     ~/.config/karabiner: .config/karabiner
     ~/.config/iterm2: .config/iterm2
     ~/.config/bat: .config/bat
+    ~/.config/preview/preview.sh: .config/preview/preview.sh
     ~/.config/spotify-tui/config.yml: .config/spotify-tui/config.yml
     ~/.zshrc: .zshrc
     ~/.zshrc.vimode: .zshrc.vimode
