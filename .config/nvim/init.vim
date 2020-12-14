@@ -71,7 +71,7 @@ Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code wi
 " Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
 "   let g:vim_markdown_folding_disabled = 1
 
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'https://github.com/chrisbra/Colorizer'
 " :ColorToggle
 
@@ -143,10 +143,6 @@ Plug 'danilamihailov/beacon.nvim'
 Plug 'https://github.com/itchyny/vim-cursorword'
 Plug 'https://github.com/dhruvasagar/vim-zoom'
 " <C-W>m to toggle zoom in and out for the split
-Plug 'https://github.com/vim-pandoc/vim-pandoc-syntax'
-augroup pandoc_syntax
-  au! BufNewFile,BufFilePre,BufRead *.md set filetype=markdown.pandoc
-augroup END
 
 fun! Startscreen()
   " Don't run if:
@@ -516,7 +512,7 @@ nnoremap <silent> <leader>t :Tags<CR>
   " Plug 'https://github.com/terryma/vim-multiple-cursors.git' " Pretty effective multiple cursors functionality
   Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'} " Alternative to https://github.com/terryma/vim-multiple-cursors.git
   " Plug 'https://github.com/ludovicchabant/vim-gutentags.git' " The best ctags plugin for Vim
-  Plug 'ludovicchabant/vim-gutentags', { 'commit': '31c0ead' }
+  Plug 'https://github.com/ludovicchabant/vim-gutentags', { 'branch': 'master' }
 
   " Add plugins to &runtimepath
   call plug#end()
@@ -536,8 +532,8 @@ set noautochdir
 set number
 set relativenumber  " show relative line numbers
 set numberwidth=3   " narrow number column
+setlocal spell " Elixir's syntax highlighting is clever enough to only spellcheck comments, so it's nice to enable this. use Ctrl+L to toggle the line number counting method
 
-" use Ctrl+L to toggle the line number counting method
 function! g:ToggleNuMode()
   if &relativenumber == 1
      set number
@@ -727,6 +723,11 @@ cnoremap <expr> <Down> pumvisible() ? '<C-n>' : '<down>'
   let g:gutentags_file_list_command = 'rg --files'
   let g:gutentags_ctags_extra_args = ['--excmd=number']
   let g:gutentags_project_root = ['tags']
+  let g:gutentags_project_info = []
+  call add(g:gutentags_project_info, {'type': 'elixir', 'file': 'mix.exs'})
+  call add(g:gutentags_project_info, { "type": "javascript", "glob": "assets/src/*" })
+  call add(g:gutentags_project_info, { "type": "svelte", "glob": "*.svelte" })
+
   " config project root markers.
   " let g:gutentags_project_root = ['.root']
   " generate datebases in my cache directory, prevent gtags files polluting my project
@@ -1125,6 +1126,8 @@ let g:airline#extensions#hunks#enabled=0
 map <Leader>d y'>p
 vmap <Leader>d y'>p
 
+" Typing pp will insert a pipe operator
+iabbrev <buffer> pp \|>
 
 set winblend=0
 set pumblend=0

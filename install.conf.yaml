@@ -16,7 +16,7 @@
     ~/.zshrc.vimode: .zshrc.vimode
     ~/.gitconfig: .gitconfig
     ~/.gitignore: .global_gitignore
-    ~/.ctags: .ctags
+    ~/.ctags.d: .ctags.d
     ~/.p10k.zsh: .p10k.zsh
     ~/Library/Preferences/com.mizage.Divvy.plist: Library/Preferences/com.mizage.Divvy.plist
 
