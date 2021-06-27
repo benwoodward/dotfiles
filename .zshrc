@@ -34,6 +34,7 @@ zinit light-mode for 'zsh-users/zsh-autosuggestions'
 zinit light-mode for rupa/z
 zinit light-mode for changyuheng/fz
 zinit light-mode for kiurchv/asdf.plugin.zsh
+
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
@@ -41,11 +42,13 @@ export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
 export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
 export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
 export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
+export DATABASE_URL=$(security find-generic-password -s 'database url' -w)
 export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
 export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
 export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
 export SPACES_ACCESS_KEY_ID=$(security find-generic-password -s 'spaces access key id' -w)
 export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
+export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
 
 # Personal aliases
 alias nt="nvim -cStart"
@@ -318,6 +321,7 @@ bindkey "^n" history-beginning-search-forward
 
 bindkey -r "^j"
 
+setopt ignore_eof # don't kill session on ctrl-d
 no-op() {
 }
 zle -N no-op no-op
@@ -348,3 +352,53 @@ export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 source /Users/ben/.asdf/asdf.sh
 
 FAST_HIGHLIGHT[git-cmsg-len]=72
+
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"
+export GOPATH="$HOME/go"
+PATH="$GOPATH/bin:$PATH"
+export PATH="/usr/local/opt/icu4c/bin:$PATH"
+export PATH="/usr/local/opt/icu4c/sbin:$PATH"
+
+# make directory and cd into it
+mkd() {
+  mkdir -p "$@" && cd "$@"
+}
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/ben/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/ben/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/ben/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/ben/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
+# the `.git` directory, listing directories first. The output gets piped into
+# `less` with options to preserve color and line numbers, unless the output is
+# small enough for one screen.
+tree-better() {
+  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNXn;
+}
+tree-better-dirs() {
+  tree -dC -a -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNXn;
+}
+
+tre() {
+  tree-better
+}
+
+tred() {
+  tree-better-dirs
+}
+
+bundle-id() {
+  a="$1";
+  a="${a//\'/\'}.app";
+  a=${a//"/\\"};
+  a=${a//\\/\\\\};
+  mdls -name kMDItemCFBundleIdentifier -raw "$(mdfind 'kMDItemContentType==com.apple.application-bundle&&kMDItemFSName=="'"$a"'"c' | head -n1)"
+}
+
+edit-history() {
+    ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
+}
+zle -N edit-history
+

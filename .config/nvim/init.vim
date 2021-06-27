@@ -1,3 +1,7 @@
+lua << EOF
+-- require'lsp-config'
+EOF
+
 " TODO:
 " - Group settings/configs, functions, mappings etc.
 "   - Modularise into files
@@ -76,56 +80,61 @@ Plug 'https://github.com/chrisbra/Colorizer'
 " :ColorToggle
 
 Plug 'https://github.com/honza/vim-snippets'
+Plug 'https://github.com/neovim/nvim-lspconfig'
+Plug 'https://github.com/hrsh7th/vim-vsnip'
+Plug 'https://github.com/hrsh7th/vim-vsnip-integ'
+Plug 'https://github.com/hrsh7th/nvim-compe'
+Plug 'https://github.com/glepnir/lspsaga.nvim'
 
 " Intellisense for Neovim
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = [
-        \ 'coc-eslint', 'coc-prettier',
-        \ 'coc-json', 'coc-yaml',
-        \ 'coc-snippets', 'coc-elixir', 'coc-svelte'
-        \ ]
-  let g:coc_snippet_next = '<C-n>' " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-  let g:coc_snippet_prev = '<C-p>' " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-  " Use <C-j> and <C-k> to navigate the completion list
-  inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-  inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-  " Coc only does snippet and additional edit on confirm.
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  set cmdheight=2 " Better display for messages
-  set updatetime=200 " Smaller updatetime for CursorHold & CursorHoldI
-  set shortmess+=c " don't give |ins-completion-menu| messages.
-  set signcolumn=yes " always show signcolumns
-  " Use `lp` and `ln` for navigate diagnostics
-  nmap <silent> <leader>dp <Plug>(coc-diagnostic-prev)
-  nmap <silent> <leader>dn <Plug>(coc-diagnostic-next)
-  nmap <silent> <leader>pe <Plug>(coc-diagnostic-prev-error)
-  nmap <silent> <leader>ne <Plug>(coc-diagnostic-next-error)
-  " Remap keys for gotos
-  nmap <silent> <leader>ld <Plug>(coc-definition)
-  nmap <silent> <leader>lt <Plug>(coc-type-definition)
-  nmap <silent> <leader>li <Plug>(coc-implementation)
-  nmap <silent> <leader>lf <Plug>(coc-references)
-  " Use K for show documentation in preview window
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"   let g:coc_global_extensions = [
+"         \ 'coc-eslint', 'coc-prettier',
+"         \ 'coc-json', 'coc-yaml',
+"         \ 'coc-snippets', 'coc-elixir', 'coc-svelte'
+"         \ ]
+"   let g:coc_snippet_next = '<C-n>' " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+"   let g:coc_snippet_prev = '<C-p>' " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+"   " Use <C-j> and <C-k> to navigate the completion list
+"   inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+"   inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+"   " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+"   " Coc only does snippet and additional edit on confirm.
+"   inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"   set cmdheight=2 " Better display for messages
+"   set updatetime=200 " Smaller updatetime for CursorHold & CursorHoldI
+"   set shortmess+=c " don't give |ins-completion-menu| messages.
+"   set signcolumn=yes " always show signcolumns
+"   " Use `lp` and `ln` for navigate diagnostics
+"   nmap <silent> <leader>dp <Plug>(coc-diagnostic-prev)
+"   nmap <silent> <leader>dn <Plug>(coc-diagnostic-next)
+"   nmap <silent> <leader>pe <Plug>(coc-diagnostic-prev-error)
+"   nmap <silent> <leader>ne <Plug>(coc-diagnostic-next-error)
+"   " Remap keys for gotos
+"   nmap <silent> <leader>ld <Plug>(coc-definition)
+"   nmap <silent> <leader>lt <Plug>(coc-type-definition)
+"   nmap <silent> <leader>li <Plug>(coc-implementation)
+"   nmap <silent> <leader>lf <Plug>(coc-references)
+"   " Use K for show documentation in preview window
+"   nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-  function! s:show_documentation()
-    if &filetype == 'vim'
-      execute 'h '.expand('<cword>')
-    else
-      call CocAction('doHover')
-    endif
-  endfunction
+"   function! s:show_documentation()
+"     if &filetype == 'vim'
+"       execute 'h '.expand('<cword>')
+"     else
+"       call CocAction('doHover')
+"     endif
+"   endfunction
 
-  " Fix current line
-  nmap <Leader>qf <Plug>(coc-fix-current)
-  vmap <leader>fs <Plug>(coc-format-selected)
-  nmap <leader>fs <Plug>(coc-format-selected)
-  nmap <Leader>rn <Plug>(coc-rename)
-  nmap <Leader>gd <Plug>(coc-definition)
-  " Auto-scroll floating window
-  " nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
-  nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
+"   " Fix current line
+"   nmap <Leader>qf <Plug>(coc-fix-current)
+"   vmap <leader>fs <Plug>(coc-format-selected)
+"   nmap <leader>fs <Plug>(coc-format-selected)
+"   nmap <Leader>rn <Plug>(coc-rename)
+"   nmap <Leader>gd <Plug>(coc-definition)
+"   " Auto-scroll floating window
+"   " nnoremap <expr><C-f> coc#util#has_float() ? coc#util#float_scroll(1) : "\<C-f>"
+"   nnoremap <expr><C-b> coc#util#has_float() ? coc#util#float_scroll(0) : "\<C-b>"
 
 Plug 'https://github.com/stephpy/vim-yaml.git', { 'for': ['yaml.yml'] } " YAML hightlighting
 Plug 'https://github.com/elzr/vim-json.git', { 'for': ['json']}         " JSON highlighter
@@ -135,11 +144,24 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/brooth/far.vim'
+Plug 'https://github.com/soywod/himalaya', {'rtp': 'vim'} " Use himalaya CLI gmail client via Vim
+nmap gw <plug>(himalaya-msg-write)
+nmap gr <plug>(himalaya-msg-reply)
+nmap gR <plug>(himalaya-msg-reply-all)
+nmap gf <plug>(himalaya-msg-forward)
+nmap ga <plug>(himalaya-msg-attachments)
+nmap gC <plug>(himalaya-msg-copy)
+nmap gM <plug>(himalaya-msg-move)
+nmap gD <plug>(himalaya-msg-delete)
+
+Plug 'https://github.com/AndrewRadev/switch.vim'
+nnoremap <leader>ta :Switch<CR>
 
 " === Vim airline ==== "
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'danilamihailov/beacon.nvim'
+Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'https://github.com/vim-airline/vim-airline-themes'
+Plug 'https://github.com/danilamihailov/beacon.nvim'
 Plug 'https://github.com/itchyny/vim-cursorword'
 Plug 'https://github.com/dhruvasagar/vim-zoom'
 " <C-W>m to toggle zoom in and out for the split
@@ -181,8 +203,14 @@ endfun
 
 command! Start call Startscreen()
 
-Plug 'https://github.com/unblevable/quick-scope'
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+Plug 'https://github.com/justinmk/vim-sneak'
+let g:sneak#label = 1
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+" Plug 'https://github.com/unblevable/quick-scope'
+" let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 augroup qs_colors
   autocmd!
@@ -332,7 +360,7 @@ Plug 'https://github.com/henrik/vim-reveal-in-finder.git' " Reveal current file 
 
 " Terminal in floating window
 Plug 'https://github.com/voldikss/vim-floaterm'
-nnoremap <c-f> :FloatermNew ranger<CR>
+  nnoremap <leader>fs :FloatermNew ranger<CR>
   " Key bindings:
   " fn F12
 
@@ -365,6 +393,7 @@ map <Leader>lc :Gbrowse HEAD^{}<CR>
 " Open current file at HEAD in browser
 map <Leader>flc :Gbrowse HEAD^{}:%<CR>
 
+Plug 'zegervdv/nrpattern.nvim' " A Neovim plugin to expand the number formats supported to increment or decrement.
 Plug 'https://github.com/voldikss/vim-searchme' " Search under cursor with options
   " vim-search-me
   nmap <silent> <Leader>s <Plug>SearchNormal
@@ -915,9 +944,9 @@ endfunction
   let g:floaterm_gitcommit='vsplit'
 
 
-  noremap  <silent> <F12>           :FloatermToggle<CR>
-  noremap! <silent> <F12>           <Esc>:FloatermToggle<CR>
-  tnoremap <silent> <F12>           <C-\><C-n>:FloatermToggle<CR>
+  noremap  <silent> <F6>           :FloatermToggle<CR>
+  noremap! <silent> <F6>           <Esc>:FloatermToggle<CR>
+  tnoremap <silent> <F6>           <C-\><C-n>:FloatermToggle<CR>
 
   highlight VertSplit guibg=NONE
 
@@ -1088,7 +1117,7 @@ set laststatus=2
 " Vim airline theme
 let g:airline_theme='space'
 " Enable extensions
-let g:airline_extensions = ['branch', 'hunks', 'coc']
+let g:airline_extensions = ['branch', 'hunks', 'nvimlsp']
 
 " Update section z to just have line number
 let g:airline_section_z = airline#section#create(['linenr'])
@@ -1125,9 +1154,6 @@ let g:airline#extensions#hunks#enabled=0
 " Shift+Space - duplicate selected lines
 map <Leader>d y'>p
 vmap <Leader>d y'>p
-
-" Typing pp will insert a pipe operator
-iabbrev <buffer> pp \|>
 
 set winblend=0
 set pumblend=0

@@ -98,14 +98,14 @@
   # (better for interactive use)
   pr-stat = !git diff --stat master $(git rev-parse --abbrev-ref HEAD)
 
-  elix-heatmap = !git heatmap -n 30 --filter 'grep -v \"priv/static\" | grep -v \"assets/package*\"'
+  eh = !git heatmap -n 30 --filter 'grep -v \"priv/static\" | grep -v \"assets/package*\"'
 [push]
   default = current
 [web]
   browser = open
 [user]
 	name = Ben Woodward
-	email = benwoodward@users.noreply.github.com
+	email = 1472981+benwoodward@users.noreply.github.com
 [github]
   user = benwoodward
 [core]
