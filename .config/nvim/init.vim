@@ -144,6 +144,17 @@ Plug 'https://github.com/bronson/vim-trailing-whitespace.git'           " Highli
 ""
 "" Section: Interface enhancements
 ""
+Plug 'https://github.com/andymass/vim-matchup'
+" map <c-p> :DoMatchParen<CR>
+let g:matchup_matchparen_fallback = 0 " never use matchparen.vim
+augroup vimenter
+  autocmd!
+  autocmd VimEnter * NoMatchParen
+augroup END
+nnoremap [op :DoMatchParen<CR>
+nnoremap ]op :NoMatchParen<CR>
+nmap <c-p> :<C-R>=exists("g:matchup_matchparen_enabled") ? ( (g:matchup_matchparen_enabled == 1) ? 'NoMatchParen': 'DoMatchParen'): 'DoMatchParen'<CR><CR>
+
 Plug 'https://github.com/brooth/far.vim'
 Plug 'https://github.com/soywod/himalaya', {'rtp': 'vim'} " Use himalaya CLI gmail client via Vim
 nmap gw <plug>(himalaya-msg-write)
@@ -901,20 +912,21 @@ endfunction
   " https://stackoverflow.com/a/47361068
   "
   " Disable parentheses matching depends on system. This way we should address all cases (?)
-  set noshowmatch
+  " set noshowmatch
   " NoMatchParen " This doesnt work as it belongs to a plugin, which is only loaded _after_ all files are.
   " Trying disable MatchParen after loading all plugins
   "
-  function! g:FuckThatMatchParen ()
-      if exists(":NoMatchParen")
-          :NoMatchParen
-      endif
-  endfunction
+  " Disabled after installing vim-matchup
+  " function! g:FuckThatMatchParen ()
+  "     if exists(":NoMatchParen")
+  "         :NoMatchParen
+  "     endif
+  " endfunction
 
-  augroup plugin_initialize
-      autocmd!
-      autocmd VimEnter * call FuckThatMatchParen()
-  augroup END
+  " augroup plugin_initialize
+  "     autocmd!
+  "     autocmd VimEnter * call FuckThatMatchParen()
+  " augroup END
 
   let g:python3_host_prog = '/usr/local/bin/python3'
 
@@ -1157,3 +1169,5 @@ vmap <Leader>d y'>p
 
 set winblend=0
 set pumblend=0
+
+set iskeyword-=\$ " Allow find next to jump between Svelte store/$store
