@@ -384,16 +384,47 @@
                         ]
                     },
                     {
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "from": {
+                            "key_code": "s",
+                            "modifiers": {
+                              "mandatory": [
+                                "left_control",
+                                "left_shift"
+                              ]
+                            }
+                          },
+                          "to": [
+                            {
+                              "set_variable": {
+                                "name": "shift-ctrl-s pressed",
+                                "value": 1
+                              }
+                            }
+                          ],
+                          "to_after_key_up": [
+                            {
+                              "set_variable": {
+                                "name": "shift-ctrl-s pressed",
+                                "value": 0
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                         "manipulators": [
                             {
-                                "description": "Map cmmd-ctrl-shift-h to move mouse left fast",
+                                "description": "Map s-ctrl-shift-h to move mouse left fast",
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
                                         "mandatory": [
                                             "left_control",
-                                            "left_shift",
-                                            "left_command"
+                                            "left_shift"
                                         ]
                                     }
                                 },
@@ -404,30 +435,12 @@
                                         }
                                     }
                                 ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "manipulators": [
-                            {
-                                "description": "Map cmmd-ctrl-shift-b to move mouse left fast",
-                                "from": {
-                                    "key_code": "b",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "left_control",
-                                            "left_shift",
-                                            "left_command"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "mouse_key": {
-                                            "x": -4300
-                                        }
-                                    }
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "shift-ctrl-s pressed",
+                                    "value": 1
+                                  }
                                 ],
                                 "type": "basic"
                             }
@@ -436,14 +449,13 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map cmmd-ctrl-shift-l to move mouse right fast",
+                                "description": "Map s-ctrl-shift-l to move mouse right fast",
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
                                         "mandatory": [
                                             "left_control",
-                                            "left_shift",
-                                            "left_command"
+                                            "left_shift"
                                         ]
                                     }
                                 },
@@ -454,6 +466,13 @@
                                         }
                                     }
                                 ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "shift-ctrl-s pressed",
+                                    "value": 1
+                                  }
+                                ],
                                 "type": "basic"
                             }
                         ]
@@ -461,14 +480,13 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map cmmd-ctrl-shift-k to move mouse up fast",
+                                "description": "Map s-ctrl-shift-k to move mouse up fast",
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
                                         "mandatory": [
                                             "left_control",
-                                            "left_shift",
-                                            "left_command"
+                                            "left_shift"
                                         ]
                                     }
                                 },
@@ -479,6 +497,13 @@
                                         }
                                     }
                                 ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "shift-ctrl-s pressed",
+                                    "value": 1
+                                  }
+                                ],
                                 "type": "basic"
                             }
                         ]
@@ -486,14 +511,13 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map cmmd-ctrl-shift-j to move mouse down fast",
+                                "description": "Map s-ctrl-shift-j to move mouse down fast",
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
                                         "mandatory": [
                                             "left_control",
-                                            "left_shift",
-                                            "left_command"
+                                            "left_shift"
                                         ]
                                     }
                                 },
@@ -503,6 +527,13 @@
                                             "y": 4300
                                         }
                                     }
+                                ],
+                                "conditions": [
+                                  {
+                                    "type": "variable_if",
+                                    "name": "shift-ctrl-s pressed",
+                                    "value": 1
+                                  }
                                 ],
                                 "type": "basic"
                             }
@@ -867,6 +898,12 @@
                         "manipulators": [
                             {
                                 "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.googlecode.iterm2"
+                                        ],
+                                        "type": "frontmost_application_unless"
+                                    },
                                     {
                                         "name": "left_shift pressed",
                                         "type": "variable_if",
