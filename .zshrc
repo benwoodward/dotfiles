@@ -402,3 +402,4 @@ edit-history() {
 }
 zle -N edit-history
 
+bindkey "^r" fzf-history-widget
