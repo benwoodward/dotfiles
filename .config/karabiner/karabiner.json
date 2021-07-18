@@ -388,7 +388,7 @@
                         {
                           "type": "basic",
                           "from": {
-                            "key_code": "s",
+                            "key_code": "q",
                             "modifiers": {
                               "mandatory": [
                                 "left_control",
@@ -399,7 +399,7 @@
                           "to": [
                             {
                               "set_variable": {
-                                "name": "shift-ctrl-s pressed",
+                                "name": "shift-ctrl-q pressed",
                                 "value": 1
                               }
                             }
@@ -407,7 +407,7 @@
                           "to_after_key_up": [
                             {
                               "set_variable": {
-                                "name": "shift-ctrl-s pressed",
+                                "name": "shift-ctrl-q pressed",
                                 "value": 0
                               }
                             }
@@ -418,7 +418,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map s-ctrl-shift-h to move mouse left fast",
+                                "description": "Map q-ctrl-shift-h to move mouse left fast",
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
@@ -438,7 +438,7 @@
                                 "conditions": [
                                   {
                                     "type": "variable_if",
-                                    "name": "shift-ctrl-s pressed",
+                                    "name": "shift-ctrl-q pressed",
                                     "value": 1
                                   }
                                 ],
@@ -449,7 +449,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map s-ctrl-shift-l to move mouse right fast",
+                                "description": "Map q-ctrl-shift-l to move mouse right fast",
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
@@ -469,7 +469,7 @@
                                 "conditions": [
                                   {
                                     "type": "variable_if",
-                                    "name": "shift-ctrl-s pressed",
+                                    "name": "shift-ctrl-q pressed",
                                     "value": 1
                                   }
                                 ],
@@ -480,7 +480,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map s-ctrl-shift-k to move mouse up fast",
+                                "description": "Map q-ctrl-shift-k to move mouse up fast",
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
@@ -500,7 +500,7 @@
                                 "conditions": [
                                   {
                                     "type": "variable_if",
-                                    "name": "shift-ctrl-s pressed",
+                                    "name": "shift-ctrl-q pressed",
                                     "value": 1
                                   }
                                 ],
@@ -511,7 +511,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Map s-ctrl-shift-j to move mouse down fast",
+                                "description": "Map q-ctrl-shift-j to move mouse down fast",
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
@@ -531,7 +531,7 @@
                                 "conditions": [
                                   {
                                     "type": "variable_if",
-                                    "name": "shift-ctrl-s pressed",
+                                    "name": "shift-ctrl-q pressed",
                                     "value": 1
                                   }
                                 ],
