@@ -51,6 +51,7 @@ Plug 'https://github.com/junegunn/vim-easy-align.git'
 "" Section: Syntax Tools
 ""
 
+Plug 'https://github.com/jparise/vim-graphql'
 Plug 'https://github.com/pangloss/vim-javascript'
 Plug 'https://github.com/HerringtonDarkholme/yats.vim'
 
