@@ -583,7 +583,10 @@
                               {
                                 "key_code": "left_control"
                               }
-                            ]
+                            ],
+                            "modifiers": {
+                              "optional": ["any"]
+                            }
                           },
                           "to": [
                             {
@@ -975,7 +978,12 @@
                             {
                                 "description": "Map control-tab-space to mouse click",
                                 "from": {
-                                    "key_code": "spacebar"
+                                    "key_code": "spacebar",
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
                                 },
                                 "to": [
                                     {
