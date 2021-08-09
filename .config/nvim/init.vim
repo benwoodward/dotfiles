@@ -50,7 +50,7 @@ Plug 'https://github.com/junegunn/vim-easy-align.git'
 ""
 "" Section: Syntax Tools
 ""
-
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'https://github.com/jparise/vim-graphql'
 Plug 'https://github.com/pangloss/vim-javascript'
 Plug 'https://github.com/HerringtonDarkholme/yats.vim'
@@ -68,9 +68,9 @@ Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 " Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
 
 autocmd FileType svelte setlocal formatoptions+=ro " Start a new line with comment string
-Plug 'evanleck/vim-svelte', {'branch': 'main'}
-let g:svelte_indent_script = 1
-let g:svelte_indent_style = 0
+" Plug 'evanleck/vim-svelte', {'branch': 'main'}
+" let g:svelte_indent_script = 1
+" let g:svelte_indent_style = 0
 
 Plug 'https://github.com/mhinz/vim-mix-format'      " Auto-format Elixir code with `mix format` on save
 " Plug 'https://github.com/plasticboy/vim-markdown', { 'for': ['md', 'markdown']} " Markdown highlighting
@@ -422,8 +422,7 @@ Plug '~/dev/oss/Forks/vim-plugins/vimify'
 
 Plug 'https://github.com/tpope/vim-commentary/'
 " Modifies commentstring dynamically, makes commenting possible in multi-language files like components
-Plug 'https://github.com/npearson72/vim-context-commentstring'
-
+Plug 'https://github.com/JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'ryanoasis/vim-devicons'                           " pretty icons everywhere
 
 Plug 'junegunn/fzf', { 'do': './install --bin' }
@@ -558,6 +557,30 @@ nnoremap <silent> <leader>t :Tags<CR>
   " Add plugins to &runtimepath
   call plug#end()
 
+" Has to come after plug#end()
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { 'typescript', 'javascript' },
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+  },
+  incremental_selection = {
+    enable = true,
+  }
+}
+EOF
+
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  context_commentstring = {
+    enable = true
+  }
+}
+EOF
 
   " Section: configs
 
