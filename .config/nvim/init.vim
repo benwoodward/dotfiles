@@ -1,7 +1,3 @@
-lua << EOF
--- require'lsp-config'
-EOF
-
 " TODO:
 " - Group settings/configs, functions, mappings etc.
 "   - Modularise into files
@@ -16,6 +12,8 @@ endif
 unlet autoload_plug_path
 
 call plug#begin()
+
+Plug 'nvim-lua/plenary.nvim'
 
 ""
 "" Section: Editing
@@ -50,6 +48,7 @@ Plug 'https://github.com/junegunn/vim-easy-align.git'
 ""
 "" Section: Syntax Tools
 ""
+Plug 'https://github.com/p00f/nvim-ts-rainbow'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'https://github.com/jparise/vim-graphql'
 Plug 'https://github.com/pangloss/vim-javascript'
@@ -62,7 +61,9 @@ Plug 'https://github.com/othree/html5.vim'          " html5 syntax highlighting
 " Plug 'https://github.com/maxmellon/vim-jsx-pretty'  " Jsx syntax highlighting
 " Plug 'https://github.com/maksimr/vim-jsbeautify'
 Plug 'https://github.com/mhartington/oceanic-next', {'commit': '08158eec24cd154afd1623686aeb336fad580be7'}  " Best dark colorscheme
-Plug 'https://github.com/rakr/vim-one'              " Light colorscheme
+Plug 'https://github.com/Th3Whit3Wolf/one-nvim'                        " Light theme compatible with nvim-treesitter
+Plug 'https://github.com/projekt0n/github-nvim-theme'                  " Light theme compatible with nvim-treesitter
+" TODO: This is deprecated, use https://github.com/qxxxb/vim-searchhi
 Plug 'https://github.com/timakro/vim-searchant'     " Highlight search result under cursor
 Plug 'https://github.com/elixir-editors/vim-elixir' " Elixir syntax highlighting
 " Plug 'https://github.com/sbdchd/neoformat'          " Multi-language formatter. TODO: Check whether I can remove other beautifiers
@@ -170,9 +171,8 @@ nmap gD <plug>(himalaya-msg-delete)
 Plug 'https://github.com/AndrewRadev/switch.vim'
 nnoremap <leader>ta :Switch<CR>
 
-" === Vim airline ==== "
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'https://github.com/vim-airline/vim-airline-themes'
+Plug 'hoob3rt/lualine.nvim'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'https://github.com/danilamihailov/beacon.nvim'
 Plug 'https://github.com/itchyny/vim-cursorword'
 Plug 'https://github.com/dhruvasagar/vim-zoom'
@@ -559,9 +559,13 @@ nnoremap <silent> <leader>t :Tags<CR>
 
 " Has to come after plug#end()
 
+lua << EOF
+require'lsp-config'
+EOF
+
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { 'typescript', 'javascript' },
+  ensure_installed = { 'typescript', 'javascript', 'css', 'lua', 'comment' },
   highlight = {
     enable = true,
   },
@@ -578,6 +582,22 @@ lua << EOF
 require'nvim-treesitter.configs'.setup {
   context_commentstring = {
     enable = true
+  }
+}
+
+require'nvim-treesitter.configs'.setup {
+  rainbow = {
+    enable = true,
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
+    colors = {
+      '#bf616a',
+      '#d08770',
+      '#ebcb8b',
+      '#a3be8c',
+      '#88c0d0'
+    }, -- table of hex strings
+    -- termcolors = {} -- table of colour name strings
   }
 }
 EOF
@@ -643,11 +663,17 @@ augroup END
   let g:oceanic_next_terminal_italic = 1
   " set bg=dark
   colorscheme OceanicNext
+  " Reloading is a fix that is probably not needed after this PR is merged:
+  " https://github.com/hoob3rt/lualine.nvim/pull/311
+  lua require("plenary.reload").reload_module("lualine", true)
+  lua require('lualine').setup { options = { theme = 'oceanicnext' }}
 
 function! LightTheme()
-  set bg=light
-  colorscheme one
-  let g:airline_theme = 'one'
+  " Reloading is a fix that is probably not needed after this PR is merged:
+  " https://github.com/hoob3rt/lualine.nvim/pull/311
+  lua require("plenary.reload").reload_module("lualine", true)
+  lua require('github-theme').setup({ themeStyle = 'light' })
+  lua require('lualine').setup { options = { theme = 'github' }}
 endfunction
 
 map <leader>lt :call LightTheme()<CR>
@@ -1149,43 +1175,6 @@ endfunction
 set noshowcmd  " to get rid of display of last command
 set noshowmode  " to get rid of thing like --INSERT--
 set laststatus=2
-
-" Vim airline theme
-let g:airline_theme='space'
-" Enable extensions
-let g:airline_extensions = ['branch', 'hunks', 'nvimlsp']
-
-" Update section z to just have line number
-let g:airline_section_z = airline#section#create(['linenr'])
-
-" Do not draw separators for empty sections (only for the active window) >
-let g:airline_skip_empty_sections = 1
-
-" Smartly uniquify buffers names with similar filename, suppressing common parts of paths.
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-
-" Custom setup that removes filetype/whitespace from default vim airline bar
-let g:airline#extensions#default#layout = [['a', 'b', 'c'], ['x', 'z', 'warning', 'error']]
-
-" Customize vim airline per filetype
-" 'list'      - Only show file type plus current line number out of total
-let g:airline_filetype_overrides = {
-  \ 'list': [ '%y', '%l/%L'],
-  \ }
-
-" Enable powerline fonts
-let g:airline_powerline_fonts = 1
-
-" Enable caching of syntax highlighting groups
-let g:airline_highlighting_cache = 1
-
-" Define custom airline symbols
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-" Don't show git changes to current file in airline
-let g:airline#extensions#hunks#enabled=0
 
 " Shift+Space - duplicate selected lines
 map <Leader>d y'>p
