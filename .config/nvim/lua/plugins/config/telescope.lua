@@ -5,7 +5,6 @@ local telescope = require('telescope')
 
 -- Extensions
 require('telescope').load_extension('project')
-require('telescope').load_extension('dap')
 
 telescope.setup {
   defaults = {

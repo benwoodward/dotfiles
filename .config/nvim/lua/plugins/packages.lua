@@ -5,14 +5,6 @@ return require('packer').startup(
     use {'wbthomason/packer.nvim'}
 
     use {
-      'jenterkin/vim-autosource',
-      config = function()
-        vim.g.autosource_conf_names = {'.lvimrc', '.lvimrc.lua'}
-        vim.g.autosource_hashdir = vim.fn.expand('$HOME/.config/nvim/etc/as_hashes')
-      end,
-    }
-
-    use {
       disable = true,
       'gruvbox-community/gruvbox',
       config = function()
@@ -64,15 +56,6 @@ return require('packer').startup(
 
     use {'kyazdani42/nvim-web-devicons'}
 
-    use {
-      'kyazdani42/nvim-tree.lua',
-      --commit = 'c2f2c665',
-      requires = {
-        'nvim-web-devicons'
-      },
-      config = require('plugins.config.tree-config').setup()
-    }
-
     -- LSP
     use {
       'neovim/nvim-lspconfig',
@@ -95,7 +78,6 @@ return require('packer').startup(
     }
 
     use {'nanotee/nvim-lsp-basics'}
-    use {'nanotee/luv-vimdocs'}
 
     use {
       'folke/trouble.nvim',
@@ -105,13 +87,6 @@ return require('packer').startup(
       config = function()
         require('plugins.config.trouble')
       end,
-    }
-
-    use {
-      'glepnir/lspsaga.nvim',
-      config = function ()
-        require('lspsaga').init_lsp_saga()
-      end
     }
 
     -- TreeSitter
@@ -155,30 +130,6 @@ return require('packer').startup(
       end,
     }
 
-    use {
-      'famiu/feline.nvim',
-      requires = {'nvim-web-devicons'},
-      config = function()
-        require('plugins.config.feline')
-      end,
-    }
-
-    use {
-      'mhinz/vim-startify',
-      config = function()
-        require('plugins.config.startify')
-      end,
-    }
-
-    use {
-      'simnalamburt/vim-mundo',
-      config = function()
-        vim.g.mundo_width          = 60
-        vim.g.mundo_preview_bottom = true
-        nmap('<F5>', ':MundoToggle<cr>')
-      end,
-    }
-
     use {'euclidianAce/BetterLua.vim'}
 
     -- Telescope
@@ -202,46 +153,15 @@ return require('packer').startup(
     }
 
     use {
-      'famiu/nvim-reload'
-    }
-
-    use {
       'norcalli/nvim-colorizer.lua',
       config = function()
         require('plugins.config.colorizer')
       end,
     }
 
-    use {'junegunn/vim-easy-align'}
-
     use {'mg979/vim-visual-multi'}
 
     use {'dstein64/nvim-scrollview'}
-
-    use {
-      'winston0410/range-highlight.nvim',
-      requires = {'winston0410/cmd-parser.nvim'},
-      config = function()
-        require("range-highlight").setup{}
-      end,
-    }
-
-    -- DAP
-    use {
-      'mfussenegger/nvim-dap',
-      requires = {
-        {'jbyuki/one-small-step-for-vimkind'},
-        {'theHamsta/nvim-dap-virtual-text', requires = 'nvim-treesitter'},
-        {'nvim-telescope/telescope-dap.nvim', requires = {'telescope.nvim', 'nvim-treesitter'}},
-      },
-      config = function ()
-        require('plugins.config.dap')
-      end
-    }
-
-    use {'rcarriga/nvim-dap-ui'}
-
-    use {'Pocco81/DAPInstall.nvim'}
 
     -- Teal language support
     use {'teal-language/vim-teal'}
