@@ -35,15 +35,6 @@ local sumneko_root_path = vim.fn.expand('$HOME/github/lua-language-server')
 local sumneko_binary = sumneko_root_path..'/bin/'..system_name..'/lua-language-server'
 
 local servers = {
-  bashls = {},
-  cssls = {},
-  gopls = {},
-  html = {},
-  jsonls = {},
-  pyls = {},
-  vimls = {},
-  yamlls = {},
-
   solargraph = {
     cmd = {'solargraph', 'stdio'},
     filetypes = {'ruby'},
