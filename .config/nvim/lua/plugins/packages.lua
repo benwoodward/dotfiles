@@ -166,5 +166,24 @@ return require('packer').startup(
     -- Teal language support
     use {'teal-language/vim-teal'}
 
+    use { "AndrewRadev/splitjoin.vim", keys = "gS" }
+
+    use {
+      'folke/which-key.nvim',
+      config = function()
+        require('plugins.config.which-key')
+      end,
+    }
+
+    use {
+      'ruifm/gitlinker.nvim',
+      key = "gy",
+      config = function()
+        require('gitlinker').setup {
+          mappings = "gy",
+        }
+      end,
+    }
+
   end
 )
