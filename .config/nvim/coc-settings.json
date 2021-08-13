@@ -1,6 +1,0 @@
-{
-  "snippets.enableStatusItem": true,
-  "snippets.extends": {
-    "svelte": ["css", "javascript", "html", "vue"]
-  }
-}
