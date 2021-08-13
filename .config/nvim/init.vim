@@ -83,9 +83,10 @@ Plug 'https://github.com/chrisbra/Colorizer'
 
 Plug 'https://github.com/honza/vim-snippets'
 Plug 'https://github.com/neovim/nvim-lspconfig'
+Plug 'https://github.com/mhartington/formatter.nvim'
+Plug 'https://github.com/hrsh7th/nvim-compe'
 Plug 'https://github.com/hrsh7th/vim-vsnip'
 Plug 'https://github.com/hrsh7th/vim-vsnip-integ'
-Plug 'https://github.com/hrsh7th/nvim-compe'
 Plug 'https://github.com/glepnir/lspsaga.nvim'
 
 " Intellisense for Neovim
@@ -560,7 +561,101 @@ nnoremap <silent> <leader>t :Tags<CR>
 " Has to come after plug#end()
 
 lua << EOF
-require'lsp-config'
+local lsp = require "lspconfig"
+local configs = require "lspconfig/configs"
+local util = require "lspconfig/util"
+
+-- -- typescript -- --
+-- configs.custom_typescript = {
+--   default_config = {
+--     cmd = {"typescript-language-server", "--stdio"},
+--     filetypes = {
+--         "javascript",
+--         "typescript",
+--         "typescript.tsx"
+--     },
+--     root_dir = util.root_pattern("package.json", "tsconfig.json", ".git")
+--   }
+-- }
+
+-- -- svelte -- --
+lsp.svelte.setup {
+  on_attach = function(client)
+    client.server_capabilities.completionProvider.triggerCharacters = {
+      ".", "\"", "'", "`", "/", "@", "*",
+      "#", "$", "+", "^", "(", "[", "-", ":",
+    }
+  end,
+  on_init = function(client)
+    vim.notify("Language Server Client successfully started!", "info", {
+      title = client.name
+    })
+  end,
+  filetypes = { "svelte" },
+  cmd = {"svelteserver", "--stdio"},
+  filetypes = { "svelte" },
+  root_dir = util.root_pattern("package.json", ".git"),
+  settings = {
+    svelte = {
+      plugin = {
+        html   = { completions = { enable = true, emmet = false } },
+        svelte = { completions = { enable = true, emmet = false } },
+        css    = { completions = { enable = true, emmet = true  } },
+      },
+    },
+  },
+}
+
+lsp.tsserver.setup{}
+
+-- nvim-compe
+-- https://github.com/seushin/dotfiles/blob/78ac2a51c83bad879039b78aad138df92033b790/config/nvim/lua/config/compe.lua
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local check_back_space = function()
+  local col = vim.fn.col('.') - 1
+  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+    return true
+   else
+    return false
+  end
+end
+
+-- Use (s-)tab to:
+--- move to prev/next item in completion menuone
+--- jump to prev/next snippet's placeholder
+_G.tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-n>"
+  elseif vim.fn.call("vsnip#available", {1}) == 1 then
+    return t "<Plug>(vsnip-expand-or-jump)"
+  elseif check_back_space() then
+    return t "<Tab>"
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+
+_G.s_tab_complete = function()
+  if vim.fn.pumvisible() == 1 then
+    return t "<C-p>"
+  elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
+    return t "<Plug>(vsnip-jump-prev)"
+  else
+    return t "<S-Tab>"
+  end
+end
+
+vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
+
+--- Test
+-- vim.api.nvim_set_keymap('i', '<C-Space>', [[compe#complete()]], {expr = true})
+vim.api.nvim_set_keymap('i', '<CR>', [[compe#confirm('<CR>')]], {expr = true})
 EOF
 
 lua <<EOF
@@ -574,8 +669,76 @@ require'nvim-treesitter.configs'.setup {
   },
   incremental_selection = {
     enable = true,
-  }
+  },
 }
+
+require("formatter").setup(
+  {
+    logging = false,
+    filetype = {
+      css = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), "--single-quote"},
+            stdin = true
+          }
+        end
+      },
+      typescript = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), "--single-quote"},
+            stdin = true
+          }
+        end
+      },
+      javascript = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), "--single-quote"},
+            stdin = true
+          }
+        end
+      },
+      svelte = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), "--single-quote"},
+            stdin = true
+          }
+        end
+      },
+      json = {
+        -- prettier
+        function()
+          return {
+            exe = "prettier",
+            args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0), "--single-quote"},
+            stdin = true
+          }
+        end
+      },
+      lua = {
+        -- luafmt
+        function()
+          return {
+            exe = "luafmt",
+            args = {"--indent-count", 2, "--stdin"},
+            stdin = true
+          }
+        end
+      }
+    }
+  }
+)
 EOF
 
 lua << EOF
