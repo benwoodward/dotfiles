@@ -64,19 +64,6 @@ return require('packer').startup(
       end,
     }
 
-    use {
-      'hrsh7th/nvim-compe',
-      requires = {
-        'nvim-lspconfig',
-        'hrsh7th/vim-vsnip',
-        -- 'rafamadriz/friendly-snippets'
-        'tamago324/compe-zsh',
-      },
-      config = function()
-        require('plugins.config.compe')
-      end,
-    }
-
     use {'nanotee/nvim-lsp-basics'}
 
     use {
@@ -183,6 +170,27 @@ return require('packer').startup(
           mappings = "gy",
         }
       end,
+    }
+
+    use {
+      'hrsh7th/nvim-cmp',
+      config = function()
+        require "plugins.cmp"
+      end,
+      requires = {
+        {
+          'L3MON4D3/LuaSnip',
+          opt = true,
+          module_pattern = { 'luasnip', 'luasnip.*' },
+          config = function()
+            require 'plugins.config.luasnip'
+          end,
+        },
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-buffer',
+      'saadparwaiz1/cmp_luasnip',
+      },
     }
 
   end
