@@ -1,8 +1,10 @@
 local ls = require "luasnip"
 local s = ls.s -- Snippet
+local sn =ls.sn
 local t = ls.t -- Text
 local i = ls.i -- Input
 local f = ls.f -- Function
+local d = ls.d
 
 ls.config.set_config {
   history = true,
@@ -87,6 +89,14 @@ ls.snippets = {
   },
   dart = dart,
   go = go,
+  svelte = {
+    -- TODO: make these smart about whether to use trailing semi or
+    -- not, based on directory (or maybe .editorconfig)
+    s(
+      {trig = 'log', dscr = 'console.log'},
+      {t('console.log('), i(1, 'value'), t(');')}
+    ),
+  },
   javascriptreact = react,
   typescriptreact = react,
   tex = {

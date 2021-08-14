@@ -1,7 +1,6 @@
 -- vim: foldmethod=marker
 
 local fn = vim.fn
-local remap = vim.api.nvim_set_keymap
 local cmp = require "cmp"
 local core = require "cmp.core"
 local cmp = require "cmp"
