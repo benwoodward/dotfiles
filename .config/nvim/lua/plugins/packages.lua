@@ -93,11 +93,6 @@ return require('packer').startup(
       end,
     }
 
-    use {
-      'lukas-reineke/indent-blankline.nvim',
-      setup = [[require('plugins.config.indentline')]]
-    }
-
     -- Git
     use {
       'lewis6991/gitsigns.nvim',
@@ -193,6 +188,9 @@ return require('packer').startup(
     }
 
     use { 'saadparwaiz1/cmp_luasnip' }
+
+    -- LSP enhancements for TS
+    use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
 
   end
 )

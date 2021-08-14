@@ -15,7 +15,7 @@ o.wildmenu      = true
 o.wildmode      = 'full'
 o.hlsearch      = true
 
-o.listchars     = [[tab:→ ,space:·,eol:¶,trail:·,extends:↷,precedes:↶]]
+o.listchars     = [[tab:→ ,space: ,trail:·,extends:↷,precedes:↶]]
 
 o.clipboard     = 'unnamedplus'
 
@@ -29,7 +29,7 @@ wo.number       = true
 wo.list         = true
 
 wo.cursorline   = true
-wo.cursorcolumn = true
+wo.cursorcolumn = false
 -- }}}
 
 -- g.loaded_node_provider   = 0
