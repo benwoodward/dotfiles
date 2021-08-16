@@ -62,6 +62,9 @@ return require('packer').startup(
       config = function()
         require('plugins.config.lsp')
       end,
+      requires = {
+        'jose-elias-alvarez/null-ls.nvim'
+      },
     }
 
     use {'nanotee/nvim-lsp-basics'}
@@ -188,9 +191,6 @@ return require('packer').startup(
     }
 
     use { 'saadparwaiz1/cmp_luasnip' }
-
-    -- LSP enhancements for TS
-    use { 'jose-elias-alvarez/nvim-lsp-ts-utils' }
 
   end
 )
