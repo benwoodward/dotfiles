@@ -192,5 +192,8 @@ return require('packer').startup(
 
     use { 'saadparwaiz1/cmp_luasnip' }
 
+    -- Easier keymapping
+    use { 'LionC/nest.nvim' }
+
   end
 )

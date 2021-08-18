@@ -26,6 +26,8 @@ o.undofile      = true
 -- }}}
 -- Window options {{{
 wo.number       = true
+wo.relativenumber = true
+wo.numberwidth  = 4
 wo.list         = true
 
 wo.cursorline   = true

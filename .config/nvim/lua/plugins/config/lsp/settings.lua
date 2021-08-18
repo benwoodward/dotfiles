@@ -41,12 +41,6 @@ local custom_attach = function(client, bufnr)
     augroup END
     ]]
   end
-
-  nmap('gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-  nmap('gd', '<cmd>lua vim.lsp.buf.definitions()<cr>')
-  nmap('K',  '<cmd>lua vim.lsp.buf.hover()<cr>')
-
-  nmap('<Leader>gr', '<cmd>lua vim.lsp.buf.references()<cr>')
 end
 
 local custom_attach_svelte = function(client, bufnr)
@@ -69,12 +63,6 @@ local custom_attach_svelte = function(client, bufnr)
     ".", "\"", "'", "`", "/", "@", "*",
     "#", "$", "+", "^", "(", "[", "-", ":",
   }
-
-  nmap('gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-  nmap('gd', '<cmd>lua vim.lsp.buf.definitions()<cr>')
-  nmap('K',  '<cmd>lua vim.lsp.buf.hover()<cr>')
-
-  nmap('<Leader>gr', '<cmd>lua vim.lsp.buf.references()<cr>')
 end
 
 local servers = {
