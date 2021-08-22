@@ -33,12 +33,13 @@ require('gitsigns').setup {
   numhl              = true,
   linehl             = false,
   current_line_blame = true,
-  current_line_blame_delay = 1000,
-  current_line_blame_position = 'right_align',
+  current_line_blame_opts = {
+    delay = 1000,
+    virt_text_pos = 'right_align',
+  },
   sign_priority      = 6,
   update_debounce    = 100,
   status_formatter   = nil,
-  use_decoration_api = true,
   use_internal_diff  = true,
 }
 

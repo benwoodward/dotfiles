@@ -19,11 +19,11 @@
     ~/.gitignore: .global_gitignore
     ~/.ctags.d: .ctags.d
     ~/.p10k.zsh: .p10k.zsh
+    ~/.skhdrc: .skhdrc
     ~/Library/Preferences/com.mizage.Divvy.plist: Library/Preferences/com.mizage.Divvy.plist
 
 - shell:
     - ["git submodule update --init --recursive", Installing/updating submodules]
     - ["git submodule foreach git pull origin master", Updating submodule contents]
     - ["date > ~/.dotfiles_update", Logging last update]
-    # - nvim +'PlugInstall --sync' +'PlugUpdate' +qa
 

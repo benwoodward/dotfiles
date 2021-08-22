@@ -195,5 +195,20 @@ return require('packer').startup(
     -- Easier keymapping
     use { 'LionC/nest.nvim' }
 
+    use {
+      "folke/zen-mode.nvim",
+      config = function()
+        require("zen-mode").setup {
+          window = {
+            width = .85 -- width will be 85% of the editor width
+          }
+        }
+      end
+    }
+
+    use { 'https://github.com/psliwka/vim-smoothie' }
+
+    use { 'https://github.com/voldikss/vim-floaterm' }
+
   end
 )

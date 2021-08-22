@@ -19,7 +19,7 @@
   ai = add --interactive
   authors = !git shortlog -s -n -e
 
-  # this is the number of commits in branch, use this on master to generate a
+  # this is the number of commits in branch, use this on main branch to generate a
   # build number for XCode release builds
 
   # All the aliases relate to commits. Note that
@@ -77,7 +77,7 @@
 
   # deletes any local branches that have been merged into current HEAD
   # cleanup = !git branch --merged | grep -v '^* master$' | grep -v '^  master$' | xargs git branch -d
-  cleanup = !git branch --merged | grep -v '\\*' | grep -v master | grep -v dev | grep -v develop | xargs -n 1 git branch -d
+  cleanup = !git branch --merged | grep -v '\\*' | grep -v master | grep -v main | grep -v dev | grep -v develop | xargs -n 1 git branch -d
   ctags = !.git/hooks/ctags\n
   bn = !git rev-list HEAD | wc -l | tr -d ' '
   browse = "!f(){ open `git remote -v | awk '/fetch/{print $2}' | sed -Ee 's#(git@|git://)#http://#' -e 's@com:@com/@'`| head -n1; }; f"
@@ -96,10 +96,10 @@
 
   # Same as above, but with a diff stat instead of just names
   # (better for interactive use)
-  pr-stat = !git diff --stat master $(git rev-parse --abbrev-ref HEAD)
+  pr-stat = !git diff --stat main $(git rev-parse --abbrev-ref HEAD)
 
-  eh = !git heatmap -n 30 --filter 'grep -v \"priv/static\" | grep -v \"assets/package*\"'
-  fzf = !"                                                                                                                                                                              \
+  hm = !git heatmap -b main -n 30 --filter 'grep -v \"package\"'
+  fl = !"                                                                                                                                                                              \
       function gfzf() {                                                                                                                                                                 \
           local filter;                                                                                                                                                                 \
           if [ -n $@ ] && [ -e $@ ]; then                                                                                                                                               \

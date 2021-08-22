@@ -36,6 +36,13 @@ telescope.setup {
       prompt_position = "bottom",
       preview_cutoff  = 120,
     },
+    mappings = {
+      i = {
+        -- ["<esc>"] = actions.close,
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+      }
+    },
     file_sorter          = require'telescope.sorters'.get_fuzzy_file,
     file_ignore_patterns = {},
     generic_sorter       = require'telescope.sorters'.get_generic_fuzzy_sorter,
@@ -54,8 +61,3 @@ telescope.setup {
     buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
   }
 }
-
-vim.api.nvim_set_keymap('n', '<Leader>ob', ':Telescope buffers show_all_buffers=true sort_lastused=true<CR>', {})
-vim.api.nvim_set_keymap('n', '<Leader>of', ':Telescope find_files<CR>', {})
-vim.api.nvim_set_keymap('n', '<Leader>og', ':Telescope git_files<CR>', {})
--- vim.api.nvim_set_keymap('n', '<Leader>', ':Telescope <CR>', {})

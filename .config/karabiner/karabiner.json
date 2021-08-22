@@ -572,77 +572,86 @@
                         ]
                     },
                     {
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "from": {
-                            "simultaneous": [
-                              {
-                                "key_code": "tab"
-                              },
-                              {
-                                "key_code": "left_control"
-                              }
-                            ],
-                            "modifiers": {
-                              "optional": ["any"]
-                            }
-                          },
-                          "to": [
+                        "manipulators": [
                             {
-                              "set_variable": {
-                                "name": "control-tab-pressed",
-                                "value": 1
-                              }
+                                "from": {
+                                    "modifiers": {
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    },
+                                    "simultaneous": [
+                                        {
+                                            "key_code": "tab"
+                                        },
+                                        {
+                                            "key_code": "left_control"
+                                        }
+                                    ]
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "control-tab-pressed",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "to_after_key_up": [
+                                    {
+                                        "set_variable": {
+                                            "name": "control-tab-pressed",
+                                            "value": 0
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
                             }
-                          ],
-                          "to_after_key_up": [
-                            {
-                              "set_variable": {
-                                "name": "control-tab-pressed",
-                                "value": 0
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "from": {
-                            "key_code": "s"
-                          },
-                          "to": [
-                            {
-                              "set_variable": {
-                                "name": "control-tab-s-pressed",
-                                "value": 1
-                              }
-                            }
-                          ],
-                          "to_after_key_up": [
-                            {
-                              "set_variable": {
-                                "name": "control-tab-s-pressed",
-                                "value": 0
-                              }
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "type": "variable_if",
-                              "name": "control-tab-pressed",
-                              "value": 1
-                            }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "s"
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "control-tab-s-pressed",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "to_after_key_up": [
+                                    {
+                                        "set_variable": {
+                                            "name": "control-tab-s-pressed",
+                                            "value": 0
+                                        }
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-s-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map s-control-tab-l to scroll left",
                                 "from": {
                                     "key_code": "l"
@@ -654,13 +663,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-s-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -668,6 +670,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-s-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map s-control-tab-h to scroll right",
                                 "from": {
                                     "key_code": "h"
@@ -679,13 +688,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-s-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -693,6 +695,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-s-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map s-control-tab-k to scroll up",
                                 "from": {
                                     "key_code": "k"
@@ -704,13 +713,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-s-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -718,6 +720,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-s-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map s-control-tab-j to scroll down",
                                 "from": {
                                     "key_code": "j"
@@ -729,53 +738,53 @@
                                         }
                                     }
                                 ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "manipulators": [
+                            {
                                 "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-s-pressed",
-                                    "value": 1
-                                  }
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "q"
+                                },
+                                "to": [
+                                    {
+                                        "set_variable": {
+                                            "name": "control-tab-q-pressed",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "to_after_key_up": [
+                                    {
+                                        "set_variable": {
+                                            "name": "control-tab-q-pressed",
+                                            "value": 0
+                                        }
+                                    }
                                 ],
                                 "type": "basic"
                             }
                         ]
                     },
                     {
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "from": {
-                            "key_code": "q"
-                          },
-                          "to": [
-                            {
-                              "set_variable": {
-                                "name": "control-tab-q-pressed",
-                                "value": 1
-                              }
-                            }
-                          ],
-                          "to_after_key_up": [
-                            {
-                              "set_variable": {
-                                "name": "control-tab-q-pressed",
-                                "value": 0
-                              }
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "type": "variable_if",
-                              "name": "control-tab-pressed",
-                              "value": 1
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-q-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map q-control-tab-h to move mouse left fast",
                                 "from": {
                                     "key_code": "h"
@@ -787,13 +796,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-q-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -801,6 +803,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-q-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map q-control-tab-l to move mouse right fast",
                                 "from": {
                                     "key_code": "l"
@@ -812,13 +821,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-q-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -826,6 +828,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-q-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map q-control-tab-k to move mouse up fast",
                                 "from": {
                                     "key_code": "k"
@@ -837,13 +846,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-q-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -851,6 +853,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-q-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map q-control-tab-j to move mouse down fast",
                                 "from": {
                                     "key_code": "j"
@@ -862,13 +871,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-q-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -876,6 +878,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map control-tab-h to move mouse left slow",
                                 "from": {
                                     "key_code": "h"
@@ -887,13 +896,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -901,6 +903,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map control-tab-l to move mouse right slow",
                                 "from": {
                                     "key_code": "l"
@@ -912,13 +921,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -926,6 +928,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map control-tab-k to move mouse up slow",
                                 "from": {
                                     "key_code": "k"
@@ -937,13 +946,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -951,6 +953,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map control-tab-j to move mouse down slow",
                                 "from": {
                                     "key_code": "j"
@@ -962,13 +971,6 @@
                                         }
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -976,6 +978,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map control-tab-space to mouse click",
                                 "from": {
                                     "key_code": "spacebar",
@@ -990,13 +999,6 @@
                                         "pointing_button": "button1"
                                     }
                                 ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-pressed",
-                                    "value": 1
-                                  }
-                                ],
                                 "type": "basic"
                             }
                         ]
@@ -1004,6 +1006,13 @@
                     {
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "name": "control-tab-pressed",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
                                 "description": "Map control-tab-r to right mouse click",
                                 "from": {
                                     "key_code": "r"
@@ -1012,13 +1021,6 @@
                                     {
                                         "pointing_button": "button2"
                                     }
-                                ],
-                                "conditions": [
-                                  {
-                                    "type": "variable_if",
-                                    "name": "control-tab-pressed",
-                                    "value": 1
-                                  }
                                 ],
                                 "type": "basic"
                             }
@@ -1209,33 +1211,33 @@
                         ]
                     },
                     {
-                      "manipulators": [
-                        {
-                          "from": {
-                            "key_code": "h",
-                            "modifiers": {
-                              "mandatory": [
-                                "left_command",
-                                "left_shift",
-                                "left_control"
-                              ],
-                              "optional": [
-                                "any"
-                              ]
-                            }
-                          },
-                          "to": [
+                        "manipulators": [
                             {
-                              "key_code": "left_arrow",
-                              "modifiers": [
-                                "right_command",
-                                "right_shift"
-                              ]
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_shift",
+                                            "left_control"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_arrow",
+                                        "modifiers": [
+                                            "right_command",
+                                            "right_shift"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
                             }
-                          ],
-                          "type": "basic"
-                        }
-                      ]
+                        ]
                     },
                     {
                         "description": "double left shift to cap_lock",
@@ -1589,39 +1591,6 @@
                                 "description": "Map ctrl-w to close window in Brave/Chrome",
                                 "from": {
                                     "key_code": "w",
-                                    "modifiers": {
-                                        "mandatory": [
-                                            "left_control"
-                                        ]
-                                    }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "w",
-                                        "modifiers": [
-                                            "command"
-                                        ]
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.google.Chrome",
-                                            "^com.brave.Browser"
-                                        ],
-                                        "type": "frontmost_application_if"
-                                    }
-                                ],
-                                "description": "Map ^Q to ⌘W in Brave/Chrome",
-                                "from": {
-                                    "key_code": "q",
                                     "modifiers": {
                                         "mandatory": [
                                             "left_control"
