@@ -88,7 +88,7 @@ return require('packer').startup(
         'p00f/nvim-ts-rainbow',
         -- 'polarmutex/contextprint.nvim',
         'theHamsta/nvim-treesitter-pairs',
-        'nvim-treesitter/playground'
+        'nvim-treesitter/playground',
       },
       run = ':TSUpdate',
       config = function()
@@ -121,9 +121,15 @@ return require('packer').startup(
     use {
       'nvim-telescope/telescope.nvim',
       requires = {
-        'nvim-lua/popup.nvim',
-        'nvim-lua/plenary.nvim',
-        'nvim-telescope/telescope-project.nvim',
+        'https://github.com/nvim-lua/popup.nvim',
+        'https://github.com/nvim-lua/plenary.nvim',
+        'https://github.com/nvim-telescope/telescope-project.nvim',
+        {
+          "https://github.com/AckslD/nvim-neoclip.lua",
+          config = function()
+            require('neoclip').setup()
+          end,
+        },
       },
       config = function()
         require('plugins.config.telescope')
@@ -132,6 +138,9 @@ return require('packer').startup(
 
     use {
       'terrortylor/nvim-comment',
+      requires = {
+        'JoosepAlviste/nvim-ts-context-commentstring'
+      },
       config = function()
         require('plugins.config.comment')
       end,
@@ -209,6 +218,26 @@ return require('packer').startup(
     use { 'https://github.com/psliwka/vim-smoothie' }
 
     use { 'https://github.com/voldikss/vim-floaterm' }
+
+    use { 'https://github.com/ojroques/vim-oscyank' }
+
+    use { 'https://github.com/justinmk/vim-sneak' }
+
+    -- I don't think this is necessary with treesitter installed?
+    -- use { 'https://github.com/evanleck/vim-svelte' }
+
+    use { 'https://github.com/Himujjal/tree-sitter-svelte' }
+
+    use { 'https://github.com/blackCauldron7/surround.nvim' }
+
+    use { 
+      'https://github.com/windwp/nvim-autopairs',
+      config = function()
+        require("nvim-autopairs").setup{}
+      end
+    }
+
+    use { 'https://github.com/andymass/vim-matchup' }
 
   end
 )

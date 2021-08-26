@@ -1,12 +1,19 @@
 -- vim: ts=2 sw=2 et:
 
 require('nvim-treesitter.configs').setup {
+  context_commentstring = {
+    enable = true,
+    enable_autocmd = false,
+  },
   ensure_installed = "maintained",
   highlight = {
     enable = true,
     use_languagetree = true,
   },
   indent = {
+    enable = true,
+  },
+  matchup = {
     enable = true,
   },
   rainbow = {

@@ -24,13 +24,13 @@ cmp.setup {
         {name = "buffer"},
     },
     mapping = {
-        ["<c-j>"] = cmp.mapping.next_item(),
-        ["<c-k>"] = cmp.mapping.prev_item(),
+        ["<c-j>"] = cmp.mapping.select_next_item(),
+        ["<c-k>"] = cmp.mapping.select_prev_item(),
         -- ['<C-u>'] = cmp.mapping.scroll(-4),
         -- ['<C-d>'] = cmp.mapping.scroll(4),
         -- ["<C-l>"] = cmp.mapping.complete(),
         -- ["<C-e>"] = cmp.mapping.close(),
-        ["<c-l>"] = function()
+        ["<tab>"] = function()
             if fn.pumvisible() ~= 0 and fn.complete_info()["selected"] ~= -1 then
                 local e = core.menu:get_selected_entry() or (core.menu:get_first_entry())
                 core.confirm(e, {

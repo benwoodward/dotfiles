@@ -59,14 +59,20 @@ local custom_attach_svelte = function(client, bufnr)
 
   vim.cmd("autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()")
 
-  client.server_capabilities.completionProvider.triggerCharacters = {
-    ".", "\"", "'", "`", "/", "@", "*",
-    "#", "$", "+", "^", "(", "[", "-", ":",
-  }
+  -- client.server_capabilities.completionProvider.triggerCharacters = {
+  --   ".", "\"", "'", "`", "/", "@", "*",
+  --   "#", "$", "+", "^", "(", "[", "-", ":",
+  -- }
 end
 
 local servers = {
-  svelte = {
+  tsserver = {
+    on_attach = custom_attach,
+    init_options = { documentFormatting = false },
+    filetypes = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
+    root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git')
+  },
+  ["null-ls"] = {
     on_attach = custom_attach_svelte,
     filetypes = { 'svelte', 'html' },
     root_dir = util.root_pattern('package.json', '.git'),
@@ -82,12 +88,6 @@ local servers = {
         },
       },
     },
-  },
-  tsserver = {
-    on_attach = custom_attach,
-    init_options = { documentFormatting = false },
-    filetypes = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
-    root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json', '.git')
   },
 }
 
