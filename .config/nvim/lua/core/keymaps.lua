@@ -9,17 +9,13 @@ g.mapleader      = ' '
 g.maplocalleader = ' '
 
 nest.applyKeymaps {
-	{ '<Left>',  '<CMD>vertical resize +2<CR>', options = { noremap = false } },
-  { '<Right>', '<CMD>vertical resize -2<CR>', options = { noremap = false } },
-  { '<Up>',    '<CMD>resize   +2<CR>', options = { noremap = false } },
-  { '<Down>',  '<CMD>resize   -2<CR>', options = { noremap = false } },
+	{ '<Left>',  '<CMD>vertical resize +2<cr>', options = { noremap = false } },
+  { '<Right>', '<CMD>vertical resize -2<cr>', options = { noremap = false } },
+  { '<Up>',    '<CMD>resize   +2<cr>', options = { noremap = false } },
+  { '<Down>',  '<CMD>resize   -2<cr>', options = { noremap = false } },
 
-  { '<a-', {
-
-  	-- buffer movements
-		{ 'l>', '<CMD>bn<CR>' },
-		{ 'h>', '<CMD>bp<CR>' },
-  }},
+	-- Previous file
+	{ '<Tab>', ':lua load_prev_file()<cr>', options = { noremap = false } },
 
 	-- Quit
 	{ 'Q', ':q<cr>' },
@@ -29,9 +25,6 @@ nest.applyKeymaps {
 
 	-- Move current line to bottom of screen - 3 lines
 	{ 'zd', 'zb<c-e><c-e><c-e>' },
-
-	-- Previous file
-	{ '<Tab>', ':lua load_prev_file()<cr>' },
 
 	{ 'f', '<Plug>Sneak_f', options = { noremap = false } },
 	{ 'F', '<Plug>Sneak_F', options = { noremap = false } },

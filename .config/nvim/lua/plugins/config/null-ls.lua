@@ -29,7 +29,6 @@ M.setup = function()
           "json",
           "jsonc",
           "css",
-          "html",
         },
       },
     },
