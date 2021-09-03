@@ -39,6 +39,8 @@ nest.applyKeymaps {
 	{ 'gcc', '<cmd>CommentToggle<cr>' },
 	{ 'gcc', '<cmd>CommentToggle<cr>' },
 
+	{ 'gx', '<Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>' },
+
 	{ '<leader>', {
 		-- Edit init.lua
 		{ '-', ':e $HOME/.config/nvim/init.lua<cr>'},
