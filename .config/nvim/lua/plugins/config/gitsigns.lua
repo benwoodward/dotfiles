@@ -1,6 +1,9 @@
 -- vim: ts=2 sw=2 et:
 
 require('gitsigns').setup {
+  diff_opts = {
+    internal = true,
+  },
   signs = {
     add          = {hl = 'GitSignsAdd',    text = '+', numhl = 'GitSignsAddNr',    linehl = 'GitSignsAddLn'},
     change       = {hl = 'GitSignsChange', text = '!', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn'},
@@ -40,6 +43,5 @@ require('gitsigns').setup {
   sign_priority      = 6,
   update_debounce    = 100,
   status_formatter   = nil,
-  use_internal_diff  = true,
 }
 

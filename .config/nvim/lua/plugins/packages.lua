@@ -1,45 +1,18 @@
 -- vim: ts=2 sw=2 et:
 
-return require('packer').startup(
-  function()
-    use {'wbthomason/packer.nvim'}
+local packer_ok, packer = pcall(require, "packer")
+if not packer_ok then
+  return
+end
 
-    use {
-      disable = true,
-      'gruvbox-community/gruvbox',
-      config = function()
-        vim.o.background            = "dark"
-        vim.g.gruvbox_italics       = true
-        vim.g.gruvbox_contrast_dark = "hard"
-        vim.cmd [[colorscheme gruvbox]]
-      end,
-    }
+return packer.startup {
+  {
+    {
+      'wbthomason/packer.nvim',
+      opt = true,
+    },
 
-    use {
-      disable = true,
-      'drewtempelmeyer/palenight.vim',
-      config = function()
-        vim.cmd [[colorscheme palenight]]
-      end,
-    }
-
-    use {
-      disable = true,
-      'marko-cerovac/material.nvim',
-      config = function()
-        vim.g.material_style            = 'palenight'
-        vim.g.material_italic_comments  = true
-        vim.g.material_italic_keywords  = false
-        vim.g.material_italic_functions = false
-        vim.g.material_italic_variables = false
-        vim.g.material_contrast         = true
-        vim.g.material_borders          = true
-        -- Load the colorscheme
-        require('material').set()
-      end,
-    }
-
-    use {
+    {
       -- disable = true,
       'folke/tokyonight.nvim',
       config = function()
@@ -52,24 +25,25 @@ return require('packer').startup(
         vim.g.tokyonight_sidebars         = {'qf', 'vista_kind', 'terminal', 'packer'}
         vim.cmd [[colorscheme tokyonight]]
       end,
-    }
+    },
 
-    use {'kyazdani42/nvim-web-devicons'}
+    {'kyazdani42/nvim-web-devicons'},
 
     -- LSP
-    use {
+    {
       'neovim/nvim-lspconfig',
       config = function()
-        require('plugins.config.lsp')
+        require('modules.lsp')
       end,
       requires = {
-        'jose-elias-alvarez/null-ls.nvim'
+        'jose-elias-alvarez/null-ls.nvim',
+        'jose-elias-alvarez/nvim-lsp-ts-utils'
       },
-    }
+    },
 
-    use {'nanotee/nvim-lsp-basics'}
+    {'nanotee/nvim-lsp-basics'},
 
-    use {
+    {
       'folke/trouble.nvim',
       requires = {
         'nvim-web-devicons'
@@ -77,10 +51,10 @@ return require('packer').startup(
       config = function()
         require('plugins.config.trouble')
       end,
-    }
+    },
 
     -- TreeSitter
-    use {
+    {
       'nvim-treesitter/nvim-treesitter',
       requires = {
         'nvim-treesitter/nvim-treesitter-refactor',
@@ -94,10 +68,10 @@ return require('packer').startup(
       config = function()
         require('plugins.config.treesitter')
       end,
-    }
+    },
 
     -- Git
-    use {
+    {
       'lewis6991/gitsigns.nvim',
       requires = {
         'nvim-lua/plenary.nvim'
@@ -105,38 +79,43 @@ return require('packer').startup(
       config = function()
         require('plugins.config.gitsigns')
       end,
-    }
+    },
 
-    use {
+    {
       'sindrets/diffview.nvim',
       requires = {'nvim-web-devicons'},
       config = function()
         require('plugins.config.diffview')
       end,
-    }
+    },
 
-    use {'euclidianAce/BetterLua.vim'}
+    {'euclidianAce/BetterLua.vim'},
 
     -- Telescope
-    use {
+    {
       'nvim-telescope/telescope.nvim',
       requires = {
         'https://github.com/nvim-lua/popup.nvim',
         'https://github.com/nvim-lua/plenary.nvim',
         'https://github.com/nvim-telescope/telescope-project.nvim',
         {
-          "https://github.com/AckslD/nvim-neoclip.lua",
-          config = function()
-            require('neoclip').setup()
-          end,
+          'https://github.com/nvim-telescope/telescope-smart-history.nvim',
+          requires = {
+            'tami5/sqlite.lua'
+          }
+        },
+        'nvim-telescope/telescope-frecency.nvim',
+        {
+          'nvim-telescope/telescope-fzf-native.nvim',
+          run = 'make'
         },
       },
       config = function()
         require('plugins.config.telescope')
       end,
-    }
+    },
 
-    use {
+    {
       'terrortylor/nvim-comment',
       requires = {
         'JoosepAlviste/nvim-ts-context-commentstring'
@@ -144,32 +123,32 @@ return require('packer').startup(
       config = function()
         require('plugins.config.comment')
       end,
-    }
+    },
 
-    use {
+    {
       'norcalli/nvim-colorizer.lua',
       config = function()
         require('plugins.config.colorizer')
       end,
-    }
+    },
 
-    use {'mg979/vim-visual-multi'}
+    {'mg979/vim-visual-multi'},
 
-    use {'dstein64/nvim-scrollview'}
+    {'dstein64/nvim-scrollview'},
 
     -- Teal language support
-    use {'teal-language/vim-teal'}
+    {'teal-language/vim-teal'},
 
-    use { "AndrewRadev/splitjoin.vim", keys = "gS" }
+    { "AndrewRadev/splitjoin.vim", keys = "gS" },
 
-    use {
+    {
       'folke/which-key.nvim',
       config = function()
         require('plugins.config.which-key')
       end,
-    }
+    },
 
-    use {
+    {
       'ruifm/gitlinker.nvim',
       key = "gy",
       config = function()
@@ -177,34 +156,49 @@ return require('packer').startup(
           mappings = "gy",
         }
       end,
-    }
+    },
 
-    use {
+    {
       'L3MON4D3/LuaSnip',
       config = function()
         require 'plugins.config.luasnip'
       end,
-    }
+    },
 
-    use {
-      'hrsh7th/nvim-cmp',
+    {
+      "hrsh7th/nvim-cmp",
       config = function()
-        require 'plugins.config.cmp'
+        require "plugins.config.cmp"
       end,
       requires = {
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-path',
-        'hrsh7th/cmp-buffer',
-        'saadparwaiz1/cmp_luasnip',
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-vsnip",
+        {
+          "hrsh7th/vim-vsnip",
+          setup = function()
+            vim.cmd [[
+            " Jump forward or backward
+            imap <expr> <C-j> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>'
+            smap <expr> <C-j> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>'
+            imap <expr> <C-k> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>'
+            smap <expr> <C-k> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>'
+          ]]
+          end,
+        },
       },
-    }
-
-    use { 'saadparwaiz1/cmp_luasnip' }
+    },
 
     -- Easier keymapping
-    use { 'LionC/nest.nvim' }
+    {
+      'LionC/nest.nvim',
+      config = function()
+        require 'plugins.config.nest'
+      end,
+    },
 
-    use {
+    {
       "folke/zen-mode.nvim",
       config = function()
         require("zen-mode").setup {
@@ -213,31 +207,88 @@ return require('packer').startup(
           }
         }
       end
-    }
+    },
 
-    use { 'https://github.com/psliwka/vim-smoothie' }
+    { 'https://github.com/psliwka/vim-smoothie' },
 
-    use { 'https://github.com/voldikss/vim-floaterm' }
+    { 'https://github.com/voldikss/vim-floaterm' },
 
-    use { 'https://github.com/ojroques/vim-oscyank' }
-
-    use { 'https://github.com/justinmk/vim-sneak' }
+    { 'https://github.com/justinmk/vim-sneak' },
 
     -- I don't think this is necessary with treesitter installed?
-    -- use { 'https://github.com/evanleck/vim-svelte' }
+    -- { 'https://github.com/evanleck/vim-svelte' },
 
-    use { 'https://github.com/Himujjal/tree-sitter-svelte' }
+    { 'https://github.com/Himujjal/tree-sitter-svelte' },
 
-    use { 'https://github.com/blackCauldron7/surround.nvim' }
+    { 'https://github.com/tpope/vim-surround' },
 
-    use { 
+    { 
       'https://github.com/windwp/nvim-autopairs',
       config = function()
         require("nvim-autopairs").setup{}
       end
-    }
+    },
 
-    use { 'https://github.com/andymass/vim-matchup' }
+    { 'https://github.com/andymass/vim-matchup' },
 
-  end
-)
+    { 
+      'https://github.com/junegunn/fzf.vim',
+      requires = {
+        'https://github.com/junegunn/fzf',
+        run = vim.fn['fzf#install'],
+      }
+    },
+
+    { 'https://github.com/voldikss/vim-browser-search' },
+
+    {
+      "AckslD/nvim-neoclip.lua",
+      config = function()
+        require('neoclip').setup({
+          history = 1000,
+          enable_persistant_history = true,
+          db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
+          filter = nil,
+          preview = true,
+          default_register = '"',
+          content_spec_column = false,
+          on_paste = {
+            set_reg = false,
+          },
+          keys = {
+            telescope = {
+              i = {
+                select = '<cr>',
+                paste = '<c-p>',
+                paste_behind = '<c-k>',
+                custom = {},
+              },
+              n = {
+                select = '<cr>',
+                paste = 'p',
+                paste_behind = 'P',
+                custom = {},
+              },
+            },
+          },
+        })
+      end,
+      requires = {
+        'tami5/sqlite.lua'
+      }
+    },
+  },
+
+  config = {
+    compile_path = vim.fn.stdpath "data"
+      .. "/site/pack/loader/start/packer.nvim/plugin/packer_compiled.lua",
+    git = {
+      clone_timeout = 300,
+    },
+    display = {
+      open_fn = function()
+        return require("packer.util").float { border = Util.borders }
+      end,
+    },
+  },
+}

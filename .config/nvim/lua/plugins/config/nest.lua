@@ -4,6 +4,7 @@ local nest = require('nest')
 local g = vim.g
 local wo  = vim.wo
 local cmd = vim.cmd
+require('plugins.config.fzf')
 
 g.mapleader      = ' '
 g.maplocalleader = ' '
@@ -17,14 +18,16 @@ nest.applyKeymaps {
 	-- Previous file
 	{ '<Tab>', ':lua load_prev_file()<cr>', options = { noremap = false } },
 
+	{ '<Esc>', '<Esc><Esc>' },
+
 	-- Quit
 	{ 'Q', ':q<cr>' },
 
-	-- Move current line to top of screen + 3 lines
-	{ 'zu', 'zt<c-y><c-y><c-y>' },
+	-- Move current line to top of screen + 4 lines
+	{ 'zu', 'zt<c-y><c-y><c-y><c-y>' },
 
-	-- Move current line to bottom of screen - 3 lines
-	{ 'zd', 'zb<c-e><c-e><c-e>' },
+	-- Move current line to bottom of screen - 4 lines
+	{ 'zd', 'zb<c-e><c-e><c-e><c-e>' },
 
 	{ 'f', '<Plug>Sneak_f', options = { noremap = false } },
 	{ 'F', '<Plug>Sneak_F', options = { noremap = false } },
@@ -41,6 +44,11 @@ nest.applyKeymaps {
 
 	{ 'gx', '<Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>' },
 
+	{ '<A-', {
+		{ 'j>', 'jjjj' },
+		{ 'k>', 'kkkk' },
+	}},
+
 	{ '<leader>', {
 		-- Edit init.lua
 		{ '-', ':e $HOME/.config/nvim/init.lua<cr>'},
@@ -50,16 +58,19 @@ nest.applyKeymaps {
 		-- { 'i', ':lua require(\'nvim-reload\').Reload()<cr>'},
 
 		-- Telescope
-		{ '/',  ':lua require("telescope.builtin").live_grep()<cr>' },
-		{ 'ff', ':lua require("telescope.builtin").grep_string()<cr>' },
+		{ '/',  ':Rg!<cr>' },
+
 		{ 'b', ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>' },
+
+		-- downcase a word
+		{ 'd', 'mQviwu`Q'},
+
 		{ 'e', ':lua require("telescope.builtin").find_files()<cr>' },
-		{ 'og', ':lua require("telescope.builtin").git_files()<cr>' },
-		{ 'op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>' },
-		{ 'oc', ':Telescope neoclip<cr>' },
 
 		-- Find git conflict markers <<<<<< | ======
 		{ 'fc', '<ESC>/\v^[<=>]{7}( .*\\|$)<cr>' },
+
+		{ 'ff', ':lua require("telescope.builtin").grep_string()<cr>' },
 
 		{ 'fs', ':FloatermNew ranger<cr>' },
 
@@ -71,29 +82,31 @@ nest.applyKeymaps {
 		-- Toggle relative numbers on/off
 		{ 'ln', ':lua toggle_number_mode()<cr>' },
 
+		{ 'og', ':lua require("telescope.builtin").git_files()<cr>' },
+		{ 'op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>' },
+
+		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
+		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
+
 		-- upcase a word
 		{ 'u', 'mQviwU`Q'},
-
-		-- downcase a word
-		{ 'd', 'mQviwu`Q'},
 
 		{ 'v', ':exe "vnew"<cr>:exe "setlocal buftype=nofile bufhidden=hide"<cr>'},
 
 		-- Write file
 		{ 'w', ':w<cr>' },
 
-		{ 'y', ':OSCYank<cr>', mode = 'v' },
+		{ 'y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>]]', mode = 'v'},
 
 		{ 'z', [[ <Cmd> lua toggle_zoom()<CR>]] },
 	}},
 
 	{ '<c-', {
-		{ 'h>', '<C-\\><C-n><C-w><C-h>' },
+		{ 'h>', '<C-\\><C-n><C-w><C-h>' }, 
 		{ 'j>', '<C-\\><C-n><C-w><C-j>' },
 		{ 'k>', '<C-\\><C-n><C-w><C-k>' },
 		{ 'l>', '<C-\\><C-n><C-w><C-l>' },
 
-		{ 'w>', '<cmd>lua require"hop".hint_words()<cr>' },
 
 	}}
 }

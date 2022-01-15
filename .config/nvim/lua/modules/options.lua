@@ -6,6 +6,8 @@ local wo  = vim.wo
 
 g.smoothie_experimental_mappings = true
 g["sneak#label"] = 1
+g["sneak#use_ic_scs"] = 1
+g.fzf_history_dir = './.fzf-history'
 
 -- Global options {{{
 o.updatetime    = 800
@@ -26,7 +28,6 @@ o.autoindent    = true
 o.smartindent   = true
 o.backspace     = [[indent,eol,start]]  -- backspace through everything in insert mode
 o.listchars     = [[tab:→ ,space: ,trail:·,extends:↷,precedes:↶]]
-o.clipboard     = 'unnamedplus'
 o.completeopt   = 'menuone,noinsert'
 o.backup        = false -- true
 o.splitbelow     = true -- split below instead of above
@@ -48,3 +49,11 @@ wo.cursorcolumn = false
 g.loaded_perl_provider   = 0
 g.loaded_python_provider = 0
 
+
+vim.env.FZF_DEFAULT_OPTS = table.concat({
+  vim.env.FZF_DEFAULT_OPTS or '',
+  ' --layout reverse',
+  ' --info inline',
+  ' --pointer " "',
+  ' --border rounded',
+}, '')

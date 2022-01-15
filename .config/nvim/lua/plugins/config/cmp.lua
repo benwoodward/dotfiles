@@ -1,65 +1,44 @@
 -- vim: foldmethod=marker
 
-local fn = vim.fn
 local cmp = require "cmp"
-local core = require "cmp.core"
-local cmp = require "cmp"
-local types = require "cmp.types"
-
-require("cmp_nvim_lsp").setup()
+local remap = vim.api.nvim_set_keymap
 
 cmp.setup {
-    snippet = {
-        expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-        end,
+  completion = {
+    autocomplete = true,
+  },
+  preselect = cmp.PreselectMode.None,
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  documentation = {
+    border = "solid",
+  },
+  sources = {
+    { name = "nvim_lsp", priority = 10 },
+    { name = "vsnip" },
+    { name = "path" },
+    { name = "buffer", keyword_length = 8 },
+  },
+  mapping = {
+    ["<C-j>"] = cmp.mapping.select_next_item { cmp.SelectBehavior.Select },
+    ["<C-k>"] = cmp.mapping.select_prev_item { cmp.SelectBehavior.Select },
+    ["<C-l>"] = cmp.mapping.complete(),
+    ["<C-d>"] = cmp.mapping.scroll_docs(4),
+    ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<CR>"] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
     },
-    documentation = {
-        border = "solid",
-    },
-    sources = {
-        {name = "nvim_lsp"},
-        {name = "luasnip"},
-        {name = "path"},
-        {name = "buffer"},
-    },
-    mapping = {
-        ["<c-j>"] = cmp.mapping.select_next_item(),
-        ["<c-k>"] = cmp.mapping.select_prev_item(),
-        -- ['<C-u>'] = cmp.mapping.scroll(-4),
-        -- ['<C-d>'] = cmp.mapping.scroll(4),
-        -- ["<C-l>"] = cmp.mapping.complete(),
-        -- ["<C-e>"] = cmp.mapping.close(),
-        ["<c-l>"] = function()
-            if fn.pumvisible() ~= 0 and fn.complete_info()["selected"] ~= -1 then
-                local e = core.menu:get_selected_entry() or (core.menu:get_first_entry())
-                core.confirm(e, {
-                    behavior = cmp.ConfirmBehavior.Replace,
-                    }, function()
-                    core.complete(
-                    core.get_context {reason = types.cmp.ContextReason.TriggerOnly})
-                end)
-
-                local prev_col, next_col = fn.col "." - 1, fn.col "."
-                local prev_char = fn.getline("."):sub(prev_col, prev_col)
-                local next_char = fn.getline("."):sub(next_col, next_col)
-
-                -- minimal autopairs-like behaviour
-                if prev_char == "{" and next_char ~= "}" then
-                    return vim.api.nvim_replace_termcodes("<CR>}<C-o>O", true, true, true)
-                end
-                if prev_char == "[" and next_char ~= "]" then
-                    return vim.api.nvim_replace_termcodes("<CR>]<C-o>O", true, true, true)
-                end
-                if prev_char == "(" and next_char ~= ")" then
-                    return vim.api.nvim_replace_termcodes("<CR>)<C-o>O", true, true, true)
-                end
-                if prev_char == ">" and next_char == "<" then
-                    return vim.api.nvim_replace_termcodes("<CR><C-o>O", true, true, true)
-                end -- html indents
-
-                return vim.api.nvim_replace_termcodes("<CR>", true, true, true)
-            end
-        end
-    },
+  },
 }
+
+remap(
+  "i",
+  "<CR>",
+  "v:lua.Util.trigger_completion()",
+  { noremap = true, expr = true }
+)
