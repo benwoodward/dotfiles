@@ -38,9 +38,6 @@ nest.applyKeymaps {
 	{ 'gd', '<cmd>lua vim.lsp.buf.definitions()<cr>' },
 	{ 'K',  '<cmd>lua vim.lsp.buf.hover()<cr>' },
 
-	-- nvim_comment
-	{ 'gcc', '<cmd>CommentToggle<cr>' },
-	{ 'gcc', '<cmd>CommentToggle<cr>' },
 
 	{ 'gx', '<Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>' },
 
@@ -106,9 +103,7 @@ nest.applyKeymaps {
 		{ 'j>', '<C-\\><C-n><C-w><C-j>' },
 		{ 'k>', '<C-\\><C-n><C-w><C-k>' },
 		{ 'l>', '<C-\\><C-n><C-w><C-l>' },
-
-
-	}}
+	}},
 }
 
 

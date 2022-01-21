@@ -13,6 +13,7 @@ let g:maplocalleader = " "
 " order matters
 runtime! lua/modules/options.lua
 runtime! lua/modules/util.lua
+runtime! lua/modules/mappings.vim
 
 " packer commands
 command! PackerInstall packadd packer.nvim | lua require('plugins.packages').install()

@@ -1,0 +1,214 @@
+{
+  "add: interface": {
+    "prefix": ["add-interface", "interface"],
+    "body": [
+      "export interface I${1:${TM_FILENAME_BASE}} {",
+      "\t${2:props}: ${3|string,boolean,() => void|}",
+      "\t$0",
+      "}"],
+    "description": "Adds exported Interface"
+  },
+  "add: type": {
+    "prefix": ["add-type", "type"],
+    "body": "export type T$1 = $0",
+    "description": "Adds exported Type"
+  },
+  "add: ts-ignore": {
+    "prefix": "ts-ignore",
+    "body": "// @ts-ignore",
+    "description": "Adds @ts-ignore"
+  },
+  "type NAME = null;":            { "prefix": "t1", "body": ["type ${1:name} = ${0:null};"], "description": "" },
+  "type NAME = {};":              { "prefix": "t_", "body": ["type ${1:name} = {", "\t$0", "};"], "description": "" },
+
+  "import type {} from ''":         { "prefix": "it_f1",  "body": ["import type { ${0:name} } from '${1:path}';"], "description": "" },
+
+  "export type NAME = null;":         { "prefix": "et1",  "body": ["export type ${1:name} = ${0:null};"], "description": "" },
+  "export type NAME = {};":         { "prefix": "et_",  "body": ["export type ${1:name} = {", "\t$0", "};"], "description": "" },
+
+  "interface NAME":             { "prefix": "i_", "body": ["interface ${1:name} {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "interface NAME extends NAME":        { "prefix": "ie_",  "body": ["interface ${1:name} extends ${2:name} {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "export interface NAME":          { "prefix": "ei_",  "body": ["export interface ${1:name} {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export interface NAME extends NAME":   { "prefix": "eie_", "body": ["export interface ${1:name} extends ${2:name} {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "namespace NAME {}":            { "prefix": "n_", "body": ["namespace ${1:name} {", "\t", "$0", "\t", "}"], "description": "" },
+
+  "let NAME:boolean = false;":        { "prefix": "lb1",  "body": ["let ${1:name}:boolean = ${0:false};"], "description": "" },
+  "let NAME:number = 0;":           { "prefix": "ln1",  "body": ["let ${1:name}:number = ${0:0};"], "description": "" },
+  "let NAME:string = '';":          { "prefix": "ls1",  "body": ["let ${1:name}:string = '$0';"], "description": "" },
+
+  "export let NAME:boolean = false;":     { "prefix": "elb1", "body": ["export let ${1:name}:boolean = ${0:false};"], "description": "" },
+  "export let NAME:number = 0;":        { "prefix": "eln1", "body": ["export let ${1:name}:number = ${0:0};"], "description": "" },
+  "export let NAME:string = '';":       { "prefix": "els1", "body": ["export let ${1:name}:string = '$0';"], "description": "" },
+
+  "const NAME:boolean = false;":        { "prefix": "cb1",  "body": ["const ${1:name}:boolean = ${0:false};"], "description": "" },
+  "const NAME:number = 0;":         { "prefix": "cn1",  "body": ["const ${1:name}:number = ${0:0};"], "description": "" },
+  "const NAME:string = '';":          { "prefix": "cs1",  "body": ["const ${1:name}:string = '$0';"], "description": "" },
+
+  "export const NAME:boolean = false;":   { "prefix": "ecb1", "body": ["export const ${1:name}:boolean = ${0:false};"], "description": "" },
+  "export const NAME:number = 0;":      { "prefix": "ecn1", "body": ["export const ${1:name}:number = ${0:0};"], "description": "" },
+  "export const NAME:string = '';":     { "prefix": "ecs1", "body": ["export const ${1:name}:string = '$0';"], "description": "" },
+
+  "enum NAME {}":               { "prefix": "e1", "body": ["enum ${1:name} { $0 };"], "description": "" },
+  "enum NAME { ... }":            { "prefix": "e_", "body": ["enum ${1:name} {", "\t$0", "};"], "description": "" },
+  "const enum NAME {}":           { "prefix": "ce1",  "body": ["const enum ${1:name} { $0 };"], "description": "" },
+  "const enum NAME { ... }":          { "prefix": "ce_",  "body": ["const enum ${1:name} {", "\t$0", "};"], "description": "" },
+
+  "function NAME () :boolean {}":       { "prefix": "fb_",  "body": ["function ${1:name} ($2) :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "function NAME () :number {}":        { "prefix": "fn_",  "body": ["function ${1:name} ($2) :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "function NAME () :string {}":        { "prefix": "fa_",  "body": ["function ${1:name} ($2) :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "function NAME () :void {}":        { "prefix": "fv_",  "body": ["function ${1:name} ($2) :void {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "export function NAME () :boolean {}":    { "prefix": "efb_", "body": ["export function ${1:name} ($2) :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export function NAME () :number {}":   { "prefix": "efn_", "body": ["export function ${1:name} ($2) :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export function NAME () :string {}":   { "prefix": "efa_", "body": ["export function ${1:name} ($2) :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export function NAME () :void {}":     { "prefix": "efv_", "body": ["export function ${1:name} ($2) :void {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "async function NAME () :boolean {}":   { "prefix": "afb_", "body": ["async function ${1:name} ($2) :Promise<boolean> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "async function NAME () :number {}":    { "prefix": "afn_", "body": ["async function ${1:name} ($2) :Promise<number> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "async function NAME () :string {}":    { "prefix": "afa_", "body": ["async function ${1:name} ($2) :Promise<string> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "async function NAME () :void {}":      { "prefix": "afv_", "body": ["async function ${1:name} ($2) :Promise<void> {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "export async function NAME () :boolean {}":{ "prefix": "eafb_",  "body": ["export async function ${1:name} ($2) :Promise<boolean> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export async function NAME () :number {}": { "prefix": "eafn_",  "body": ["export async function ${1:name} ($2) :Promise<number> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export async function NAME () :string {}": { "prefix": "eafa_",  "body": ["export async function ${1:name} ($2) :Promise<string> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "export async function NAME () :void {}": { "prefix": "eafv_",  "body": ["export async function ${1:name} ($2) :Promise<void> {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public constructor () {}":         { "prefix": "pc_",  "body": ["public constructor ($1) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private constructor () {}":        { "prefix": "_c_",  "body": ["private constructor ($1) {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public NAME = null;":            { "prefix": "p1", "body": ["public ${1:name} = ${0:null};"], "description": "" },
+  "public NAME:boolean = null;":        { "prefix": "pb1",  "body": ["public ${1:name}:boolean = ${0:false};"], "description": "" },
+  "public NAME:number = null;":       { "prefix": "pn1",  "body": ["public ${1:name}:number = ${0:0};"], "description": "" },
+  "public NAME:string = null;":       { "prefix": "ps1",  "body": ["public ${1:name}:string = '$0';"], "description": "" },
+
+  "public readonly NAME":           { "prefix": "pr1",  "body": ["public readonly ${1:name} = ${0:null};"], "description": "" },
+  "public readonly NAME:boolean = null;":   { "prefix": "prb1", "body": ["public readonly ${1:name}:boolean = ${0:false};"], "description": "" },
+  "public readonly NAME:number = null;":    { "prefix": "prn1", "body": ["public readonly ${1:name}:number = ${0:0};"], "description": "" },
+  "public readonly NAME:string = null;":    { "prefix": "prs1", "body": ["public readonly ${1:name}:string = '$0';"], "description": "" },
+
+  "public static NAME = null;":       { "prefix": "ps1",  "body": ["public static ${1:name} = ${0:null};"], "description": "" },
+  "public static NAME:boolean = null;":   { "prefix": "psb1", "body": ["public static ${1:name}:boolean = ${0:false};"], "description": "" },
+  "public static NAME:number = null;":    { "prefix": "psn1", "body": ["public static ${1:name}:number = ${0:0};"], "description": "" },
+  "public static NAME:string = null;":    { "prefix": "pss1", "body": ["public static ${1:name}:string = '$0';"], "description": "" },
+
+  "private NAME = null;":           { "prefix": "_1", "body": ["private ${1:name} = ${0:null};"], "description": "" },
+  "private NAME:boolean = null;":       { "prefix": "_b1",  "body": ["private ${1:name}:boolean = ${0:false};"], "description": "" },
+  "private NAME:number = null;":        { "prefix": "_n1",  "body": ["private ${1:name}:number = ${0:0};"], "description": "" },
+  "private NAME:string = null;":        { "prefix": "_s1",  "body": ["private ${1:name}:string = '$0';"], "description": "" },
+
+  "private readonly NAME":          { "prefix": "_r1",  "body": ["private readonly ${1:name} = ${0:null};"], "description": "" },
+  "private readonly NAME:boolean = null;":  { "prefix": "_rb1", "body": ["private readonly ${1:name}:boolean = ${0:false};"], "description": "" },
+  "private readonly NAME:number = null;":   { "prefix": "_rn1", "body": ["private readonly ${1:name}:number = ${0:0};"], "description": "" },
+  "private readonly NAME:string = null;":   { "prefix": "_rs1", "body": ["private readonly ${1:name}:string = '$0';"], "description": "" },
+
+  "private static NAME = null;":        { "prefix": "_s1",  "body": ["private static ${1:name} = ${0:null};"], "description": "" },
+  "private static NAME:boolean = null;":    { "prefix": "_sb1", "body": ["private static ${1:name}:boolean = ${0:false};"], "description": "" },
+  "private static NAME:number = null;":   { "prefix": "_sn1", "body": ["private static ${1:name}:number = ${0:0};"], "description": "" },
+  "private static NAME:string = null;":   { "prefix": "_ss1", "body": ["private static ${1:name}:string = '$0';"], "description": "" },
+
+  "public NAME () {}":            { "prefix": "p_", "body": ["public ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public NAME () :boolean {}":       { "prefix": "pb_",  "body": ["public ${1:name} ($2) :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public NAME () :number {}":        { "prefix": "pn_",  "body": ["public ${1:name} ($2) :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public NAME () :string {}":        { "prefix": "ps_",  "body": ["public ${1:name} ($2) :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public NAME () :void {}":          { "prefix": "pv_",  "body": ["public ${1:name} ($2) :void {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public async NAME () {}":          { "prefix": "pa_",  "body": ["public async ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public async NAME () :boolean {}":     { "prefix": "pab_", "body": ["public async ${1:name} ($2) :Promise<boolean> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public async NAME () :number {}":      { "prefix": "pan_", "body": ["public async ${1:name} ($2) :Promise<number> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public async NAME () :string {}":      { "prefix": "pas_", "body": ["public async ${1:name} ($2) :Promise<string> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public async NAME () :void {}":      { "prefix": "pav_", "body": ["public async ${1:name} ($2) :Promise<void> {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "private NAME () {}":           { "prefix": "__", "body": ["private ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private NAME () :boolean {}":        { "prefix": "_b_",  "body": ["private ${1:name} ($2) :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private NAME () :number {}":       { "prefix": "_n_",  "body": ["private ${1:name} ($2) :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private NAME () :string {}":       { "prefix": "_s_",  "body": ["private ${1:name} ($2) :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private NAME () :void {}":         { "prefix": "_v_",  "body": ["private ${1:name} ($2) :void {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "private async NAME () {}":         { "prefix": "_a_",  "body": ["private async ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private async NAME () :boolean {}":    { "prefix": "_ab_", "body": ["private async ${1:name} ($2) :Promise<boolean> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private async NAME () :number {}":     { "prefix": "_an_", "body": ["private async ${1:name} ($2) :Promise<number> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private async NAME () :string {}":     { "prefix": "_as_", "body": ["private async ${1:name} ($2) :Promise<string> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private async NAME () :void {}":     { "prefix": "_av_", "body": ["private async ${1:name} ($2) :Promise<void> {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public get set NAME () {}":        { "prefix": "pg_s_",  "body": ["private _${1:name} = ${0:null};", "", "public get ${1:name} () {", "\t", "\treturn this._${1:name};", "\t", "}", "", "public set ${1:name} (value) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+  "public get set NAME () :boolean {}":   { "prefix": "pbg_s_", "body": ["private _${1:name}:boolean = ${0:false};", "", "public get ${1:name} () :boolean {", "\t", "\treturn this._${1:name};", "\t", "}", "", "public set ${1:name} (value:boolean) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+  "public get set NAME () :number {}":    { "prefix": "png_s_", "body": ["private _${1:name}:number = ${0:0};", "", "public get ${1:name} () :number {", "\t", "\treturn this._${1:name};", "\t", "}", "", "public set ${1:name} (value:number) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+  "public get set NAME () :string {}":    { "prefix": "psg_s_", "body": ["private _${1:name}:string = '$0';", "", "public get ${1:name} () :string {", "\t", "\treturn this._${1:name};", "\t", "}", "", "public set ${1:name} (value:string) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+
+  "public get NAME () {}":          { "prefix": "pg_",  "body": ["public get ${1:name} () {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public get NAME () :boolean {}":     { "prefix": "pgb_", "body": ["public get ${1:name} () :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public get NAME () :number {}":      { "prefix": "pgn_", "body": ["public get ${1:name} () :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public get NAME () :string {}":      { "prefix": "pgs_", "body": ["public get ${1:name} () :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public set NAME (value) {}":       { "prefix": "ps_",  "body": ["public set ${1:name} (value) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public set NAME (value:boolean) {}":   { "prefix": "psb_", "body": ["public set ${1:name} (value:boolean) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public set NAME (value:number) {}":    { "prefix": "psn_", "body": ["public set ${1:name} (value:number) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public set NAME (value:string) {}":    { "prefix": "pss_", "body": ["public set ${1:name} (value:string) {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "private get set NAME () {}":       { "prefix": "_g_s_",  "body": ["private _${1:name} = ${0:null};", "", "private get ${1:name} () {", "\t", "\treturn this._${1:name};", "\t", "}", "", "private set ${1:name} (value) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+  "private get set NAME () :boolean {}":    { "prefix": "_bg_s_", "body": ["private _${1:name} = ${0:false};", "", "private get ${1:name} () :boolean {", "\t", "\treturn this._${1:name};", "\t", "}", "", "private set ${1:name} (value:boolean) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+  "private get set NAME () :number {}":   { "prefix": "_ng_s_", "body": ["private _${1:name} = ${0:0};", "", "private get ${1:name} () :number {", "\t", "\treturn this._${1:name};", "\t", "}", "", "private set ${1:name} (value:number) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+  "private get set NAME () :string {}":   { "prefix": "_sg_s_", "body": ["private _${1:name} = '$0';", "", "private get ${1:name} () :string {", "\t", "\treturn this._${1:name};", "\t", "}", "", "private set ${1:name} (value:string) {", "\t", "\tthis._${1:name} = value;", "\t", "}"], "description": "" },
+
+  "private get NAME () {}":         { "prefix": "_g_",  "body": ["private get ${1:name} () {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private get NAME () :boolean {}":      { "prefix": "_gb_", "body": ["private get ${1:name} () :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private get NAME () :number {}":     { "prefix": "_gn_", "body": ["private get ${1:name} () :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private get NAME () :string {}":     { "prefix": "_gs_", "body": ["private get ${1:name} () :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "private set NAME (value) {}":        { "prefix": "_s_",  "body": ["private set ${1:name} (value) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private set NAME (value:boolean) {}":    { "prefix": "_sb_", "body": ["private set ${1:name} (value:boolean) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private set NAME (value:number) {}":   { "prefix": "_sn_", "body": ["private set ${1:name} (value:number) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private set NAME (value:string) {}":   { "prefix": "_ss_", "body": ["private set ${1:name} (value:string) {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public static NAME () {}":         { "prefix": "ps_",  "body": ["public static ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static NAME () :boolean {}":    { "prefix": "psb_", "body": ["public static ${1:name} ($2) :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static NAME () :number {}":     { "prefix": "psn_", "body": ["public static ${1:name} ($2) :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static NAME () :string {}":     { "prefix": "pss_", "body": ["public static ${1:name} ($2) :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static NAME () :void {}":     { "prefix": "psv_", "body": ["public static ${1:name} ($2) :void {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public static async NAME () {}":     { "prefix": "psa_", "body": ["public static async ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static async NAME () :boolean {}":  { "prefix": "psab_",  "body": ["public static async ${1:name} ($2) :Promise<boolean> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static async NAME () :number {}": { "prefix": "psan_",  "body": ["public static async ${1:name} ($2) :Promise<number> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static async NAME () :string {}": { "prefix": "psas_",  "body": ["public static async ${1:name} ($2) :Promise<string> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public static async NAME () :void {}":   { "prefix": "psav_",  "body": ["public static async ${1:name} ($2) :Promise<void> {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "private static NAME () {}":        { "prefix": "_s_",  "body": ["private static ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static NAME () :boolean {}":   { "prefix": "_sb_", "body": ["private static ${1:name} ($2) :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static NAME () :number {}":    { "prefix": "_sn_", "body": ["private static ${1:name} ($2) :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static NAME () :string {}":    { "prefix": "_ss_", "body": ["private static ${1:name} ($2) :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static NAME () :void {}":      { "prefix": "_sv_", "body": ["private static ${1:name} ($2) :void {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "private static async NAME () {}":      { "prefix": "_sa_", "body": ["private static async ${1:name} ($2) {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static async NAME () :boolean {}": { "prefix": "_sab_",  "body": ["private static async ${1:name} ($2) :Promise<boolean> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static async NAME () :number {}":  { "prefix": "_san_",  "body": ["private static async ${1:name} ($2) :Promise<number> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static async NAME () :string {}":  { "prefix": "_sas_",  "body": ["private static async ${1:name} ($2) :Promise<string> {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "private static async NAME () :void {}":  { "prefix": "_sav_",  "body": ["private static async ${1:name} ($2) :Promise<void> {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public valueOf () :boolean {}":      { "prefix": "pvOb_",  "body": ["public valueOf () :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public valueOf () :number {}":       { "prefix": "pvOn_",  "body": ["public valueOf () :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public valueOf () :string {}":       { "prefix": "pvOs_",  "body": ["public valueOf () :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public toJSON () {}":            { "prefix": "ptJ_", "body": ["public toJSON () :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public toJSON () :boolean {}":       { "prefix": "ptJb_",  "body": ["public toJSON () :boolean {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public toJSON () :number {}":        { "prefix": "ptJn_",  "body": ["public toJSON () :number {", "\t", "\t$0", "\t", "}"], "description": "" },
+  "public toJSON () :string {}":        { "prefix": "ptJs_",  "body": ["public toJSON () :string {", "\t", "\t$0", "\t", "}"], "description": "" },
+
+  "public toString () {}":          { "prefix": "ptS_", "body": ["public toString () {", "\t", "\treturn '[object ${0:name}]';", "\t", "}"], "description": "" },
+  "public toString () :string {}":      { "prefix": "ptSs_",  "body": ["public toString () :string {", "\t", "\treturn '[object ${0:name}]';", "\t", "}"], "description": "" },
+
+  "csl": {
+    "prefix": "csl",
+    "body": [
+      "console.log(${1:'here'});"
+    ],
+    "description": "Console Log"
+  },
+  "tsimport": {
+    "prefix": "tsimport",
+    "body": [
+      "import { ${1:Component} } from '${2:./}';"
+    ]
+  }
+}

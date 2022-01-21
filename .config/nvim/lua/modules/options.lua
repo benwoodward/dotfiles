@@ -8,6 +8,8 @@ g.smoothie_experimental_mappings = true
 g["sneak#label"] = 1
 g["sneak#use_ic_scs"] = 1
 g.fzf_history_dir = './.fzf-history'
+g.vsnip_snippet_dir = os.getenv('HOME') .. '/.config/nvim/data/snippets'
+
 
 -- Global options {{{
 o.updatetime    = 800

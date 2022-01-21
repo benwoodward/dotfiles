@@ -115,14 +115,63 @@ return packer.startup {
       end,
     },
 
+    -- {
+    --   'terrortylor/nvim-comment',
+    --   requires = {
+    --     'JoosepAlviste/nvim-ts-context-commentstring'
+    --   },
+    --   config = function()
+    --     require('plugins.config.comment')
+    --   end,
+    -- },
+
     {
-      'terrortylor/nvim-comment',
+      'numToStr/Comment.nvim',
       requires = {
         'JoosepAlviste/nvim-ts-context-commentstring'
       },
       config = function()
-        require('plugins.config.comment')
+        require('Comment').setup {
+          mappings = {
+            ---operator-pending mapping
+            ---Includes `gcc`, `gcb`, `gc[count]{motion}` and `gb[count]{motion}`
+            basic = true,
+            ---extra mapping
+            ---Includes `gco`, `gcO`, `gcA`
+            extra = true,
+            ---extended mapping
+            ---Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
+            extended = false,
+          },
+          pre_hook = function(ctx)
+            local U = require 'Comment.utils'
+
+            local location = nil
+            if ctx.ctype == U.ctype.block then
+              location =
+                require('ts_context_commentstring.utils').get_cursor_location()
+            elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
+              location =
+                require('ts_context_commentstring.utils').get_visual_start_location()
+            end
+
+            return
+            require('ts_context_commentstring.internal').calculate_commentstring {
+              key = ctx.ctype == U.ctype.line and '__default' or '__multiline',
+              location = location
+            }
+          end,
+        }
       end,
+    },
+
+    {
+      'JoosepAlviste/nvim-ts-context-commentstring',
+        config = function()
+          require'nvim-treesitter.configs'.setup {
+            context_commentstring = {enable = true, enable_autocmd = false}
+          }
+        end
     },
 
     {
@@ -140,13 +189,6 @@ return packer.startup {
     {'teal-language/vim-teal'},
 
     { "AndrewRadev/splitjoin.vim", keys = "gS" },
-
-    {
-      'folke/which-key.nvim',
-      config = function()
-        require('plugins.config.which-key')
-      end,
-    },
 
     {
       'ruifm/gitlinker.nvim',
@@ -175,18 +217,7 @@ return packer.startup {
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-vsnip",
-        {
-          "hrsh7th/vim-vsnip",
-          setup = function()
-            vim.cmd [[
-            " Jump forward or backward
-            imap <expr> <C-j> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>'
-            smap <expr> <C-j> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : '<C-j>'
-            imap <expr> <C-k> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>'
-            smap <expr> <C-k> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : '<C-k>'
-          ]]
-          end,
-        },
+        "hrsh7th/vim-vsnip",
       },
     },
 
@@ -214,9 +245,6 @@ return packer.startup {
     { 'https://github.com/voldikss/vim-floaterm' },
 
     { 'https://github.com/justinmk/vim-sneak' },
-
-    -- I don't think this is necessary with treesitter installed?
-    -- { 'https://github.com/evanleck/vim-svelte' },
 
     { 'https://github.com/Himujjal/tree-sitter-svelte' },
 
