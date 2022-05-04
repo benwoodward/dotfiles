@@ -1,18 +1,18 @@
 [diff]
-	tool = Kaleidoscope
+  tool = Kaleidoscope
 [difftool]
-	prompt = false
+  prompt = false
 [mergetool]
   keepBackup = false
-	prompt = false
+  prompt = false
 [merge]
   keepBackup = false
-	tool = Kaleidoscope
+  tool = Kaleidoscope
 [mergetool "Kaleidoscope"]
-	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustexitcode = true
+  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+  trustexitcode = true
 [difftool "Kaleidoscope"]
-	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+  cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [alias]
   lg = log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'\n--abbrev-commit --date=relative
   cl = clone
@@ -59,6 +59,7 @@
   b = branch
   l = log
   f = fetch
+  fix = "!f(){ msg=$1; hyphenated_branch=${msg// /-}; branch=$(echo \"${hyphenated_branch}\" | tr [:upper:] [:lower:]); git checkout -b fix/${branch}; git add --all; git commit -m \"fix: ${msg}\"; git checkout main; git merge fix/${branch}; }; f"
   rb = rebase
   r = reset
 
@@ -69,6 +70,7 @@
   # pretty git log
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  ll = lol -3
 
   #  pd = !/Users/benwoodward/dev/pretty-diff/pretty-diff.js
   #  gd = !/Users/benwoodward/dev/pretty-diff/gist-diff.js
@@ -130,16 +132,16 @@
 [web]
   browser = open
 [user]
-	name = Ben Woodward
-	email = 1472981+benwoodward@users.noreply.github.com
+  name = Ben Woodward
+  email = 1472981+benwoodward@users.noreply.github.com
 [github]
   user = benwoodward
 [core]
   # editor = mvim -f --nomru -c \"au VimLeave * !open -a iTerm\"
   editor = subl -n -w
   excludesfile = ~/.gitignore
-	quotepath = false
-	pager = diff-so-fancy | less --tabs=1,5 -R
+  quotepath = false
+  pager = diff-so-fancy | less --tabs=1,5 -R
 [credential]
   helper = osxkeychain
 [grep]
@@ -148,19 +150,19 @@
   clean = git-lfs clean -- %f
   smudge = git lfs smudge %f
   required = true
-	process = git-lfs filter-process
+  process = git-lfs filter-process
 [init]
-	templatedir = /Users/ben/.git-templates
-	defaultBranch = main
+  templatedir = /Users/ben/.git-templates
+  defaultBranch = main
 [fetch]
   ; templatedir = ~/.git_template
   prune = true
 [http]
-	cookiefile = ~/.gitcookies
+  cookiefile = ~/.gitcookies
 [diff-so-fancy]
-	markEmptyLines = true
-	stripLeadingSymbols = true
-	changeHunkIndicators = false
+  markEmptyLines = true
+  stripLeadingSymbols = true
+  changeHunkIndicators = false
 [color]
   diff = auto
   status = auto

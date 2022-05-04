@@ -5,7 +5,7 @@ require('nvim-treesitter.configs').setup {
     enable = true,
     enable_autocmd = false,
   },
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {
     enable = true,
     use_languagetree = true,

@@ -1,196 +1,105 @@
-local fn, api = vim.fn, vim.api
+local api = vim.api
 
-_G.Util = {}
-
-P = function(stuff)
-  print(vim.inspect(stuff))
-  return stuff
-end
-
-Util.trigger_completion = function()
-  local prev_col, next_col = fn.col "." - 1, fn.col "."
-  local prev_char = fn.getline("."):sub(prev_col, prev_col)
-  local next_char = fn.getline("."):sub(next_col, next_col)
-
-  -- minimal autopairs-like behaviour
-
-  if prev_char == "{" and next_char ~= "}" then
-    return Util.t "<CR>}<C-o>O"
+local get_map_options = function(custom_options)
+  local options = {silent = true}
+  if custom_options then
+    options = vim.tbl_extend("force", options, custom_options)
   end
-  if prev_char == "[" and next_char ~= "]" then
-    return Util.t "<CR>]<C-o>O"
+  return options
+end
+
+local M = {}
+
+M.map = function(mode, target, source, opts)
+  vim.keymap.set(mode, target, source, get_map_options(opts))
+end
+
+for _, mode in ipairs({"n", "o", "i", "x", "t", "c"}) do
+  M[mode .. "map"] = function(...)
+    M.map(mode, ...)
   end
-  if prev_char == "(" and next_char ~= ")" then
-    return Util.t "<CR>)<C-o>O"
+end
+
+M.buf_map = function(bufnr, mode, target, source, opts)
+  opts = opts or {}
+  opts.buffer = bufnr
+
+  M.map(mode, target, source, get_map_options(opts))
+end
+
+M.command = function(name, fn, opts)
+  api.nvim_create_user_command(name, fn, opts or {})
+end
+
+M.buf_command = function(bufnr, name, fn, opts)
+  api.nvim_buf_create_user_command(bufnr, name, fn, opts or {})
+end
+
+M.t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+M.gfind = function(str, substr, cb, init)
+  init = init or 1
+  local start_pos, end_pos = str:find(substr, init)
+  if start_pos then
+    cb(start_pos, end_pos)
+    return M.gfind(str, substr, cb, end_pos + 1)
   end
-  if prev_char == ">" and next_char == "<" then
-    return Util.t "<CR><C-o>O"
-  end -- html indents
-  if prev_char == "(" and next_char == ")" then
-    return Util.t "<CR><C-o>O"
-  end -- flutter indents
-
-  return Util.t "<CR>"
 end
 
-local to_rgb = function(hex)
-  if #hex == 9 then
-    local _, r, g, b, a = hex:match "(.)(..)(..)(..)(..)"
-    return string.format(
-      "rgba(%s, %s, %s, %s)",
-      tonumber("0x" .. r),
-      tonumber("0x" .. g),
-      tonumber("0x" .. b),
-      tonumber("0x" .. a)
-    )
-  end
-
-  local _, r, g, b = hex:match "(.)(..)(..)(..)"
-  return string.format(
-    "rgb(%s, %s, %s)",
-    tonumber("0x" .. r),
-    tonumber("0x" .. g),
-    tonumber("0x" .. b)
-  )
-end
-
-local to_hex = function(rgb)
-  if #rgb >= 16 then
-    local r, g, b, a = rgb:match "%((%d+),%s(%d+),%s(%d+),%s(%d+)"
-    return string.format("#%x%x%x%x", r, g, b, a)
-  end
-
-  local r, g, b = rgb:match "%((%d+),%s(%d+),%s(%d+)"
-  return string.format("#%x%x%x", r, g, b)
-end
-
--- convert colours
-Util.convert_colour = function(mode)
-  local result
-
-  if mode == "rgb" then
-    result = to_rgb(Util.get_word())
-  elseif mode == "hex" then
-    result = to_hex(Util.get_word())
-  else
-    return print "Not Supported!"
-  end
-
-  vim.cmd(string.format("s/%s/%s", Util.get_word(), result))
-end
-
-vim.cmd [[
-  command! -nargs=? -range=% ToRgb call v:lua.Util.convert_color('rgb')
-  command! -nargs=? -range=% ToHex call v:lua.Util.convert_color('hex')
-]]
-
-Util.get_word = function()
-  local first_line, last_line = fn.getpos("'<")[2], fn.getpos("'>")[2]
-  local first_col, last_col = fn.getpos("'<")[3], fn.getpos("'>")[3]
-  return fn.getline(first_line, last_line)[1]:sub(first_col, last_col)
-end
-
-Util.t = function(cmd)
-  return api.nvim_replace_termcodes(cmd, true, true, true)
-end
-
-Util.borders = {
-  -- fancy border
-  { "🭽", "FloatBorder" },
-  { "▔", "FloatBorder" },
-  { "🭾", "FloatBorder" },
-  { "▕", "FloatBorder" },
-  { "🭿", "FloatBorder" },
-  { "▁", "FloatBorder" },
-  { "🭼", "FloatBorder" },
-  { "▏", "FloatBorder" },
-
-  -- padding border
-  -- {"▄", "Bordaa"},
-  -- {"▄", "Bordaa"},
-  -- {"▄", "Bordaa"},
-  -- {"█", "Bordaa"},
-  -- {"▀", "Bordaa"},
-  -- {"▀", "Bordaa"},
-  -- {"▀", "Bordaa"},
-  -- {"█", "Bordaa"}
+M.table = {
+  some = function(tbl, cb)
+    for k, v in pairs(tbl) do
+      if cb(k, v) then
+        return true
+      end
+    end
+    return false
+  end,
 }
 
-Util.lsp_on_init = function(client)
-  if
-    client.name == "svelte"
-    or client.name == "volar"
-    or client.name == "tsserver"
-  then
-    client.resolved_capabilities.document_formatting = false
+M.input = function(keys, mode)
+  api.nvim_feedkeys(M.t(keys), mode or "m", true)
+end
+
+M.warn = function(msg)
+  api.nvim_echo({{msg, "WarningMsg"}}, true, {})
+end
+
+M.is_file = function(path)
+  if path == "" then
+    return false
   end
 
-  vim.notify(
-    client.name .. ": Language Server Client successfully started!",
-    "info"
-  )
+  local stat = vim.loop.fs_stat(path)
+  return stat and stat.type == "file"
 end
 
-Util.lsp_on_attach = function(client, bufnr)
-  if client.name == "tsserver" then
-    local ts_utils = require "nvim-lsp-ts-utils"
-    ts_utils.setup {
-      auto_inlay_hints = false, -- enable this once #9496 got merged
-      enable_import_on_completion = true,
-    }
-    ts_utils.setup_client(client)
-  end
+M.make_floating_window = function(custom_window_config, height_ratio, width_ratio)
+  height_ratio = height_ratio or 0.95
+  width_ratio = width_ratio or 0.95
 
-  if client.resolved_capabilities.code_lens then
-    vim.cmd [[
-    augroup CodeLens
-      au!
-      au InsertEnter,InsertLeave * lua vim.lsp.codelens.refresh()
-    augroup END
-    ]]
-  end
+  local height = math.ceil(vim.opt.lines:get() * height_ratio)
+  local width = math.ceil(vim.opt.columns:get() * width_ratio)
+  local window_config = {
+    relative = "editor",
+    style = "minimal",
+    border = "double",
+    width = width,
+    height = height,
+    row = width / 2,
+    col = height / 2,
+  }
+  window_config = vim.tbl_extend("force", window_config, custom_window_config or {})
 
-  if client.resolved_capabilities.document_highlight then
-    vim.cmd [[
-      autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()
-      autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()
-      autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-    ]]
-  end
-
-  require("modules.lsp.mappings").lsp_mappings(bufnr)
+  local bufnr = api.nvim_create_buf(false, true)
+  local winnr = api.nvim_open_win(bufnr, true, window_config)
+  return winnr, bufnr
 end
 
-local module_name = 'modules.util'
-local fn_store = {}
-
-local function register_fn(fn)
-  table.insert(fn_store, fn)
-  return #fn_store
+M.get_system_output = function(cmd)
+  return vim.split(vim.fn.system(cmd), "\n")
 end
 
-function Util.apply_function(id)
-  fn_store[id]()
-end
-
-function Util.apply_expr(id)
-  return vim.api.nvim_replace_termcodes(fn_store[id](), true, true, true)
-end
-
-function Util.lua_fn(fn)
-  return string.format(
-    "<cmd>lua require('%s').apply_function(%s)<CR>",
-    module_name,
-    register_fn(fn)
-  )
-end
-
-function Util.lua_expr(fn)
-  return string.format(
-    "v:lua.require'%s'.apply_expr(%s)",
-    module_name,
-    register_fn(fn)
-  )
-end
-
-return Util
+return M

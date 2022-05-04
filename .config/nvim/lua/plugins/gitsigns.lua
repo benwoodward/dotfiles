@@ -30,7 +30,7 @@ require('gitsigns').setup {
     ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
     ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>'
   },
-  watch_index = {
+  watch_gitdir = {
     interval = 1000,
   },
   numhl              = true,
@@ -38,7 +38,7 @@ require('gitsigns').setup {
   current_line_blame = true,
   current_line_blame_opts = {
     delay = 1000,
-    virt_text_pos = 'right_align',
+    virt_text_pos = 'eol',
   },
   sign_priority      = 6,
   update_debounce    = 100,

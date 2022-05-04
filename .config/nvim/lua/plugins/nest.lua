@@ -4,12 +4,14 @@ local nest = require('nest')
 local g = vim.g
 local wo  = vim.wo
 local cmd = vim.cmd
-require('plugins.config.fzf')
+require('plugins.fzf')
 
 g.mapleader      = ' '
 g.maplocalleader = ' '
 
 nest.applyKeymaps {
+	{ '0', '^' },
+	{ '^', '0' },
 	{ '<Left>',  '<CMD>vertical resize +2<cr>', options = { noremap = false } },
   { '<Right>', '<CMD>vertical resize -2<cr>', options = { noremap = false } },
   { '<Up>',    '<CMD>resize   +2<cr>', options = { noremap = false } },
@@ -29,12 +31,12 @@ nest.applyKeymaps {
 	-- Move current line to bottom of screen - 4 lines
 	{ 'zd', 'zb<c-e><c-e><c-e><c-e>' },
 
-	{ 'f', '<Plug>Sneak_f', options = { noremap = false } },
-	{ 'F', '<Plug>Sneak_F', options = { noremap = false } },
-	{ 't', '<Plug>Sneak_t', options = { noremap = false } },
-	{ 'T', '<Plug>Sneak_T', options = { noremap = false } },
+	-- { 'f', '<Plug>Sneak_f', options = { noremap = false } },
+	-- { 'F', '<Plug>Sneak_F', options = { noremap = false } },
+	-- { 't', '<Plug>Sneak_t', options = { noremap = false } },
+	-- { 'T', '<Plug>Sneak_T', options = { noremap = false } },
 
-	{ 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>' },
+	-- { 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>' },
 	{ 'gd', '<cmd>lua vim.lsp.buf.definitions()<cr>' },
 	{ 'K',  '<cmd>lua vim.lsp.buf.hover()<cr>' },
 
@@ -119,7 +121,7 @@ end
 function _G.toggle_zoom()
   require("zen-mode").toggle({
     window = {
-      width = .65,
+      width = .80,
     }
   })
 end

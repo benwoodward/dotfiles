@@ -4,6 +4,7 @@ local packer_ok, packer = pcall(require, "packer")
 if not packer_ok then
   return
 end
+local u = require("modules.util")
 
 return packer.startup {
   {
@@ -49,7 +50,7 @@ return packer.startup {
         'nvim-web-devicons'
       },
       config = function()
-        require('plugins.config.trouble')
+        require('plugins.trouble')
       end,
     },
 
@@ -66,7 +67,7 @@ return packer.startup {
       },
       run = ':TSUpdate',
       config = function()
-        require('plugins.config.treesitter')
+        require('plugins.treesitter')
       end,
     },
 
@@ -77,7 +78,7 @@ return packer.startup {
         'nvim-lua/plenary.nvim'
       },
       config = function()
-        require('plugins.config.gitsigns')
+        require('plugins.gitsigns')
       end,
     },
 
@@ -85,7 +86,7 @@ return packer.startup {
       'sindrets/diffview.nvim',
       requires = {'nvim-web-devicons'},
       config = function()
-        require('plugins.config.diffview')
+        require('plugins.diffview')
       end,
     },
 
@@ -111,7 +112,7 @@ return packer.startup {
         },
       },
       config = function()
-        require('plugins.config.telescope')
+        require('plugins.telescope')
       end,
     },
 
@@ -121,7 +122,7 @@ return packer.startup {
     --     'JoosepAlviste/nvim-ts-context-commentstring'
     --   },
     --   config = function()
-    --     require('plugins.config.comment')
+    --     require('plugins.comment')
     --   end,
     -- },
 
@@ -177,7 +178,7 @@ return packer.startup {
     {
       'norcalli/nvim-colorizer.lua',
       config = function()
-        require('plugins.config.colorizer')
+        require('plugins.colorizer')
       end,
     },
 
@@ -200,24 +201,31 @@ return packer.startup {
       end,
     },
 
-    {
-      'L3MON4D3/LuaSnip',
-      config = function()
-        require 'plugins.config.luasnip'
-      end,
-    },
+    -- {
+    --   'L3MON4D3/LuaSnip',
+    --   config = function()
+    --     require 'plugins.luasnip'
+    --   end,
+    -- },
 
     {
       "hrsh7th/nvim-cmp",
       config = function()
-        require "plugins.config.cmp"
+        require "plugins.cmp"
       end,
       requires = {
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-vsnip",
-        "hrsh7th/vim-vsnip",
+        -- "hrsh7th/cmp-vsnip",
+        -- "hrsh7th/vim-vsnip",
+        "onsails/lspkind-nvim", -- Enables icons on completions
+        { -- Snippets
+          "L3MON4D3/LuaSnip",
+          requires = {
+            "saadparwaiz1/cmp_luasnip",
+          },
+        },
       },
     },
 
@@ -225,7 +233,7 @@ return packer.startup {
     {
       'LionC/nest.nvim',
       config = function()
-        require 'plugins.config.nest'
+        require 'plugins.nest'
       end,
     },
 
@@ -244,7 +252,11 @@ return packer.startup {
 
     { 'https://github.com/voldikss/vim-floaterm' },
 
-    { 'https://github.com/justinmk/vim-sneak' },
+    -- { 'https://github.com/justinmk/vim-sneak' },
+
+    { 'https://github.com/ggandor/lightspeed.nvim' },
+
+    { 'https://github.com/tpope/vim-repeat' },
 
     { 'https://github.com/Himujjal/tree-sitter-svelte' },
 
@@ -274,7 +286,7 @@ return packer.startup {
       config = function()
         require('neoclip').setup({
           history = 1000,
-          enable_persistant_history = true,
+          enable_persistent_history = true,
           db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
           filter = nil,
           preview = true,
@@ -305,6 +317,16 @@ return packer.startup {
         'tami5/sqlite.lua'
       }
     },
+
+    { 'https://github.com/jparise/vim-graphql' },
+
+    { 'https://github.com/jose-elias-alvarez/typescript.nvim' },
+
+    { 'https://github.com/danymat/neogen',
+       config = function()
+         require('plugins.neogen')
+       end,
+    }, -- highlights and allows moving between variable references
   },
 
   config = {
@@ -315,7 +337,7 @@ return packer.startup {
     },
     display = {
       open_fn = function()
-        return require("packer.util").float { border = Util.borders }
+        return require("packer.util").float { border = u.borders }
       end,
     },
   },

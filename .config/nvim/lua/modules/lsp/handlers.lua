@@ -1,13 +1,14 @@
 local fn, lsp = vim.fn, vim.lsp
+local u = require("modules.util")
 
 lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, {
-  border = Util.borders,
+  border = u.borders,
 })
 
 lsp.handlers["textDocument/signatureHelp"] = lsp.with(
   lsp.handlers.signature_help,
   {
-    border = Util.borders,
+    border = u.borders,
   }
 )
 

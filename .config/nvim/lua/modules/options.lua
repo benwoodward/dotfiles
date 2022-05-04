@@ -5,13 +5,14 @@ local g   = vim.g
 local wo  = vim.wo
 
 g.smoothie_experimental_mappings = true
-g["sneak#label"] = 1
-g["sneak#use_ic_scs"] = 1
+-- g["sneak#label"] = 1
+-- g["sneak#use_ic_scs"] = 1
 g.fzf_history_dir = './.fzf-history'
 g.vsnip_snippet_dir = os.getenv('HOME') .. '/.config/nvim/data/snippets'
 
 
 -- Global options {{{
+o.formatoptions = o.formatoptions .. "cro" -- auto-comment next line after comment
 o.updatetime    = 800
 o.termguicolors = true
 o.mouse         = 'n'

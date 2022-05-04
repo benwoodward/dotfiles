@@ -14,4 +14,4 @@
 -- end
 
 
-vim.cmd [[ command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --hidden --smart-case --no-heading --color=always -g "!.git" '.shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%') : fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e'}, 'right:50%', '?'), <bang>0) ]]
+vim.cmd [[ command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --hidden --smart-case --no-heading --color=always -g "!.git" -g "!src/lib/types" ' .shellescape(<q-args>), 1, <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%') : fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e'}, 'right:50%', '?'), <bang>0) ]]

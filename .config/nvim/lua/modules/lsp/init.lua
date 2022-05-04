@@ -1,73 +1,65 @@
-local lspconfig = require "lspconfig"
+local u = require("modules.util")
 
--- override handlers
-require "modules.lsp.handlers"
+local lsp = vim.lsp
+
+local border_opts = {border = "single", focusable = false, scope = "line"}
+
+vim.diagnostic.config({virtual_text = false, float = border_opts})
+
+lsp.handlers["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_help, border_opts)
+lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, border_opts)
+
+-- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+local on_attach = function(client, bufnr)
+  -- commands
+  -- u.buf_command(bufnr, "LspHover", vim.lsp.buf.hover)
+  -- u.buf_command(bufnr, "LspDiagPrev", vim.diagnostic.goto_prev)
+  -- u.buf_command(bufnr, "LspDiagNext", vim.diagnostic.goto_next)
+  -- u.buf_command(bufnr, "LspDiagLine", vim.diagnostic.open_float)
+  -- u.buf_command(bufnr, "LspDiagQuickfix", vim.diagnostic.setqflist)
+  -- u.buf_command(bufnr, "LspSignatureHelp", vim.lsp.buf.signature_help)
+  -- u.buf_command(bufnr, "LspTypeDef", vim.lsp.buf.type_definition)
+  -- u.buf_command(bufnr, "LspRangeAct", vim.lsp.buf.range_code_action)
+  -- not sure why this is necessary?
+  -- u.buf_command(bufnr, "LspRename", vim.lsp.buf.rename)
+
+  -- bindings
+  -- u.buf_map(bufnr, "n", "gi", ":LspRename<CR>")
+  -- u.buf_map(bufnr, "n", "K", ":LspHover<CR>")
+  -- u.buf_map(bufnr, "n", "[a", ":LspDiagPrev<CR>")
+  -- u.buf_map(bufnr, "n", "]a", ":LspDiagNext<CR>")
+  -- u.buf_map(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>")
+  -- u.buf_map(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>")
+
+  -- u.buf_map(bufnr, "n", "gy", ":LspRef<CR>")
+  -- u.buf_map(bufnr, "n", "gh", ":LspTypeDef<CR>")
+  -- u.buf_map(bufnr, "n", "gd", ":LspDef<CR>")
+  -- u.buf_map(bufnr, "n", "ga", ":LspAct<CR>")
+  -- u.buf_map(bufnr, "v", "ga", "<Esc><cmd> LspRangeAct<CR>")
+end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.documentationFormat = {
-  "markdown",
-}
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.preselectSupport = true
-capabilities.textDocument.completion.completionItem.insertReplaceSupport = true
-capabilities.textDocument.completion.completionItem.labelDetailsSupport = true
-capabilities.textDocument.completion.completionItem.deprecatedSupport = true
-capabilities.textDocument.completion.completionItem.commitCharactersSupport =
-  true
-capabilities.textDocument.completion.completionItem.tagSupport = {
-  valueSet = { 1 },
-}
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = {
-    "documentation",
-    "detail",
-    "additionalTextEdits",
-  },
-}
+capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
-local servers = {
-  tsserver = {
-    init_options = vim.tbl_deep_extend(
-      "force",
-      require("nvim-lsp-ts-utils").init_options,
-      {
-        preferences = {
-          importModuleSpecifierEnding = "auto",
-          importModuleSpecifierPreference = "shortest",
-        },
-        documentFormatting = false,
-      }
-    ),
-    settings = {
-      completions = {
-        completeFunctionCalls = true,
-      },
-    },
-  },
-  jsonls = require("modules.lsp.json").config,
-  svelte = require("modules.lsp.svelte").config,
-  html = {
-    cmd = { "vscode-html-language-server", "--stdio" },
-  },
-  cssls = {
-    cmd = { "vscode-css-language-server", "--stdio" },
-  },
-  eslint = {},
-}
+for _, server in ipairs({
+  "eslint",
+  "tsserver",
+  "svelte",
+}) do
+require("modules.lsp." .. server).setup(on_attach, capabilities)
+end
 
-require("plugins.config.null-ls").setup()
-
-for name, opts in pairs(servers) do
-  if type(opts) == "function" then
-    opts()
-  else
-    local client = lspconfig[name]
-
-    client.setup(vim.tbl_extend("force", {
-      flags = { debounce_text_changes = 150 },
-      on_attach = Util.lsp_on_attach,
-      on_init = Util.lsp_on_init,
-      capabilities = capabilities,
-    }, opts))
+-- suppress irrelevant messages
+local notify = vim.notify
+vim.notify = function(msg, ...)
+  if msg:match("%[lspconfig%]") then
+    return
   end
+
+  if msg:match("warning: multiple different client offset_encodings") then
+    return
+  end
+
+  notify(msg, ...)
 end
