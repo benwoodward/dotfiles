@@ -40,6 +40,7 @@ o.undofile      = true
 -- Window options {{{
 wo.number       = true
 wo.relativenumber = true
+wo.signcolumn   = 'yes'
 wo.numberwidth  = 3
 wo.list         = true
 

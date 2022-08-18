@@ -10,6 +10,8 @@ endif
 let g:mapleader = " "
 let g:maplocalleader = " "
 
+set guifont=Hack\ Nerd\ Font\ Mono:h18
+
 " order matters
 runtime! lua/modules/options.lua
 runtime! lua/modules/util.lua

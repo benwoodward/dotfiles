@@ -248,13 +248,17 @@ return packer.startup {
       end
     },
 
-    { 'https://github.com/psliwka/vim-smoothie' },
+    { 'https://github.com/psliwka/vim-smoothie' }, -- Neovide has built-in smoothing
 
     { 'https://github.com/voldikss/vim-floaterm' },
 
     -- { 'https://github.com/justinmk/vim-sneak' },
 
-    { 'https://github.com/ggandor/lightspeed.nvim' },
+    { 'https://github.com/ggandor/lightspeed.nvim',
+      config = function()
+        require('plugins.lightspeed')
+      end,
+    },
 
     { 'https://github.com/tpope/vim-repeat' },
 
@@ -327,6 +331,47 @@ return packer.startup {
          require('plugins.neogen')
        end,
     }, -- highlights and allows moving between variable references
+
+    { 'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim' },
+
+    { 'https://github.com/JoseConseco/vim-case-change' },
+
+    { 'https://github.com/akinsho/toggleterm.nvim',
+      config = function()
+        require("toggleterm").setup({
+          -- size can be a number or function which is passed the current terminal
+          size = function(term)
+            if term.direction == "horizontal" then
+              return 15
+            elseif term.direction == "vertical" then
+              return  300
+            end
+          end,
+          dir = 'git_dir',
+          hide_numbers = true, -- hide the number column in toggleterm buffers
+          shade_filetypes = {},
+          shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
+          shading_factor = 2, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
+          start_in_insert = true,
+          insert_mappings = false, -- whether or not the open mapping applies in insert mode
+          terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+          persist_size = true,
+          persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
+          direction = 'float',
+          close_on_exit = true, -- close the terminal window when the process exits
+          shell = vim.o.shell, -- change the default shell
+          float_opts = {
+            border = 'single',
+          -- width = 100,
+         --    height = 50,
+            winblend = 3,
+          },
+          winbar = {
+            enabled = false,
+          },      
+        })
+      end,
+    }
   },
 
   config = {

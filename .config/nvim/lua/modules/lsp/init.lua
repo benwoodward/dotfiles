@@ -4,7 +4,11 @@ local lsp = vim.lsp
 
 local border_opts = {border = "single", focusable = false, scope = "line"}
 
-vim.diagnostic.config({virtual_text = false, float = border_opts})
+vim.diagnostic.config({
+  virtual_text = false,
+  float = border_opts,
+  virtual_lines = false,
+})
 
 lsp.handlers["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_help, border_opts)
 lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, border_opts)
@@ -46,6 +50,7 @@ for _, server in ipairs({
   "eslint",
   "tsserver",
   "svelte",
+  "null-ls",
 }) do
 require("modules.lsp." .. server).setup(on_attach, capabilities)
 end

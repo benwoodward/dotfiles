@@ -4,9 +4,6 @@ local cb = require'diffview.config'.diffview_callback
 
 require'diffview'.setup {
   diff_binaries = false,    -- Show diffs for binaries
-  file_panel = {
-    width = 35,
-  },
   key_bindings = {
     -- The `view` bindings are active in the diff buffers, only when the current
     -- tabpage is a Diffview.

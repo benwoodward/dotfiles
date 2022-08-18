@@ -25,11 +25,11 @@ nest.applyKeymaps {
 	-- Quit
 	{ 'Q', ':q<cr>' },
 
-	-- Move current line to top of screen + 4 lines
-	{ 'zu', 'zt<c-y><c-y><c-y><c-y>' },
+	-- Move current line to top of screen + 3 lines
+	{ 'zu', 'zt<c-y><c-y><c-y>' },
 
-	-- Move current line to bottom of screen - 4 lines
-	{ 'zd', 'zb<c-e><c-e><c-e><c-e>' },
+	-- Move current line to bottom of screen - 3 lines
+	{ 'zd', 'zb<c-e><c-e><c-e>' },
 
 	-- { 'f', '<Plug>Sneak_f', options = { noremap = false } },
 	-- { 'F', '<Plug>Sneak_F', options = { noremap = false } },
@@ -87,6 +87,8 @@ nest.applyKeymaps {
 		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
 		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
 
+		{ 'tv', '<Plug>(toggle-lsp-diag-vtext)' },
+
 		-- upcase a word
 		{ 'u', 'mQviwU`Q'},
 
@@ -95,7 +97,7 @@ nest.applyKeymaps {
 		-- Write file
 		{ 'w', ':w<cr>' },
 
-		{ 'y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>]]', mode = 'v'},
+		{ 'y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>', mode = 'v'},
 
 		{ 'z', [[ <Cmd> lua toggle_zoom()<CR>]] },
 	}},

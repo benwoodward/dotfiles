@@ -22,12 +22,7 @@ local M = {
         end
       end,
       on_init = function(client, bufnr)
-        if
-          client.name == "svelte"
-          or client.name == "tsserver"
-        then
-          client.resolved_capabilities.document_formatting = false
-        end
+        client.resolved_capabilities.document_formatting = true
 
         vim.notify(
           client.name .. ": Language Server Client successfully started!",

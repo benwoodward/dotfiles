@@ -5,7 +5,8 @@ local M = {
     lspconfig["eslint"].setup({
       root_dir = lspconfig.util.root_pattern(".eslintrc", ".eslintrc.js", ".eslintrc.json"),
       on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = true
+        client.server_capabilities.documentFormattingProvider = false
+
         on_attach(client, bufnr)
       end,
       capabilities = capabilities,
@@ -28,7 +29,11 @@ local M = {
     })
     
     lspconfig.diagnosticls.setup {
-      filetypes = {'javascript', 'typescript', 'svelte'}
+      filetypes = {'javascript', 'typescript', 'svelte'},
+      on_attach = function(client, bufnr)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+      end,
     }
   end,
 }
