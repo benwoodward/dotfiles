@@ -8,6 +8,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = "all",
   highlight = {
     enable = true,
+    additional_vim_regex_highlighting = false,
     use_languagetree = true,
   },
   indent = {
@@ -40,4 +41,8 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
+}
+
+require('nvim-treesitter.highlight').set_custom_captures {
+  ['camelCase'] = 'TSUnderline',
 }

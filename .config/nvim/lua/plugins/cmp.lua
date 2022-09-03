@@ -1,9 +1,29 @@
 local cmp = require("cmp")
 local luasnip = require("luasnip")
+local lspkind = require('lspkind')
+
+local source_mapping = {
+  buffer = "[Buffer]",
+  nvim_lsp = "[LSP]",
+  nvim_lua = "[Lua]",
+  cmp_tabnine = "[TN]",
+  path = "[Path]",
+}
+
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line-1, 0, line-1, col, {})[1]:match("^%s*$") == nil
+end
 
 cmp.setup({
   completion = {
-    completeopt = "menuone,noinsert",
+    autocomplete = {
+      cmp.TriggerEvent.TextChanged,
+      cmp.TriggerEvent.InsertEnter,
+    },
+    completeopt = "menuone,noinsert,noselect",
+    -- keyword_length = 0,
   },
   snippet = {
     expand = function(args)
@@ -11,14 +31,29 @@ cmp.setup({
     end,
   },
   mapping = {
+    -- ["<Tab>"] = cmp.mapping(function(fallback)
+    --   if luasnip.expand_or_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   elseif cmp.visible() then
+    --     cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace })
+    --   else
+    --     fallback()
+    --   end
+    -- end, { "i", "s" }),
+    ["<Tab>"] = vim.schedule_wrap(function(fallback)
+      if luasnip.expand_or_jumpable() and has_words_before() then
+        luasnip.expand_or_jump()
+      elseif cmp.visible() and has_words_before() then
+        cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace })
+      else
+        fallback()
+      end
+    end),
     ["<C-j>"] = cmp.mapping({
       i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
     }),
     ["<C-k>"] = cmp.mapping({
       i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
-    }),
-    ["<C-l>"] = cmp.mapping({
-      i = cmp.mapping.confirm({select = false}),
     }),
     ["<C-e>"] = cmp.mapping({
       i = cmp.mapping.abort(),
@@ -31,9 +66,11 @@ cmp.setup({
     -- }),
   },
   sources = {
-    {name = "luasnip", priority = 9999},
-    {name = "nvim_lsp"},
-    {name = "path"},
+    { name = "copilot" },
+    { name = 'cmp_tabnine' },
+    { name = "luasnip" },
+    { name = "nvim_lsp" },
+    { name = "path" },
     {
       name = "buffer",
       option = {
@@ -48,4 +85,60 @@ cmp.setup({
       },
     },
   },
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      require("copilot_cmp.comparators").prioritize,
+      require("copilot_cmp.comparators").score,
+
+      -- Below is the default comparitor list and order for nvim-cmp
+      cmp.config.compare.offset,
+      -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
+  },
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = "symbol_text", -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
+      maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+
+      -- The function below will be called before any actual modifications from lspkind
+      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      before = function(entry, vim_item)
+        vim_item.kind = lspkind.presets.default[vim_item.kind]
+
+        local menu = source_mapping[entry.source.name]
+        if entry.source.name == "cmp_tabnine" then
+          if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+            menu = entry.completion_item.data.detail .. " " .. menu
+          end
+          vim_item.kind = ""
+        end
+
+        if entry.source.name == "copilot" then
+          if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
+            menu = entry.completion_item.data.detail .. " " .. menu
+          end
+          vim_item.kind = ""
+        end
+
+        vim_item.menu = menu
+
+        return vim_item
+      end,
+    }),
+  },
+  experimental = {
+    view = {
+      entries = true,
+    },
+    ghost_text = true,
+  }
 })

@@ -1,6 +1,7 @@
 -- vim: ts=2 sw=2 et:
 
 local o   = vim.o
+local opt = vim.opt
 local g   = vim.g
 local wo  = vim.wo
 
@@ -13,6 +14,7 @@ g.vsnip_snippet_dir = os.getenv('HOME') .. '/.config/nvim/data/snippets'
 
 -- Global options {{{
 o.formatoptions = o.formatoptions .. "cro" -- auto-comment next line after comment
+o.hidden        = true
 o.updatetime    = 800
 o.termguicolors = true
 o.mouse         = 'n'
@@ -33,10 +35,10 @@ o.backspace     = [[indent,eol,start]]  -- backspace through everything in inser
 o.listchars     = [[tab:→ ,space: ,trail:·,extends:↷,precedes:↶]]
 o.completeopt   = 'menuone,noinsert'
 o.backup        = false -- true
-o.splitbelow     = true -- split below instead of above
-o.splitright     = true -- split right instead of left
+o.splitbelow    = true -- split below instead of above
+o.splitright    = true -- split right instead of left
 o.undofile      = true
--- }}}
+
 -- Window options {{{
 wo.number       = true
 wo.relativenumber = true
@@ -52,6 +54,10 @@ wo.cursorcolumn = false
 -- g.loaded_ruby_provider   = 0
 g.loaded_perl_provider   = 0
 g.loaded_python_provider = 0
+
+vim.cmd [[
+  syntax enable
+]]
 
 
 vim.env.FZF_DEFAULT_OPTS = table.concat({

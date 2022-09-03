@@ -23,8 +23,8 @@ fix_brew_permissions() {
   # sudo chmod -R g+rwx /usr/local/share/zsh
 
   # Make it usable for multiple users (anyone in custom 'brew' group)
-  sudo chgrp -R brew $(brew --prefix)/*
-  sudo chown -R root $(brew --prefix)/*
+  # sudo chgrp -R brew $(brew --prefix)/*
+  # sudo chown -R root $(brew --prefix)/*
   # sudo chown -R root /usr/local/share/zsh
 }
 
@@ -62,17 +62,6 @@ set -e
 
 HOMEBREW_PREFIX="/usr/local"
 
-if [ -d "$HOMEBREW_PREFIX" ]; then
-  read -p "Add 'brew' group with homebrew users in 'Users & Groups' in Sys. Prefs. Press enter when complete"
-  if ! [ -r "$HOMEBREW_PREFIX" ]; then
-    printf ""
-  fi
-else
-  sudo mkdir "$HOMEBREW_PREFIX"
-  sudo chflags norestricted "$HOMEBREW_PREFIX"
-  sudo chown -R "$LOGNAME:admin" "$HOMEBREW_PREFIX"
-fi
-
 gem_install_or_update() {
   if gem list "$1" --installed > /dev/null; then
     gem update "$@"
@@ -83,8 +72,7 @@ gem_install_or_update() {
 
 if ! command -v brew >/dev/null; then
   fancy_echo "Installing Homebrew ..."
-    curl -fsS \
-      'https://raw.githubusercontent.com/Homebrew/install/master/install' | ruby
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     append_to_zshrc '# recommended by brew doctor'
 
@@ -111,6 +99,13 @@ brew "git"
 brew "openssl"
 brew "neovim"
 brew "zsh"
+brew "exa"
+brew "ripgrep"
+brew "ranger"
+brew "fzf"
+brew "bat"
+brew "diff-so-fancy"
+cask "ksdiff"
 
 # Image manipulation
 brew "imagemagick"
@@ -118,14 +113,18 @@ brew "imagemagick"
 # Programming language prerequisites and package managers
 brew "libyaml" # should come after openssl
 brew "coreutils"
-cask "gpg-suite"
 
 # Databases
 brew "postgres", restart_service: :changed
 brew "asdf"
+
+# UI enhancements
+brew "koekeishiya/formulae/yabai"
+brew "koekeishiya/formulae/skhd"
+cask "karabiner-elements"
 EOF
 
-fix_brew_permissions
+# fix_brew_permissions
 
 fancy_echo "Configuring asdf version manager ..."
 if [ ! -d "$HOME/.asdf" ]; then
@@ -148,8 +147,6 @@ add_or_update_asdf_plugin() {
 source "$(brew --prefix asdf)/asdf.sh"
 add_or_update_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 add_or_update_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
-add_or_update_asdf_plugin "erlang" "https://github.com/asdf-vm/asdf-erlang.git"
-add_or_update_asdf_plugin "erlang" "https://github.com/asdf-vm/asdf-elixir.git"
 
 install_asdf_language() {
   local language="$1"
@@ -166,7 +163,6 @@ number_of_cores=$(sysctl -n hw.ncpu)
 bundle config --global jobs $((number_of_cores - 1))
 
 fancy_echo "Installing latest Node ..."
-bash "$HOME/.asdf/plugins/nodejs/bin/import-release-team-keyring"
 install_asdf_language "nodejs"
 
 # TODO: Copy minimal icons to iTerm via command

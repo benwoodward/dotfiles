@@ -45,3 +45,30 @@ defaults write com.apple.dock showhidden -bool true
 
 # Prefer tabs when opening documents: 'always', 'fullscreen', 'manual'
 defaults write NSGlobalDomain AppleWindowTabbingMode -string 'always'
+
+# Speed up Mission Control animations
+defaults write com.apple.dock expose-animation-duration -float 0.5
+
+# Show image for notifications
+defaults write com.apple.dock notification-always-show-image -bool true
+
+# Enable highlight hover effect for the grid view of a stack (Dock)
+defaults write com.apple.dock mouse-over-hilite-stack -bool true
+
+# Set the icon size of Dock items to 36 pixels
+defaults write com.apple.dock tilesize -int 36
+
+# Speed up Mission Control animations
+defaults write com.apple.dock expose-animation-duration -float 0.1
+
+# Disable Dashboard
+defaults write com.apple.dashboard mcx-disabled -bool true
+
+# Don’t show Dashboard as a Space
+defaults write com.apple.dock dashboard-in-overlay -bool true
+
+# Don’t automatically rearrange Spaces based on most recent use
+defaults write com.apple.dock mru-spaces -bool false
+
+# Remove the auto-hiding Dock delay
+defaults write com.apple.dock autohide-delay -float 0

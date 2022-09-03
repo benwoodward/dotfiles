@@ -57,7 +57,8 @@ nest.applyKeymaps {
 		-- { 'i', ':lua require(\'nvim-reload\').Reload()<cr>'},
 
 		-- Telescope
-		{ '/',  ':Rg!<cr>' },
+		-- { '/',  ':Rg!<cr>' },
+		{ '/', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>" },
 
 		{ 'b', ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>' },
 
@@ -87,7 +88,7 @@ nest.applyKeymaps {
 		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
 		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
 
-		{ 'tv', '<Plug>(toggle-lsp-diag-vtext)' },
+		{ 't', '<Plug>(toggle-lsp-diag-vtext)' },
 
 		-- upcase a word
 		{ 'u', 'mQviwU`Q'},

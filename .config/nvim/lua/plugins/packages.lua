@@ -9,13 +9,13 @@ local u = require("modules.util")
 return packer.startup {
   {
     {
-      'wbthomason/packer.nvim',
+      'https://github.com/wbthomason/packer.nvim',
       opt = true,
     },
 
     {
       -- disable = true,
-      'folke/tokyonight.nvim',
+      'https://github.com/folke/tokyonight.nvim',
       config = function()
         vim.g.tokyonight_style            = 'storm' -- 'storm', 'night'  or 'day'
         vim.g.tokyonight_italic_comments  = true
@@ -28,24 +28,24 @@ return packer.startup {
       end,
     },
 
-    {'kyazdani42/nvim-web-devicons'},
+    {'https://github.com/kyazdani42/nvim-web-devicons'},
 
     -- LSP
     {
-      'neovim/nvim-lspconfig',
+      'https://github.com/neovim/nvim-lspconfig',
       config = function()
         require('modules.lsp')
       end,
       requires = {
-        'jose-elias-alvarez/null-ls.nvim',
-        'jose-elias-alvarez/nvim-lsp-ts-utils'
+        'https://github.com/jose-elias-alvarez/null-ls.nvim',
+        'https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils'
       },
     },
 
-    {'nanotee/nvim-lsp-basics'},
+    {'https://github.com/nanotee/nvim-lsp-basics'},
 
     {
-      'folke/trouble.nvim',
+      'https://github.com/folke/trouble.nvim',
       requires = {
         'nvim-web-devicons'
       },
@@ -56,14 +56,14 @@ return packer.startup {
 
     -- TreeSitter
     {
-      'nvim-treesitter/nvim-treesitter',
+      'https://github.com/nvim-treesitter/nvim-treesitter',
       requires = {
-        'nvim-treesitter/nvim-treesitter-refactor',
-        'nvim-treesitter/nvim-treesitter-textobjects',
-        'p00f/nvim-ts-rainbow',
+        'https://github.com/nvim-treesitter/nvim-treesitter-refactor',
+        'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
+        'https://github.com/p00f/nvim-ts-rainbow',
         -- 'polarmutex/contextprint.nvim',
-        'theHamsta/nvim-treesitter-pairs',
-        'nvim-treesitter/playground',
+        'https://github.com/theHamsta/nvim-treesitter-pairs',
+        'https://github.com/nvim-treesitter/playground',
       },
       run = ':TSUpdate',
       config = function()
@@ -73,7 +73,7 @@ return packer.startup {
 
     -- Git
     {
-      'lewis6991/gitsigns.nvim',
+      'https://github.com/lewis6991/gitsigns.nvim',
       requires = {
         'nvim-lua/plenary.nvim'
       },
@@ -83,29 +83,30 @@ return packer.startup {
     },
 
     {
-      'sindrets/diffview.nvim',
+      'https://github.com/sindrets/diffview.nvim',
       requires = {'nvim-web-devicons'},
       config = function()
         require('plugins.diffview')
       end,
     },
 
-    {'euclidianAce/BetterLua.vim'},
+    {'https://github.com/euclidianAce/BetterLua.vim'},
 
     -- Telescope
     {
-      'nvim-telescope/telescope.nvim',
+      'https://github.com/nvim-telescope/telescope.nvim',
       requires = {
         'https://github.com/nvim-lua/popup.nvim',
         'https://github.com/nvim-lua/plenary.nvim',
         'https://github.com/nvim-telescope/telescope-project.nvim',
+        'https://github.com/nvim-telescope/telescope-live-grep-args.nvim',
         {
           'https://github.com/nvim-telescope/telescope-smart-history.nvim',
           requires = {
             'tami5/sqlite.lua'
           }
         },
-        'nvim-telescope/telescope-frecency.nvim',
+        'https://github.com/nvim-telescope/telescope-frecency.nvim',
         {
           'nvim-telescope/telescope-fzf-native.nvim',
           run = 'make'
@@ -127,9 +128,9 @@ return packer.startup {
     -- },
 
     {
-      'numToStr/Comment.nvim',
+      'https://github.com/numToStr/Comment.nvim',
       requires = {
-        'JoosepAlviste/nvim-ts-context-commentstring'
+        'https://github.com/JoosepAlviste/nvim-ts-context-commentstring'
       },
       config = function()
         require('Comment').setup {
@@ -144,52 +145,35 @@ return packer.startup {
             ---Includes `g>`, `g<`, `g>[count]{motion}` and `g<[count]{motion}`
             extended = false,
           },
-          pre_hook = function(ctx)
-            local U = require 'Comment.utils'
-
-            local location = nil
-            if ctx.ctype == U.ctype.block then
-              location =
-                require('ts_context_commentstring.utils').get_cursor_location()
-            elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-              location =
-                require('ts_context_commentstring.utils').get_visual_start_location()
-            end
-
-            return
-            require('ts_context_commentstring.internal').calculate_commentstring {
-              key = ctx.ctype == U.ctype.line and '__default' or '__multiline',
-              location = location
-            }
-          end,
+          pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
         }
       end,
     },
 
     {
-      'JoosepAlviste/nvim-ts-context-commentstring',
+      'https://github.com/JoosepAlviste/nvim-ts-context-commentstring',
         config = function()
           require'nvim-treesitter.configs'.setup {
-            context_commentstring = {enable = true, enable_autocmd = false}
+            context_commentstring = {
+              enable = true,
+              enable_autocmd = false,
+            }
           }
         end
     },
 
     {
-      'norcalli/nvim-colorizer.lua',
+      'https://github.com/norcalli/nvim-colorizer.lua',
       config = function()
         require('plugins.colorizer')
       end,
     },
 
-    {'mg979/vim-visual-multi'},
+    {'https://github.com/mg979/vim-visual-multi'},
 
-    {'dstein64/nvim-scrollview'},
+    {'https://github.com/dstein64/nvim-scrollview'},
 
-    -- Teal language support
-    {'teal-language/vim-teal'},
-
-    { "AndrewRadev/splitjoin.vim", keys = "gS" },
+    { "https://github.com/AndrewRadev/splitjoin.vim", keys = "gS" },
 
     {
       'ruifm/gitlinker.nvim',
@@ -209,14 +193,15 @@ return packer.startup {
     -- },
 
     {
-      "hrsh7th/nvim-cmp",
+      "https://github.com/hrsh7th/nvim-cmp",
       config = function()
         require "plugins.cmp"
       end,
       requires = {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-buffer",
+        "https://github.com/hrsh7th/cmp-nvim-lsp",
+        "https://github.com/hrsh7th/cmp-path",
+        "https://github.com/hrsh7th/cmp-buffer",
+        "https://github.com/tzachar/cmp-tabnine",
         -- "hrsh7th/cmp-vsnip",
         -- "hrsh7th/vim-vsnip",
         "onsails/lspkind-nvim", -- Enables icons on completions
@@ -229,16 +214,54 @@ return packer.startup {
       },
     },
 
+    {
+      'https://github.com/tzachar/cmp-tabnine',
+      run='./install.sh',
+      requires = { 
+        'https://github.com/hrsh7th/nvim-cmp',
+        'https://github.com/onsails/lspkind.nvim',
+      },
+      config = function()
+        require('cmp_tabnine.config').setup {
+          max_lines = 1000,
+          max_num_results = 20,
+          sort = true,
+          run_on_every_keystroke = true,
+          snippet_placeholder = '..',
+          ignored_file_types = { 
+            -- default is not to ignore
+            -- uncomment to ignore in lua:
+            -- lua = true
+          },
+          show_prediction_strength = false
+        }
+      end,
+    },
+
+    -- {"github/copilot.vim"},
+    {
+      "https://github.com/zbirenbaum/copilot-cmp",
+      module = "copilot_cmp",
+    },
+
+    {
+      "https://github.com/zbirenbaum/copilot.lua",
+      event = "InsertEnter",
+      config = function ()
+        vim.schedule(function() require("copilot").setup() end)
+      end,
+    },
+
     -- Easier keymapping
     {
-      'LionC/nest.nvim',
+      'https://github.com/LionC/nest.nvim',
       config = function()
         require 'plugins.nest'
       end,
     },
 
     {
-      "folke/zen-mode.nvim",
+      "https://github.com/folke/zen-mode.nvim",
       config = function()
         require("zen-mode").setup {
           window = {
@@ -318,7 +341,7 @@ return packer.startup {
         })
       end,
       requires = {
-        'tami5/sqlite.lua'
+        'https://github.com/tami5/sqlite.lua'
       }
     },
 
@@ -338,39 +361,44 @@ return packer.startup {
 
     { 'https://github.com/akinsho/toggleterm.nvim',
       config = function()
-        require("toggleterm").setup({
-          -- size can be a number or function which is passed the current terminal
-          size = function(term)
-            if term.direction == "horizontal" then
-              return 15
-            elseif term.direction == "vertical" then
-              return  300
-            end
-          end,
-          dir = 'git_dir',
-          hide_numbers = true, -- hide the number column in toggleterm buffers
-          shade_filetypes = {},
-          shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
-          shading_factor = 2, -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
-          start_in_insert = true,
-          insert_mappings = false, -- whether or not the open mapping applies in insert mode
-          terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-          persist_size = true,
-          persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
-          direction = 'float',
-          close_on_exit = true, -- close the terminal window when the process exits
-          shell = vim.o.shell, -- change the default shell
-          float_opts = {
-            border = 'single',
-          -- width = 100,
-         --    height = 50,
-            winblend = 3,
-          },
-          winbar = {
-            enabled = false,
-          },      
-        })
-      end,
+        require('plugins.toggleterm')
+      end
+    },
+
+    -- {
+    --   'https://github.com/jghauser/fold-cycle.nvim',
+    --   config = function()
+    --     require('plugins.fold')
+    --   end,
+    --   requires = 'https://github.com/anuvyklack/pretty-fold.nvim'
+    -- },
+
+    -- {
+    --   'https://github.com/anuvyklack/pretty-fold.nvim',
+    --   config = function()
+    --     require('plugins.pretty-fold')
+    --   end
+    -- },
+
+    { 'https://github.com/anuvyklack/fold-preview.nvim',
+       requires = 'https://github.com/anuvyklack/keymap-amend.nvim',
+       config = function()
+          require('plugins.fold-preview')
+       end
+    },
+
+    {
+      'https://github.com/kevinhwang91/nvim-ufo',
+      requires = {
+        'https://github.com/kevinhwang91/promise-async'
+      },
+      config = function()
+        require('plugins.nvim-ufo')
+      end
+    },
+
+    { 
+      'https://github.com/tpope/vim-abolish'
     }
   },
 

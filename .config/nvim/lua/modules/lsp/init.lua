@@ -11,7 +11,7 @@ vim.diagnostic.config({
 })
 
 lsp.handlers["textDocument/signatureHelp"] = lsp.with(lsp.handlers.signature_help, border_opts)
-lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, border_opts)
+-- lsp.handlers["textDocument/hover"] = lsp.with(lsp.handlers.hover, border_opts)
 
 -- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 

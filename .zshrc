@@ -1,27 +1,15 @@
 ### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
 
-source "$HOME/.zinit/bin/zinit.zsh"
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-autoload -Uz compinit && compinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
-
-### End of Zinit's installer chunk
-### End of Zinit's installer chunk
 
 # Advanced auto-completion
 zinit light-mode for atload'source ~/.p10k.zsh' romkatv/powerlevel10k
@@ -33,7 +21,6 @@ zinit light-mode for zdharma/fast-syntax-highlighting
 zinit light-mode for 'zsh-users/zsh-autosuggestions'
 zinit light-mode for rupa/z
 zinit light-mode for changyuheng/fz
-zinit light-mode for kiurchv/asdf.plugin.zsh
 
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
@@ -68,6 +55,7 @@ alias lll='exa -l | less'
 alias lla='exa -la'
 alias llt='exa -T'
 alias llfu='exa -bghHliS --git'
+alias nd='npm run dev'
 
 # list recursive files, ordered by creation date
 alias lsr="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 | rev | cut -d ' ' -f 1,2,4,5 | rev"
@@ -184,6 +172,7 @@ tab_title() {
   # sets the tab title to current dir
   echo -ne "\e]1;${PWD##*/}\a"
 }
+autoload -U add-zsh-hook
 add-zsh-hook precmd tab_title
 
 # Theme for fzf
@@ -349,7 +338,6 @@ setopt extendedglob        # Enable extended wildcard options for globbing
 
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
-source /Users/ben/.asdf/asdf.sh
 
 FAST_HIGHLIGHT[git-cmsg-len]=72
 
@@ -403,3 +391,7 @@ edit-history() {
 zle -N edit-history
 
 bindkey "^r" fzf-history-widget
+
+# recommended by brew doctor
+export PATH="/usr/local/bin:$PATH"
+
