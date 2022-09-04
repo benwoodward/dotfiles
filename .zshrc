@@ -147,13 +147,6 @@ WORDCHARS=$WORDCHARS:s:/-:
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Include git information in FZF preview
-export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
-export BAT_STYLE=changes,header,grid
-export FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git"'
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block, everything else may go below.
@@ -176,43 +169,18 @@ autoload -U add-zsh-hook
 add-zsh-hook precmd tab_title
 
 # Theme for fzf
-# Base16 Chalk
-# Author: Chris Kempson (http://chriskempson.com)
-
-_gen_fzf_default_opts() {
-
-local color00='#1B2B34'
-local color01='#343D46'
-local color02='#4F5B66'
-local color03='#65737E'
-local color04='#A7ADBA'
-local color05='#C0C5CE'
-local color06='#CDD3DE'
-local color07='#D8DEE9'
-local color08='#EC5f67'
-local color09='#F99157'
-local color0A='#FAC863'
-local color0B='#99C794'
-local color0C='#5FB3B3'
-local color0D='#6699CC'
-local color0E='#C594C5'
-local color0F='#AB7967'
-
+export BAT_STYLE=changes,header,grid
+export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git"'
 export FZF_DEFAULT_OPTS="
-  --black
+  --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
+  --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#7dcfff
+  --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
+  --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a'
   --border
-  --color=bg+:$color00,bg:$color00,spinner:$color0C,hl:$color0D
-  --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
-  --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
-  --preview-window='right:70%'
-  --bind ctrl-j:preview-down,ctrl-k:preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down,tab:toggle+down,shift-tab:toggle+up
+  --preview-window=right,70%
+  --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-d:preview-page-down'
 "
-
-}
-
-_gen_fzf_default_opts
-
-
 
 # Prints file_name + line number for every hunk in a diff
 # Example output:
@@ -390,7 +358,13 @@ edit-history() {
 }
 zle -N edit-history
 
-bindkey "^r" fzf-history-widget
+# bindkey "^r" fzf-history-widget
+fzf-history-widget() {
+  LBUFFER=$(fc -l 1 | fzf +s +m -n2..,.. --tac | sed "s/ *[0-9*]* *//")
+  zle redisplay
+}
+zle     -N   fzf-history-widget
+bindkey '^R' fzf-history-widget
 
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
