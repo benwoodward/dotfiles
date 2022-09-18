@@ -40,18 +40,16 @@
   # shortcuts for commands
   ss = status
   s = status -s
-  d = !git status -s \
+  d = !git diff --name-only \
      | fzf --no-sort --reverse \
-       --preview 'git diff --color=always {+2} | diff-so-fancy' \
-       --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
-       --bind=ctrl-d:preview-page-down --bind=ctrl-u:preview-page-up \
-       --preview-window=right:70%
+       --preview 'git diff --color=always {} | diff-so-fancy' \
+       --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-d:preview-page-down' \
+       --preview-window=right,70%
   ds = !git diff --name-only --cached \
      | fzf --no-sort --reverse \
        --preview 'git diff --staged --color=always {} | diff-so-fancy' \
-       --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
-       --bind=ctrl-d:preview-page-down --bind=ctrl-u:preview-page-up \
-       --preview-window=right:70%
+       --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-d:preview-page-down' \
+       --preview-window=right,70%
   df = diff --color --color-words --abbrev
   dt = difftool
   a = add

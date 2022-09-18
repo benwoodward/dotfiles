@@ -39,6 +39,8 @@ o.splitbelow    = true -- split below instead of above
 o.splitright    = true -- split right instead of left
 o.undofile      = true
 
+opt.viewoptions = 'cursor,folds,slash,unix'
+
 -- Window options {{{
 wo.number       = true
 wo.relativenumber = true

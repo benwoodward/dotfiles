@@ -106,6 +106,10 @@ brew "fzf"
 brew "bat"
 brew "diff-so-fancy"
 cask "ksdiff"
+brew "tree"
+brew "gh"
+brew "patchutils"
+brew "colordiff"
 
 # Image manipulation
 brew "imagemagick"
@@ -122,6 +126,8 @@ brew "asdf"
 brew "koekeishiya/formulae/yabai"
 brew "koekeishiya/formulae/skhd"
 cask "karabiner-elements"
+brew "blueutil"
+cask "hammerspoon"
 EOF
 
 # fix_brew_permissions

@@ -137,7 +137,8 @@ cmp.setup({
   },
   experimental = {
     view = {
-      entries = true,
+      -- entries = true,
+      entries = { name = 'custom', selection_order = 'near_cursor' } 
     },
     ghost_text = true,
   }

@@ -369,3 +369,10 @@ bindkey '^R' fzf-history-widget
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
 
+function f_notifyme {
+    LAST_EXIT_CODE=$?
+    CMD=$(fc -ln -1)
+    # No point in waiting for the command to complete
+    notify "$CMD" "$LAST_EXIT_CODE" &
+}
+export PS1='$(f_notifyme)'$PS1

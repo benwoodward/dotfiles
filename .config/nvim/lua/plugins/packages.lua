@@ -103,12 +103,12 @@ return packer.startup {
         {
           'https://github.com/nvim-telescope/telescope-smart-history.nvim',
           requires = {
-            'tami5/sqlite.lua'
+            'https://github.com/tami5/sqlite.lua'
           }
         },
         'https://github.com/nvim-telescope/telescope-frecency.nvim',
         {
-          'nvim-telescope/telescope-fzf-native.nvim',
+          'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
           run = 'make'
         },
       },
@@ -399,6 +399,10 @@ return packer.startup {
 
     { 
       'https://github.com/tpope/vim-abolish'
+    },
+
+    {
+      'https://github.com/zhimsel/vim-stay'
     }
   },
 

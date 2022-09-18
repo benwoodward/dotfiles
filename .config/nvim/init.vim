@@ -10,7 +10,9 @@ endif
 let g:mapleader = " "
 let g:maplocalleader = " "
 
+" Neovide settings
 set guifont=Hack\ Nerd\ Font\ Mono:h18
+let g:neovide_input_use_logo=v:true
 
 " order matters
 runtime! lua/modules/options.lua

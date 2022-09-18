@@ -4,13 +4,6 @@ local actions   = require('telescope.actions')
 local telescope = require('telescope')
 local lga_actions = require("telescope-live-grep-args.actions")
 
--- Extensions
-require('telescope').load_extension('project')
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('smart_history')
-require('telescope').load_extension('frecency')
-require('telescope').load_extension('live_grep_args')
-
 telescope.setup {
   defaults = {
     vimgrep_arguments = {
@@ -78,14 +71,19 @@ telescope.setup {
                                        -- the default case_mode is "smart_case"
     },
     live_grep_args = {
-      auto_quoting = true, -- enable/disable auto-quoting
-      -- override default mappings
-      -- default_mappings = {},
-      mappings = { -- extend mappings
+      auto_quoting = true,
+      default_mappings = {
         i = {
-          ["<C-i>"] = lga_actions.quote_prompt(),
+          ["<C-l>"] = lga_actions.quote_prompt(),
         }
       }
     },
   }
 }
+
+-- Extensions (some of them need to come after setup)
+require('telescope').load_extension('project')
+require('telescope').load_extension('fzf')
+require('telescope').load_extension('smart_history')
+require('telescope').load_extension('frecency')
+require('telescope').load_extension('live_grep_args')

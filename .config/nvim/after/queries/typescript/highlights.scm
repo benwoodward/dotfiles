@@ -7,3 +7,8 @@
   (identifier) @camelCase
   (#match? @camelCase "([a-z][a-z0-9]+[A-Z])")
 )
+
+(
+  (property_identifier) @camelCase
+  (#match? @camelCase "([a-z][a-z0-9]+[A-Z])")
+)

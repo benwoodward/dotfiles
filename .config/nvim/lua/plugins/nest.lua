@@ -11,7 +11,8 @@ g.maplocalleader = ' '
 
 nest.applyKeymaps {
 	{ '0', '^' },
-	{ '^', '0' },
+	-- { '^', '0' },
+
 	{ '<Left>',  '<CMD>vertical resize +2<cr>', options = { noremap = false } },
   { '<Right>', '<CMD>vertical resize -2<cr>', options = { noremap = false } },
   { '<Up>',    '<CMD>resize   +2<cr>', options = { noremap = false } },
@@ -49,6 +50,10 @@ nest.applyKeymaps {
 	}},
 
 	{ '<leader>', {
+		{ '.', ':Telescope find_files hidden=true<cr>' },
+
+		{ ';', ':Telescope command_history<cr>' },
+
 		-- Edit init.lua
 		{ '-', ':e $HOME/.config/nvim/init.lua<cr>'},
 
@@ -88,6 +93,8 @@ nest.applyKeymaps {
 		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
 		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
 
+		{ 'r', ':Telescope oldfiles<cr>' },
+
 		{ 't', '<Plug>(toggle-lsp-diag-vtext)' },
 
 		-- upcase a word
@@ -104,6 +111,7 @@ nest.applyKeymaps {
 	}},
 
 	{ '<c-', {
+		{ '0', '^' },
 		{ 'h>', '<C-\\><C-n><C-w><C-h>' }, 
 		{ 'j>', '<C-\\><C-n><C-w><C-j>' },
 		{ 'k>', '<C-\\><C-n><C-w><C-k>' },
