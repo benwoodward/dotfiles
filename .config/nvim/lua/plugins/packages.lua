@@ -211,6 +211,21 @@ return packer.startup {
             "saadparwaiz1/cmp_luasnip",
           },
         },
+        {
+          "zbirenbaum/copilot.lua",
+          event = "InsertEnter",
+          config = function()
+            require("copilot").setup()
+          end,
+        },
+        {
+          "zbirenbaum/copilot-cmp",
+          after = { "copilot.lua" },
+          module = "copilot_cmp",
+          config = function()
+            require("copilot_cmp").setup()
+          end,
+        },
       },
     },
 
@@ -235,20 +250,6 @@ return packer.startup {
           },
           show_prediction_strength = false
         }
-      end,
-    },
-
-    -- {"github/copilot.vim"},
-    {
-      "https://github.com/zbirenbaum/copilot-cmp",
-      module = "copilot_cmp",
-    },
-
-    {
-      "https://github.com/zbirenbaum/copilot.lua",
-      event = "InsertEnter",
-      config = function ()
-        vim.schedule(function() require("copilot").setup() end)
       end,
     },
 

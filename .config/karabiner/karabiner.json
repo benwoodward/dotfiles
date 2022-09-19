@@ -1106,6 +1106,7 @@
                                     {
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
                                             "^com.neovide.neovide"
                                         ],
                                         "file_paths": [
@@ -1137,6 +1138,7 @@
                                     {
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
                                             "^com.neovide.neovide"
                                         ],
                                         "file_paths": [
@@ -1168,6 +1170,7 @@
                                     {
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
                                             "^com.neovide.neovide"
                                         ],
                                         "file_paths": [
@@ -1199,6 +1202,7 @@
                                     {
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
                                             "^com.neovide.neovide"
                                         ],
                                         "file_paths": [
@@ -1263,7 +1267,8 @@
                                 "conditions": [
                                     {
                                         "bundle_identifiers": [
-                                            "^com.googlecode.iterm2"
+                                            "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm"
                                         ],
                                         "type": "frontmost_application_unless"
                                     },
@@ -1337,6 +1342,7 @@
                                     {
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
                                             "^com.neovide.neovide"
                                         ],
                                         "file_paths": [

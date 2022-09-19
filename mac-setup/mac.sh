@@ -110,6 +110,7 @@ brew "tree"
 brew "gh"
 brew "patchutils"
 brew "colordiff"
+brew "tmux"
 
 # Image manipulation
 brew "imagemagick"
