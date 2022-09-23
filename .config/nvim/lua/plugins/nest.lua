@@ -50,6 +50,7 @@ nest.applyKeymaps {
 	}},
 
 	{ '<leader>', {
+		{ '0', '0' },
 		{ '.', ':Telescope find_files hidden=true<cr>' },
 
 		{ ';', ':Telescope command_history<cr>' },
@@ -79,6 +80,8 @@ nest.applyKeymaps {
 
 		{ 'fs', ':FloatermNew ranger<cr>' },
 
+		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
+		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
 		{ 'gr', '<cmd>lua vim.lsp.buf.references()<cr>' },
 
 		-- Toggle search result highlights
@@ -90,8 +93,7 @@ nest.applyKeymaps {
 		{ 'og', ':lua require("telescope.builtin").git_files()<cr>' },
 		{ 'op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>' },
 
-		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
-		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
+		{ 'p', ':lua require("telescope").extensions.neoclip.default()<cr>' },
 
 		{ 'r', ':Telescope oldfiles<cr>' },
 
@@ -111,7 +113,6 @@ nest.applyKeymaps {
 	}},
 
 	{ '<c-', {
-		{ '0', '^' },
 		{ 'h>', '<C-\\><C-n><C-w><C-h>' }, 
 		{ 'j>', '<C-\\><C-n><C-w><C-j>' },
 		{ 'k>', '<C-\\><C-n><C-w><C-k>' },

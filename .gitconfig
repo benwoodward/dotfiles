@@ -130,8 +130,8 @@
 [web]
   browser = open
 [user]
-  name = Ben Woodward
-  email = 1472981+benwoodward@users.noreply.github.com
+	name = Ben Woodward
+	email = 1472981+benwoodward@users.noreply.github.com
 [github]
   user = benwoodward
 [core]

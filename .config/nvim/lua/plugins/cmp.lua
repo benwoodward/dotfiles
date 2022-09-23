@@ -58,12 +58,9 @@ cmp.setup({
     ["<C-e>"] = cmp.mapping({
       i = cmp.mapping.abort(),
     }),
-    ["<CR>"] = cmp.mapping({
-      i = cmp.mapping.confirm({select = true}),
+    ["<cr>"] = cmp.mapping({
+      i = cmp.mapping.confirm({select = false}),
     }),
-    -- ["<C-Space>"] = cmp.mapping({
-    --   i = cmp.mapping.complete(),
-    -- }),
   },
   sources = {
     { name = "copilot" },

@@ -108,8 +108,52 @@ return packer.startup {
         },
         'https://github.com/nvim-telescope/telescope-frecency.nvim',
         {
-          'https://github.com/nvim-telescope/telescope-fzf-native.nvim',
-          run = 'make'
+          "https://github.com/AckslD/nvim-neoclip.lua",
+          config = function()
+            require('neoclip').setup({
+              history = 1000,
+              enable_persistent_history = false,
+              length_limit = 1048576,
+              continuous_sync = false,
+              db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
+              filter = nil,
+              preview = true,
+              default_register = '"',
+              default_register_macros = 'q',
+              enable_macro_history = true,
+              content_spec_column = false,
+              on_paste = {
+                set_reg = true,
+              },
+              on_replay = {
+                set_reg = false,
+              },
+              keys = {
+                telescope = {
+                  i = {
+                    select = "<nop>",
+                    paste = "<nop>",
+                    paste_behind = "<cr>",
+                    replay = "<nop>",
+                    delete = "<c-d>",
+                    custom = {},
+                  },
+                  n = {
+                    select = "<nop>",
+                    paste = "<nop>",
+                    paste_behind = "<cr>",
+                    replay = "<nop>",
+                    delete = "dd",
+                    custom = {},
+                  }
+                },
+              },
+            })
+            require("telescope").load_extension("neoclip")
+          end,
+          requires = {
+            'https://github.com/tami5/sqlite.lua',
+          }
         },
       },
       config = function()
@@ -308,43 +352,6 @@ return packer.startup {
     },
 
     { 'https://github.com/voldikss/vim-browser-search' },
-
-    {
-      "AckslD/nvim-neoclip.lua",
-      config = function()
-        require('neoclip').setup({
-          history = 1000,
-          enable_persistent_history = true,
-          db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
-          filter = nil,
-          preview = true,
-          default_register = '"',
-          content_spec_column = false,
-          on_paste = {
-            set_reg = false,
-          },
-          keys = {
-            telescope = {
-              i = {
-                select = '<cr>',
-                paste = '<c-p>',
-                paste_behind = '<c-k>',
-                custom = {},
-              },
-              n = {
-                select = '<cr>',
-                paste = 'p',
-                paste_behind = 'P',
-                custom = {},
-              },
-            },
-          },
-        })
-      end,
-      requires = {
-        'https://github.com/tami5/sqlite.lua'
-      }
-    },
 
     { 'https://github.com/jparise/vim-graphql' },
 

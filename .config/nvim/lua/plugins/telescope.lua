@@ -41,6 +41,7 @@ telescope.setup {
     mappings = {
       i = {
         -- ["<esc>"] = actions.close,
+        ['<c-p>'] = false,
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
       }
@@ -87,3 +88,4 @@ require('telescope').load_extension('fzf')
 require('telescope').load_extension('smart_history')
 require('telescope').load_extension('frecency')
 require('telescope').load_extension('live_grep_args')
+require('telescope').load_extension('neoclip')
