@@ -107,7 +107,13 @@ return packer.startup {
           }
         },
         'https://github.com/nvim-telescope/telescope-frecency.nvim',
-        {
+      },
+      config = function()
+        require('plugins.telescope')
+      end,
+    },
+
+    {
           "https://github.com/AckslD/nvim-neoclip.lua",
           config = function()
             require('neoclip').setup({
@@ -132,16 +138,16 @@ return packer.startup {
                 telescope = {
                   i = {
                     select = "<nop>",
-                    paste = "<nop>",
-                    paste_behind = "<cr>",
+                    paste = "<cr>",
+                    paste_behind = "<nop>",
                     replay = "<nop>",
                     delete = "<c-d>",
                     custom = {},
                   },
                   n = {
                     select = "<nop>",
-                    paste = "<nop>",
-                    paste_behind = "<cr>",
+                    paste = "<cr>",
+                    paste_behind = "<nop>",
                     replay = "<nop>",
                     delete = "dd",
                     custom = {},
@@ -155,11 +161,6 @@ return packer.startup {
             'https://github.com/tami5/sqlite.lua',
           }
         },
-      },
-      config = function()
-        require('plugins.telescope')
-      end,
-    },
 
     -- {
     --   'terrortylor/nvim-comment',
