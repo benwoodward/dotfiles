@@ -33,7 +33,7 @@ require('gitsigns').setup {
   watch_gitdir = {
     interval = 1000,
   },
-  numhl              = true,
+  numhl              = false,
   linehl             = false,
   current_line_blame = true,
   current_line_blame_opts = {

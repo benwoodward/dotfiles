@@ -22,8 +22,8 @@ require('nvim-treesitter.configs').setup {
     extended_mode = true,
   },
   refactor = {
-    highlight_current_scope = {enable = false},
-    highlight_definitions   = {enable = true},
+    highlight_current_scope = {enable = true},
+    highlight_definitions   = {enable = false},
     smart_rename = {
       enable = true,
       keymaps = {

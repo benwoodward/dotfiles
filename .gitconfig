@@ -43,7 +43,7 @@
   d = !git diff --name-only \
      | fzf --no-sort --reverse \
        --preview 'git diff --color=always {} | diff-so-fancy' \
-       --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-d:preview-page-down' \
+       --bind 'ctrl-j:down,ctrl-k:up,ctrl-e:preview-down+preview-down+preview-down,ctrl-y:preview-up+preview-up+preview-up,ctrl-u:preview-page-up,ctrl-d:preview-page-down' \
        --preview-window=right,70%
   ds = !git diff --name-only --cached \
      | fzf --no-sort --reverse \

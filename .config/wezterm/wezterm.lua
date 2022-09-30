@@ -23,7 +23,7 @@ return {
     },
   },
   font_antialias = "Subpixel",
-  font_size = 16.0,
+  font_size = 17.0,
   window_padding = {
     left = 10,
     right = 10,

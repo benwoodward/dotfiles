@@ -28,7 +28,7 @@ return packer.startup {
       end,
     },
 
-    {'https://github.com/kyazdani42/nvim-web-devicons'},
+    {'https://github.com/kyazdani42/nvim-web-devicons'}, -- makes it possible to display special characters and icons in vim using patched fonts
 
     -- LSP
     {
@@ -42,7 +42,7 @@ return packer.startup {
       },
     },
 
-    {'https://github.com/nanotee/nvim-lsp-basics'},
+    -- {'https://github.com/nanotee/nvim-lsp-basics'},
 
     {
       'https://github.com/folke/trouble.nvim',
@@ -52,17 +52,17 @@ return packer.startup {
       config = function()
         require('plugins.trouble')
       end,
-    },
+    }, -- list all diagnostics in separate pane
 
     -- TreeSitter
     {
       'https://github.com/nvim-treesitter/nvim-treesitter',
       requires = {
         'https://github.com/nvim-treesitter/nvim-treesitter-refactor',
-        'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
-        'https://github.com/p00f/nvim-ts-rainbow',
+        -- 'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
+        'https://github.com/p00f/nvim-ts-rainbow', -- color-code parentheses
         -- 'polarmutex/contextprint.nvim',
-        'https://github.com/theHamsta/nvim-treesitter-pairs',
+        -- 'https://github.com/theHamsta/nvim-treesitter-pairs',
         'https://github.com/nvim-treesitter/playground',
       },
       run = ':TSUpdate',
@@ -80,7 +80,7 @@ return packer.startup {
       config = function()
         require('plugins.gitsigns')
       end,
-    },
+    }, -- jump between hunks, unstage/reset hunks etc.
 
     {
       'https://github.com/sindrets/diffview.nvim',
@@ -111,56 +111,56 @@ return packer.startup {
       config = function()
         require('plugins.telescope')
       end,
-    },
+    }, -- modal for searching through sources
 
     {
-          "https://github.com/AckslD/nvim-neoclip.lua",
-          config = function()
-            require('neoclip').setup({
-              history = 1000,
-              enable_persistent_history = false,
-              length_limit = 1048576,
-              continuous_sync = false,
-              db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
-              filter = nil,
-              preview = true,
-              default_register = '"',
-              default_register_macros = 'q',
-              enable_macro_history = true,
-              content_spec_column = false,
-              on_paste = {
-                set_reg = true,
+      "https://github.com/AckslD/nvim-neoclip.lua",
+      config = function()
+        require('neoclip').setup({
+          history = 1000,
+          enable_persistent_history = false,
+          length_limit = 1048576,
+          continuous_sync = false,
+          db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
+          filter = nil,
+          preview = true,
+          default_register = '"',
+          default_register_macros = 'q',
+          enable_macro_history = true,
+          content_spec_column = false,
+          on_paste = {
+            set_reg = true,
+          },
+          on_replay = {
+            set_reg = false,
+          },
+          keys = {
+            telescope = {
+              i = {
+                select = "<nop>",
+                paste = "<cr>",
+                paste_behind = "<nop>",
+                replay = "<nop>",
+                delete = "<c-d>",
+                custom = {},
               },
-              on_replay = {
-                set_reg = false,
-              },
-              keys = {
-                telescope = {
-                  i = {
-                    select = "<nop>",
-                    paste = "<cr>",
-                    paste_behind = "<nop>",
-                    replay = "<nop>",
-                    delete = "<c-d>",
-                    custom = {},
-                  },
-                  n = {
-                    select = "<nop>",
-                    paste = "<cr>",
-                    paste_behind = "<nop>",
-                    replay = "<nop>",
-                    delete = "dd",
-                    custom = {},
-                  }
-                },
-              },
-            })
-            require("telescope").load_extension("neoclip")
-          end,
-          requires = {
-            'https://github.com/tami5/sqlite.lua',
-          }
-        },
+              n = {
+                select = "<nop>",
+                paste = "<cr>",
+                paste_behind = "<nop>",
+                replay = "<nop>",
+                delete = "dd",
+                custom = {},
+              }
+            },
+          },
+        })
+        require("telescope").load_extension("neoclip")
+      end,
+      requires = {
+        'https://github.com/tami5/sqlite.lua',
+      }
+    }, -- clipboard history
 
     -- {
     --   'terrortylor/nvim-comment',
@@ -193,7 +193,7 @@ return packer.startup {
           pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
         }
       end,
-    },
+    }, -- intelligent code commenting
 
     {
       'https://github.com/JoosepAlviste/nvim-ts-context-commentstring',
@@ -212,16 +212,16 @@ return packer.startup {
       config = function()
         require('plugins.colorizer')
       end,
-    },
+    }, -- highlight CSS colors in the editor
 
-    {'https://github.com/mg979/vim-visual-multi'},
+    {'https://github.com/mg979/vim-visual-multi'}, -- multiple cursors
 
-    {'https://github.com/dstein64/nvim-scrollview'},
+    {'https://github.com/dstein64/nvim-scrollview'}, -- add scrollbars
 
-    { "https://github.com/AndrewRadev/splitjoin.vim", keys = "gS" },
+    { "https://github.com/AndrewRadev/splitjoin.vim", keys = "gS" }, -- convert single line statements to multiline
 
     {
-      'ruifm/gitlinker.nvim',
+      'https://github.com/ruifm/gitlinker.nvim',
       key = "gy",
       config = function()
         require('gitlinker').setup {
@@ -235,7 +235,7 @@ return packer.startup {
     --   config = function()
     --     require 'plugins.luasnip'
     --   end,
-    -- },
+    -- }, -- snippets
 
     {
       "https://github.com/hrsh7th/nvim-cmp",
@@ -272,7 +272,7 @@ return packer.startup {
           end,
         },
       },
-    },
+    }, -- autocompletions
 
     {
       'https://github.com/tzachar/cmp-tabnine',
@@ -296,15 +296,14 @@ return packer.startup {
           show_prediction_strength = false
         }
       end,
-    },
+    }, -- autocompletions
 
-    -- Easier keymapping
     {
       'https://github.com/LionC/nest.nvim',
       config = function()
         require 'plugins.nest'
       end,
-    },
+    }, -- keymap organization
 
     {
       "https://github.com/folke/zen-mode.nvim",
@@ -315,11 +314,11 @@ return packer.startup {
           }
         }
       end
-    },
+    }, -- center current buffer in editor using <leader>z
 
     { 'https://github.com/psliwka/vim-smoothie' }, -- Neovide has built-in smoothing
 
-    { 'https://github.com/voldikss/vim-floaterm' },
+    { 'https://github.com/voldikss/vim-floaterm' }, -- used for ranger / lf
 
     -- { 'https://github.com/justinmk/vim-sneak' },
 
@@ -327,7 +326,7 @@ return packer.startup {
       config = function()
         require('plugins.lightspeed')
       end,
-    },
+    }, -- jump around quickly using 's'
 
     { 'https://github.com/tpope/vim-repeat' },
 
@@ -358,11 +357,11 @@ return packer.startup {
 
     { 'https://github.com/jose-elias-alvarez/typescript.nvim' },
 
-    { 'https://github.com/danymat/neogen',
-       config = function()
-         require('plugins.neogen')
-       end,
-    }, -- highlights and allows moving between variable references
+    -- { 'https://github.com/danymat/neogen',
+    --    config = function()
+    --      require('plugins.neogen')
+    --    end,
+    -- }, -- highlights and allows moving between variable references
 
     { 'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim' },
 
@@ -412,6 +411,19 @@ return packer.startup {
 
     {
       'https://github.com/zhimsel/vim-stay'
+    },
+
+    {
+      "https://github.com/folke/todo-comments.nvim",
+      requires = "nvim-lua/plenary.nvim",
+      config = function()
+        require("todo-comments").setup {
+        }
+      end
+    },
+
+    {
+      'https://github.com/RRethy/vim-illuminate' -- highlight usages of word under cursor, more configurable than treesitter-refactor
     }
   },
 

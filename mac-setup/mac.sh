@@ -111,6 +111,9 @@ brew "gh"
 brew "patchutils"
 brew "colordiff"
 brew "tmux"
+brew "lf"
+brew "wget"
+brew "ffmpeg"
 
 # Image manipulation
 brew "imagemagick"

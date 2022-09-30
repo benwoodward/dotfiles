@@ -78,7 +78,7 @@ nest.applyKeymaps {
 
 		{ 'ff', ':lua require("telescope.builtin").grep_string()<cr>' },
 
-		{ 'fs', ':FloatermNew ranger<cr>' },
+		{ 'fs', ':FloatermNew lf<cr>' },
 
 		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
 		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},

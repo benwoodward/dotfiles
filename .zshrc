@@ -11,6 +11,13 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+fpath=(~/.zsh $fpath)
+
+# if this causes "Ignore insecure directories and continue" then run:
+# `compaudit | xargs chmod g-w`
+autoload -Uz compinit && compinit
+
 # Advanced auto-completion
 zinit light-mode for atload'source ~/.p10k.zsh' romkatv/powerlevel10k
 
@@ -179,7 +186,7 @@ export FZF_DEFAULT_OPTS="
   --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a'
   --border
   --preview-window=right,70%
-  --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-d:preview-page-down'
+  --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-y:preview-up+preview-up,ctrl-e:preview-down+preview-down+preview-down,ctrl-d:preview-page-down'
 "
 
 # Prints file_name + line number for every hunk in a diff
@@ -222,7 +229,7 @@ hunk-diff() {
   | fzf --no-sort --reverse \
     --preview 'git diff --unified=8 {+1} | filterdiff --lines={+2} | colordiff | sed "s/0;//g" | diff-so-fancy' \
     --preview-window=right:60%:wrap \
-    --bind=ctrl-e:preview-down --bind=ctrl-y:preview-up \
+    --bind=ctrl-e:preview-down+preview-down+preview-down --bind=ctrl-y:preview-up+preview-up+preview-up \
     --bind=ctrl-d:preview-page-down --bind=ctrl-u:preview-page-up \
     --bind "enter:execute:(echo {} | git diff --unified=8 {+1} | filterdiff --lines={+2} -i 'a/{+1}' | git apply --cached --whitespace=nowarn)"
 }
