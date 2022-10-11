@@ -28,7 +28,7 @@ M.setup = function(on_attach, capabilities)
         client.resolved_capabilities.document_formatting = false
 
         vim.notify(
-          client.name .. ": Language Server Client successfully started!",
+          client.name .. ": Typescript Language Server Client successfully started!",
           "info"
         )
       end,

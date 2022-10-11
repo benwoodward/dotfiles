@@ -114,6 +114,7 @@ brew "tmux"
 brew "lf"
 brew "wget"
 brew "ffmpeg"
+brew "git-imerge"
 
 # Image manipulation
 brew "imagemagick"

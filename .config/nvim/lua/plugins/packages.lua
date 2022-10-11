@@ -260,7 +260,7 @@ return packer.startup {
           "zbirenbaum/copilot.lua",
           event = "InsertEnter",
           config = function()
-            require("copilot").setup()
+            vim.schedule(function() require("copilot").setup() end)
           end,
         },
         {
@@ -365,7 +365,7 @@ return packer.startup {
 
     { 'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim' },
 
-    { 'https://github.com/JoseConseco/vim-case-change' },
+    -- { 'https://github.com/JoseConseco/vim-case-change' }, -- vim-abolish is better
 
     { 'https://github.com/akinsho/toggleterm.nvim',
       config = function()
@@ -388,12 +388,12 @@ return packer.startup {
     --   end
     -- },
 
-    { 'https://github.com/anuvyklack/fold-preview.nvim',
-       requires = 'https://github.com/anuvyklack/keymap-amend.nvim',
-       config = function()
-          require('plugins.fold-preview')
-       end
-    },
+    -- { 'https://github.com/anuvyklack/fold-preview.nvim',
+    --    requires = 'https://github.com/anuvyklack/keymap-amend.nvim',
+    --    config = function()
+    --       require('plugins.fold-preview')
+    --    end
+    -- }, -- this isn't needed, because nvim-ufo provides this functionality, however, fold-preview previews look a lot better
 
     {
       'https://github.com/kevinhwang91/nvim-ufo',
@@ -424,7 +424,7 @@ return packer.startup {
 
     {
       'https://github.com/RRethy/vim-illuminate' -- highlight usages of word under cursor, more configurable than treesitter-refactor
-    }
+    },
   },
 
   config = {

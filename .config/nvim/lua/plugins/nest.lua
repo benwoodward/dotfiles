@@ -11,7 +11,11 @@ g.maplocalleader = ' '
 
 nest.applyKeymaps {
 	{ '0', '^' },
+	{ '0', '^', options = { noremap = false }, mode = 'v' },
 	-- { '^', '0' },
+
+	{ ']t', ':lua require("todo-comments").jump_next()<cr>' },
+	{ '[t', ':lua require("todo-comments").jump_prev()<cr>' },
 
 	{ '<Left>',  '<CMD>vertical resize +2<cr>', options = { noremap = false } },
   { '<Right>', '<CMD>vertical resize -2<cr>', options = { noremap = false } },
@@ -39,12 +43,16 @@ nest.applyKeymaps {
 
 	-- { 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>' },
 	{ 'gd', '<cmd>lua vim.lsp.buf.definitions()<cr>' },
-	{ 'K',  '<cmd>lua vim.lsp.buf.hover()<cr>' },
+	-- { 'K',  '<cmd>lua vim.lsp.buf.hover()<cr>' }, -- mapped in nvim-ufo function
 
 
 	{ 'gx', '<Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>' },
 
+	{ 'zJ', [[ <Cmd> lua go_next_closed_and_peek()<cr>]] },
+	{ 'zK', [[ <Cmd> lua go_previous_closed_and_peek()<cr>]] },
+
 	{ '<A-', {
+		{ 'o>', '<c-i>'},
 		{ 'j>', 'jjjj' },
 		{ 'k>', 'kkkk' },
 	}},
@@ -78,7 +86,7 @@ nest.applyKeymaps {
 
 		{ 'ff', ':lua require("telescope.builtin").grep_string()<cr>' },
 
-		{ 'fs', ':FloatermNew lf<cr>' },
+		{ 'fs', ':FloatermNew ranger<cr>' },
 
 		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
 		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
@@ -136,4 +144,16 @@ function _G.toggle_zoom()
       width = .80,
     }
   })
+end
+
+function _G.go_previous_closed_and_peek()
+  require('ufo').goPreviousClosedFold()
+  require('ufo').peekFoldedLinesUnderCursor()
+  -- require("fold-preview").show_preview()
+end
+
+function _G.go_next_closed_and_peek()
+  require('ufo').goNextClosedFold()
+  require('ufo').peekFoldedLinesUnderCursor()
+  -- require("fold-preview").show_preview()
 end

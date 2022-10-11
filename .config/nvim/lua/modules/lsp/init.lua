@@ -50,6 +50,7 @@ for _, server in ipairs({
   "eslint",
   "tsserver",
   "svelte",
+  "emmet",
   "null-ls",
 }) do
 require("modules.lsp." .. server).setup(on_attach, capabilities)

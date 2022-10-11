@@ -25,16 +25,19 @@ local M = {
         client.resolved_capabilities.document_formatting = true
 
         vim.notify(
-          client.name .. ": Language Server Client successfully started!",
+          client.name .. ": Svelte Language Server Client successfully started!",
           "info"
         )
       end,
       capabilities = capabilities,
       settings = {
+        format = {
+          enable = true,
+        },
         svelte = {
           plugin = {
-            html   = { completions = { enable = true, emmet = false } },
-            svelte = { completions = { enable = true, emmet = false } },
+            html   = { completions = { enable = true, emmet = true } },
+            svelte = { completions = { enable = true, emmet = true } },
             css    = { completions = { enable = true, emmet = true  } },
           },
         },

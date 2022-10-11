@@ -1,6 +1,11 @@
 local wezterm = require 'wezterm';
 return {
   keys = {
+    {
+      key = 'w',
+      mods = 'CMD|CTRL',
+      action = wezterm.action.CloseCurrentTab { confirm = true },
+    },
     {key='UpArrow', mods='CTRL|SHIFT', action="DisableDefaultAssignment"},
     {key='DownArrow', mods='CTRL|SHIFT', action="DisableDefaultAssignment"},
     {key='PageUp', mods='SHIFT', action="DisableDefaultAssignment"},
@@ -35,6 +40,7 @@ return {
   hide_tab_bar_if_only_one_tab = true,
   enable_tab_bar = false,
   tab_close_confirmation = 'AlwaysPrompt',
+  text_background_opacity = 1,
   color_scheme = 'tokyo-night-storm',
   color_schemes = {
     ['tokyo-night-storm'] = {
@@ -43,7 +49,7 @@ return {
       cursor_fg = '#24283b',
       cursor_bg = '#c9d3ff',
       cursor_border = '#c9d3ff',
-      selection_bg = '#2d4370',
+      selection_bg = '#304A86',
       ansi = {
         '#32344a',
         '#ea4e6b',
@@ -64,13 +70,6 @@ return {
         '#7dcfff',
         '#cbcff5',
       },
-    },
-  },
-    keys = {
-    {
-      key = 'w',
-      mods = 'CMD|CTRL',
-      action = wezterm.action.CloseCurrentTab { confirm = true },
     },
   },
 }

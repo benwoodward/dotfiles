@@ -32,25 +32,26 @@ cmp.setup({
   },
   mapping = {
     -- ["<Tab>"] = cmp.mapping(function(fallback)
-    --   if luasnip.expand_or_jumpable() then
-    --     luasnip.expand_or_jump()
-    --   elseif cmp.visible() then
-    --     cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace })
+    --   -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+    --   if cmp.visible() then
+    --     local entry = cmp.get_selected_entry()
+    --     if not entry then
+    --       cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+    --     else
+    --       cmp.confirm()
+    --     end
     --   else
     --     fallback()
     --   end
-    -- end, { "i", "s" }),
-    ["<Tab>"] = vim.schedule_wrap(function(fallback)
-      if luasnip.expand_or_jumpable() and has_words_before() then
-        luasnip.expand_or_jump()
-      elseif cmp.visible() and has_words_before() then
-        cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace })
-      else
-        fallback()
-      end
-    end),
+    -- end, {"i","s","c",}),
+    ["<tab>"] = cmp.mapping({
+      i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
+    }),
     ["<C-j>"] = cmp.mapping({
       i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
+    }),
+    ["<s-tab>"] = cmp.mapping({
+      i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
     }),
     ["<C-k>"] = cmp.mapping({
       i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
@@ -58,16 +59,25 @@ cmp.setup({
     ["<C-e>"] = cmp.mapping({
       i = cmp.mapping.abort(),
     }),
+    ["<c-l>"] = cmp.mapping({
+      i = cmp.mapping.confirm({select = false}),
+    }),
+    ["<c-l>"] = vim.schedule_wrap(function(fallback)
+      if luasnip.expand_or_jumpable() and has_words_before() then
+        luasnip.expand_or_jump()
+      elseif cmp.visible() and has_words_before() then
+        cmp.confirm({ select = true })
+      else
+        fallback()
+      end
+    end),
     ["<cr>"] = cmp.mapping({
       i = cmp.mapping.confirm({select = false}),
     }),
   },
   sources = {
-    { name = "copilot" },
+    { name = "copilot" }, -- copilot is not quite there yet, and kinda buggy
     { name = 'cmp_tabnine' },
-    { name = "luasnip" },
-    { name = "nvim_lsp" },
-    { name = "path" },
     {
       name = "buffer",
       option = {
@@ -81,6 +91,9 @@ cmp.setup({
         end,
       },
     },
+    { name = "luasnip" },
+    { name = "nvim_lsp" },
+    { name = "path" },
   },
   sorting = {
     priority_weight = 2,
@@ -139,4 +152,18 @@ cmp.setup({
     },
     ghost_text = true,
   }
+})
+
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(), -- important!
+  sources = {
+    { name = 'nvim_lua' },
+    { name = 'cmdline' },
+  },
+})
+cmp.setup.cmdline('/', {
+  mapping = cmp.mapping.preset.cmdline(), -- important!
+  sources = {
+    { name = 'buffer' },
+  },
 })

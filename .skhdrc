@@ -89,16 +89,16 @@
 # shift + alt - 0 : yabai -m space --balance
 
 # make floating window fill left-half of screen
-shift + alt + cmd - left   : yabai -m window --grid 1:2:0:0:1:1
+# shift + alt + cmd - left   : yabai -m window --grid 1:2:0:0:1:1
 
 # make floating window fill right-half of screen
-shift + alt + cmd - right   : yabai -m window --grid 1:2:1:0:1:1
+# shift + alt + cmd - right   : yabai -m window --grid 1:2:1:0:1:1
 
 # move/resize focused window to occupy the left two thirds of the screen
-cmd + alt - left : yabai -m window --grid 1:3:0:0:2:1
+# cmd + alt - left : yabai -m window --grid 1:3:0:0:2:1
 
 # move/resize focused window to occupy the right two thirds of the screen
-cmd + alt - right : yabai -m window --grid 1:3:1:0:2:1
+# cmd + alt - right : yabai -m window --grid 1:3:1:0:2:1
 
 # make full-screen
 cmd + shift - m : yabai -m window --grid 1:1:0:0:1:1

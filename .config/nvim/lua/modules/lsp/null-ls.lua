@@ -14,6 +14,9 @@ end
 local sources = {
   -- formatting
   b.formatting.prettier,
+  b.formatting.prettierd.with {
+    filetypes = { "html", "json", "svelte", "markdown", "css", "javascript", "javascriptreact" },
+  },
 
   -- diagnostics
   b.diagnostics.write_good,
@@ -88,7 +91,7 @@ function _G.null_ls_autoToggleServices()
   local status = vim.b.bufferLspInfo
   if not status then return end
 
-  if  status.hasEslint then
+  if status.hasEslint then
     null_ls.enable({ name = "eslint_d", method = null_ls.methods.DIAGNOSTICS })
   else
     null_ls.disable({ name = "eslint_d", method = null_ls.methods.DIAGNOSTICS })

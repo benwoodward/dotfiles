@@ -45,6 +45,7 @@ export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces acce
 export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
 
 # Personal aliases
+alias fk="fork"
 alias nt="nvim -cStart"
 alias n="nvim"
 alias nn="nvim ."
