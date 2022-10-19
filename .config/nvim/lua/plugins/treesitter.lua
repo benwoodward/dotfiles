@@ -43,6 +43,7 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-require('nvim-treesitter.highlight').set_custom_captures {
-  ['camelCase'] = 'TSUnderline',
-}
+-- causing a weird error in 0.8
+-- require('nvim-treesitter.highlight').set_custom_captures {
+--   ['camelCase'] = 'TSUnderline',
+-- }

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CompactMinimalTabBarHeight</key>
+	<real>24</real>
 	<key>Custom Color Presets</key>
 	<dict>
 		<key>tokyo-night</key>
@@ -2002,6 +2004,8 @@
 	<false/>
 	<key>TabStyleWithAutomaticOption</key>
 	<integer>5</integer>
+	<key>TabViewType</key>
+	<integer>0</integer>
 	<key>UseBorder</key>
 	<false/>
 	<key>VisualIndicatorForEsc</key>

@@ -10,7 +10,7 @@ local M = {
         require("modules.lsp.mappings").lsp_mappings(bufnr)
       end,
       on_init = function(client, bufnr)
-        client.resolved_capabilities.document_formatting = true
+        client.server_capabilities.document_formatting = true
 
         vim.notify(
           client.name .. ": Svelte Language Server Client successfully started!",

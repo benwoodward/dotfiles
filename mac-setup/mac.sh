@@ -115,6 +115,7 @@ brew "lf"
 brew "wget"
 brew "ffmpeg"
 brew "git-imerge"
+brew "ag"
 
 # Image manipulation
 brew "imagemagick"

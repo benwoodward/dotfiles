@@ -19,16 +19,16 @@ local sources = {
   },
 
   -- diagnostics
-  b.diagnostics.write_good,
-  b.diagnostics.markdownlint,
-  b.diagnostics.shellcheck.with({
-    diagnostics_format = diagnostics_code_template,
-  }),
+  -- b.diagnostics.write_good,
+  -- b.diagnostics.markdownlint,
+  -- b.diagnostics.shellcheck.with({
+  --   diagnostics_format = diagnostics_code_template,
+  -- }),
   -- code actions
-  b.code_actions.gitsigns,
-  b.code_actions.gitrebase,
+  -- b.code_actions.gitsigns,
+  -- b.code_actions.gitrebase,
   -- hover
-  b.hover.dictionary,
+  -- b.hover.dictionary,
 }
 
 local async_formatting = function(bufnr)

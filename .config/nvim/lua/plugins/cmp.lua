@@ -78,6 +78,8 @@ cmp.setup({
   sources = {
     { name = "copilot" }, -- copilot is not quite there yet, and kinda buggy
     { name = 'cmp_tabnine' },
+    { name = "luasnip" },
+    -- { name = "nvim_lsp" },
     {
       name = "buffer",
       option = {
@@ -91,8 +93,6 @@ cmp.setup({
         end,
       },
     },
-    { name = "luasnip" },
-    { name = "nvim_lsp" },
     { name = "path" },
   },
   sorting = {

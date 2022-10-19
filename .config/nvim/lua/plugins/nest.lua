@@ -50,6 +50,7 @@ nest.applyKeymaps {
 
 	{ 'zJ', [[ <Cmd> lua go_next_closed_and_peek()<cr>]] },
 	{ 'zK', [[ <Cmd> lua go_previous_closed_and_peek()<cr>]] },
+	{ 'Z', ':WindowsMaximize<cr>' },
 
 	{ '<A-', {
 		{ 'o>', '<c-i>'},
@@ -72,7 +73,9 @@ nest.applyKeymaps {
 
 		-- Telescope
 		-- { '/',  ':Rg!<cr>' },
-		{ '/', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>" },
+		{ '/',  ':Ag!<cr>' },
+		-- { '/',  ':Telescope grep_string<cr>' },
+		-- { '/', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>" },
 
 		{ 'b', ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>' },
 
@@ -117,7 +120,7 @@ nest.applyKeymaps {
 
 		{ 'y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>', mode = 'v'},
 
-		{ 'z', [[ <Cmd> lua toggle_zoom()<CR>]] },
+		-- { 'z', [[ <Cmd> lua toggle_zoom()<CR>]] },
 	}},
 
 	{ '<c-', {

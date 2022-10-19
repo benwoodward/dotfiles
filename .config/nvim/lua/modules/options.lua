@@ -69,3 +69,24 @@ vim.env.FZF_DEFAULT_OPTS = table.concat({
   ' --pointer " "',
   ' --border rounded',
 }, '')
+
+-- neovim 0.8 stuff:
+-- Hide statusline by setting laststatus and cmdheight to 0.
+-- o.ls = 0
+o.ch = 0
+
+-- Set the winbar to the statusline.
+o.wbr = o.stl
+
+-- With vertical splits, the statusline would still show up at the
+-- bottom of the split. A quick fix is to just set the statusline
+-- to empty whitespace (it can't be an empty string because then
+-- it'll get replaced by the default stline).
+-- o.stl = " "
+
+vim.g.fzf_layout = {
+  window = {
+    width = 0.9,
+    height = 0.9,
+  }
+}

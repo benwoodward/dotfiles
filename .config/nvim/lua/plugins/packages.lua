@@ -67,7 +67,8 @@ return packer.startup {
       },
       run = ':TSUpdate',
       config = function()
-        require('plugins.treesitter')
+        -- causing a weird error in 0.8
+        -- require('plugins.treesitter')
       end,
     },
 
@@ -208,7 +209,7 @@ return packer.startup {
     },
 
     {
-      'https://github.com/norcalli/nvim-colorizer.lua',
+      'https://github.com/NvChad/nvim-colorizer.lua',
       config = function()
         require('plugins.colorizer')
       end,
@@ -268,7 +269,11 @@ return packer.startup {
           after = { "copilot.lua" },
           module = "copilot_cmp",
           config = function()
-            require("copilot_cmp").setup()
+            require("copilot_cmp").setup({
+              formatters = {
+                insert_text = require("copilot_cmp.format").remove_existing
+              },
+            })
           end,
         },
       },
@@ -415,7 +420,7 @@ return packer.startup {
 
     {
       "https://github.com/folke/todo-comments.nvim",
-      requires = "nvim-lua/plenary.nvim",
+      requires = "https://github.com/nvim-lua/plenary.nvim",
       config = function()
         require("todo-comments").setup {
         }
@@ -423,8 +428,26 @@ return packer.startup {
     },
 
     {
-      'https://github.com/RRethy/vim-illuminate' -- highlight usages of word under cursor, more configurable than treesitter-refactor
-    },
+      'https://github.com/RRethy/vim-illuminate'
+    }, -- highlight usages of word under cursor, more configurable than treesitter-refactor
+
+    -- {
+    --   'https://github.com/milkias17/reloader.nvim',
+    --   requires = "https://github.com/nvim-lua/plenary.nvim",
+    -- }, -- reload config with :Reload
+
+    { "https://github.com/anuvyklack/windows.nvim",
+      requires = {
+        "https://github.com/anuvyklack/middleclass",
+        "https://github.com/anuvyklack/animation.nvim"
+      },
+      config = function()
+         vim.o.winwidth = 10
+         vim.o.winminwidth = 10
+         vim.o.equalalways = false
+         require('windows').setup()
+      end
+    }, -- automatically resizes vim panes
   },
 
   config = {

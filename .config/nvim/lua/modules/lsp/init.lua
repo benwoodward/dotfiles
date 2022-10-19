@@ -44,14 +44,15 @@ local on_attach = function(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
 for _, server in ipairs({
   "eslint",
   "tsserver",
   "svelte",
   "emmet",
-  "null-ls",
+  -- "json",
+  -- "null-ls",
 }) do
 require("modules.lsp." .. server).setup(on_attach, capabilities)
 end
