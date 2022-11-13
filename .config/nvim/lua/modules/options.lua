@@ -38,6 +38,7 @@ o.backup        = false -- true
 o.splitbelow    = true -- split below instead of above
 o.splitright    = true -- split right instead of left
 o.undofile      = true
+o.textwidth     = 80 -- necessary for windows.nvim resizing to work on larger screens
 
 opt.viewoptions = 'cursor,folds,slash,unix'
 
@@ -47,7 +48,6 @@ wo.relativenumber = true
 wo.signcolumn   = 'yes'
 wo.numberwidth  = 3
 wo.list         = true
-
 wo.cursorline   = true
 wo.cursorcolumn = false
 -- }}}
@@ -69,6 +69,8 @@ vim.env.FZF_DEFAULT_OPTS = table.concat({
   ' --pointer " "',
   ' --border rounded',
 }, '')
+
+vim.env.FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -l -g ""'
 
 -- neovim 0.8 stuff:
 -- Hide statusline by setting laststatus and cmdheight to 0.

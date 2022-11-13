@@ -53,7 +53,7 @@ nest.applyKeymaps {
 	{ 'Z', ':WindowsMaximize<cr>' },
 
 	{ '<A-', {
-		{ 'o>', '<c-i>'},
+		{ 'i>', '<c-i>'},
 		{ 'j>', 'jjjj' },
 		{ 'k>', 'kkkk' },
 	}},
@@ -96,7 +96,7 @@ nest.applyKeymaps {
 		{ 'gr', '<cmd>lua vim.lsp.buf.references()<cr>' },
 
 		-- Toggle search result highlights
-		{ 'hl', ':set hlsearch! hlsearch?<cr>'},
+		{ 'hl', ':set hlsearch! hlsearch?<cr><cr>'},
 
 		-- Toggle relative numbers on/off
 		{ 'ln', ':lua toggle_number_mode()<cr>' },
@@ -108,7 +108,7 @@ nest.applyKeymaps {
 
 		{ 'r', ':Telescope oldfiles<cr>' },
 
-		{ 't', '<Plug>(toggle-lsp-diag-vtext)' },
+		{ 't', '<Plug>(toggle-lsp-diag-vtext)<cr>' },
 
 		-- upcase a word
 		{ 'u', 'mQviwU`Q'},

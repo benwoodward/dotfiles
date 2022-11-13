@@ -76,7 +76,7 @@ cmp.setup({
     }),
   },
   sources = {
-    { name = "copilot" }, -- copilot is not quite there yet, and kinda buggy
+    -- { name = "copilot" }, -- copilot is not quite there yet, and kinda buggy
     { name = 'cmp_tabnine' },
     { name = "luasnip" },
     -- { name = "nvim_lsp" },

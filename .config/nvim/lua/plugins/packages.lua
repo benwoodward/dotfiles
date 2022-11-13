@@ -68,7 +68,7 @@ return packer.startup {
       run = ':TSUpdate',
       config = function()
         -- causing a weird error in 0.8
-        -- require('plugins.treesitter')
+        require('plugins.treesitter')
       end,
     },
 
@@ -436,18 +436,31 @@ return packer.startup {
     --   requires = "https://github.com/nvim-lua/plenary.nvim",
     -- }, -- reload config with :Reload
 
-    { "https://github.com/anuvyklack/windows.nvim",
-      requires = {
-        "https://github.com/anuvyklack/middleclass",
-        "https://github.com/anuvyklack/animation.nvim"
-      },
-      config = function()
-         vim.o.winwidth = 10
-         vim.o.winminwidth = 10
-         vim.o.equalalways = false
-         require('windows').setup()
-      end
-    }, -- automatically resizes vim panes
+    -- { "https://github.com/anuvyklack/windows.nvim",
+    --   requires = {
+    --     "https://github.com/anuvyklack/middleclass",
+    --     "https://github.com/anuvyklack/animation.nvim"
+    --   },
+    --   cond = true,
+    --   config = function()
+    --      vim.o.winwidth = 5
+    --      vim.o.winminwidth = 15
+    --      vim.o.equalalways = false
+    --      require('windows').setup()
+    --   end
+    -- }, -- automatically resizes vim panes
+    { "anuvyklack/windows.nvim",
+       requires = {
+          "anuvyklack/middleclass",
+          "anuvyklack/animation.nvim"
+       },
+       config = function()
+          vim.o.winwidth = 10
+          vim.o.winminwidth = 10
+          vim.o.equalalways = false
+          require('windows').setup()
+       end
+    }
   },
 
   config = {
