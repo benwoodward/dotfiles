@@ -1,48 +1,43 @@
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
+if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
+  git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
 
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
-# if this causes "Ignore insecure directories and continue" then run:
-# `compaudit | xargs chmod g-w`
-autoload -Uz compinit && compinit
-
 # Advanced auto-completion
-zinit light-mode for atload'source ~/.p10k.zsh' romkatv/powerlevel10k
+source ~/.p10k.zsh
+zcomet load romkatv/powerlevel10k
 
 # Command-line syntax highlighting
 # Must be AFTER after all calls to `compdef`, `zle -N` or `zle -C`.
-zinit light-mode for zdharma/fast-syntax-highlighting
+zcomet load zdharma/fast-syntax-highlighting
 
-zinit light-mode for 'zsh-users/zsh-autosuggestions'
-zinit light-mode for rupa/z
-zinit light-mode for changyuheng/fz
+zcomet load zsh-users/zsh-autosuggestions
+zcomet load rupa/z
+zcomet load changyuheng/fz
+
+# if this causes "Ignore insecure directories and continue" then run:
+# `compaudit | xargs chmod g-w`
+zcomet compinit
+compaudit | xargs chmod g-w
 
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
-export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
-export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
-export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
-export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
-export DATABASE_URL=$(security find-generic-password -s 'database url' -w)
-export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
-export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
-export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
-export SPACES_ACCESS_KEY_ID=$(security find-generic-password -s 'spaces access key id' -w)
-export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
-export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
+# export SONOS_CLIENT_ID=$(security find-generic-password -s 'sonos-client-id' -w)
+# export SONOS_CLIENT_SECRET=$(security find-generic-password -s 'sonos-client-secret' -w)
+# export SECRET_KEY_BASE=$(security find-generic-password -s 'secret-key-base' -w)
+# export MAILGUN_API_KEY=$(security find-generic-password -s 'mailgun-api-key' -w)
+# export DATABASE_URL=$(security find-generic-password -s 'database url' -w)
+# export POSTGRES_DATABASE=$(security find-generic-password -s 'postgres database' -w)
+# export POSTGRES_USERNAME=$(security find-generic-password -s 'postgres username' -w)
+# export POSTGRES_PASSWORD=$(security find-generic-password -s 'postgres password' -w)
+# export SPACES_ACCESS_KEY_ID=$(security find-generic-password -s 'spaces access key id' -w)
+# export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
+# export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
 
 # Personal aliases
 alias fk="fork"
@@ -277,6 +272,7 @@ ch() {
 bindkey '^E' forward-word
 bindkey '^B' backward-kill-word
 bindkey '^L' autosuggest-accept
+bindkey '^a' autosuggest-toggle
 
 # completion
 bindkey "^[[Z" reverse-menu-complete                        # shift-tab - move through the completion menu backwards
