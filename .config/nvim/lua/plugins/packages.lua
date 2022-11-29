@@ -4,7 +4,6 @@ local packer_ok, packer = pcall(require, "packer")
 if not packer_ok then
   return
 end
-local u = require("modules.util")
 
 return packer.startup {
   {
@@ -29,20 +28,6 @@ return packer.startup {
     },
 
     {'https://github.com/kyazdani42/nvim-web-devicons'}, -- makes it possible to display special characters and icons in vim using patched fonts
-
-    -- LSP
-    {
-      'https://github.com/neovim/nvim-lspconfig',
-      config = function()
-        require('modules.lsp')
-      end,
-      requires = {
-        'https://github.com/jose-elias-alvarez/null-ls.nvim',
-        'https://github.com/jose-elias-alvarez/nvim-lsp-ts-utils'
-      },
-    },
-
-    -- {'https://github.com/nanotee/nvim-lsp-basics'},
 
     {
       'https://github.com/folke/trouble.nvim',
@@ -81,16 +66,6 @@ return packer.startup {
         require('plugins.gitsigns')
       end,
     }, -- jump between hunks, unstage/reset hunks etc.
-
-    {
-      'https://github.com/sindrets/diffview.nvim',
-      requires = {'nvim-web-devicons'},
-      config = function()
-        require('plugins.diffview')
-      end,
-    },
-
-    {'https://github.com/euclidianAce/BetterLua.vim'},
 
     -- Telescope
     {
@@ -162,16 +137,6 @@ return packer.startup {
       }
     }, -- clipboard history
 
-    -- {
-    --   'terrortylor/nvim-comment',
-    --   requires = {
-    --     'JoosepAlviste/nvim-ts-context-commentstring'
-    --   },
-    --   config = function()
-    --     require('plugins.comment')
-    --   end,
-    -- },
-
     {
       'https://github.com/numToStr/Comment.nvim',
       requires = {
@@ -230,54 +195,6 @@ return packer.startup {
       end,
     },
 
-    -- {
-    --   'L3MON4D3/LuaSnip',
-    --   config = function()
-    --     require 'plugins.luasnip'
-    --   end,
-    -- }, -- snippets
-
-    {
-      "https://github.com/hrsh7th/nvim-cmp",
-      config = function()
-        require "plugins.cmp"
-      end,
-      requires = {
-        "https://github.com/hrsh7th/cmp-nvim-lsp",
-        "https://github.com/hrsh7th/cmp-path",
-        "https://github.com/hrsh7th/cmp-buffer",
-        "https://github.com/tzachar/cmp-tabnine",
-        -- "hrsh7th/cmp-vsnip",
-        -- "hrsh7th/vim-vsnip",
-        "onsails/lspkind-nvim", -- Enables icons on completions
-        { -- Snippets
-          "L3MON4D3/LuaSnip",
-          requires = {
-            "saadparwaiz1/cmp_luasnip",
-          },
-        },
-        {
-          "zbirenbaum/copilot.lua",
-          event = "InsertEnter",
-          config = function()
-            vim.schedule(function() require("copilot").setup() end)
-          end,
-        },
-        {
-          "zbirenbaum/copilot-cmp",
-          after = { "copilot.lua" },
-          module = "copilot_cmp",
-          config = function()
-            require("copilot_cmp").setup({
-              formatters = {
-                insert_text = require("copilot_cmp.format").remove_existing
-              },
-            })
-          end,
-        },
-      },
-    }, -- autocompletions
-
     {
       'https://github.com/tzachar/cmp-tabnine',
       run='./install.sh',
@@ -324,8 +241,6 @@ return packer.startup {
 
     { 'https://github.com/voldikss/vim-floaterm' }, -- used for ranger / lf
 
-    -- { 'https://github.com/justinmk/vim-sneak' },
-
     { 'https://github.com/ggandor/lightspeed.nvim',
       config = function()
         require('plugins.lightspeed')
@@ -359,45 +274,15 @@ return packer.startup {
 
     { 'https://github.com/jparise/vim-graphql' },
 
-    { 'https://github.com/jose-elias-alvarez/typescript.nvim' },
-
-    -- { 'https://github.com/danymat/neogen',
-    --    config = function()
-    --      require('plugins.neogen')
-    --    end,
-    -- }, -- highlights and allows moving between variable references
+    -- { 'https://github.com/jose-elias-alvarez/typescript.nvim' },
 
     { 'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim' },
-
-    -- { 'https://github.com/JoseConseco/vim-case-change' }, -- vim-abolish is better
 
     { 'https://github.com/akinsho/toggleterm.nvim',
       config = function()
         require('plugins.toggleterm')
       end
     },
-
-    -- {
-    --   'https://github.com/jghauser/fold-cycle.nvim',
-    --   config = function()
-    --     require('plugins.fold')
-    --   end,
-    --   requires = 'https://github.com/anuvyklack/pretty-fold.nvim'
-    -- },
-
-    -- {
-    --   'https://github.com/anuvyklack/pretty-fold.nvim',
-    --   config = function()
-    --     require('plugins.pretty-fold')
-    --   end
-    -- },
-
-    -- { 'https://github.com/anuvyklack/fold-preview.nvim',
-    --    requires = 'https://github.com/anuvyklack/keymap-amend.nvim',
-    --    config = function()
-    --       require('plugins.fold-preview')
-    --    end
-    -- }, -- this isn't needed, because nvim-ufo provides this functionality, however, fold-preview previews look a lot better
 
     {
       'https://github.com/kevinhwang91/nvim-ufo',
@@ -434,24 +319,6 @@ return packer.startup {
       'https://github.com/RRethy/vim-illuminate'
     }, -- highlight usages of word under cursor, more configurable than treesitter-refactor
 
-    -- {
-    --   'https://github.com/milkias17/reloader.nvim',
-    --   requires = "https://github.com/nvim-lua/plenary.nvim",
-    -- }, -- reload config with :Reload
-
-    -- { "https://github.com/anuvyklack/windows.nvim",
-    --   requires = {
-    --     "https://github.com/anuvyklack/middleclass",
-    --     "https://github.com/anuvyklack/animation.nvim"
-    --   },
-    --   cond = true,
-    --   config = function()
-    --      vim.o.winwidth = 5
-    --      vim.o.winminwidth = 15
-    --      vim.o.equalalways = false
-    --      require('windows').setup()
-    --   end
-    -- }, -- automatically resizes vim panes
     { "anuvyklack/windows.nvim",
        requires = {
           "anuvyklack/middleclass",
@@ -464,6 +331,29 @@ return packer.startup {
           require('windows').setup()
        end
     },
+
+    {
+      'VonHeikemen/lsp-zero.nvim',
+      requires = {
+        -- LSP Support
+        {'neovim/nvim-lspconfig'},
+        {'williamboman/mason.nvim'},
+        {'williamboman/mason-lspconfig.nvim'},
+        {'https://github.com/jose-elias-alvarez/null-ls.nvim'},
+
+        -- Autocompletion
+        {'hrsh7th/nvim-cmp'},
+        {'hrsh7th/cmp-buffer'},
+        {'hrsh7th/cmp-path'},
+        {'saadparwaiz1/cmp_luasnip'},
+        {'hrsh7th/cmp-nvim-lsp'},
+        {'hrsh7th/cmp-nvim-lua'},
+
+        -- Snippets
+        {'L3MON4D3/LuaSnip'},
+        {'rafamadriz/friendly-snippets'},
+      },
+    }
   },
 
   config = {
@@ -471,11 +361,6 @@ return packer.startup {
       .. "/site/pack/loader/start/packer.nvim/plugin/packer_compiled.lua",
     git = {
       clone_timeout = 300,
-    },
-    display = {
-      open_fn = function()
-        return require("packer.util").float { border = u.borders }
-      end,
     },
   },
 }
