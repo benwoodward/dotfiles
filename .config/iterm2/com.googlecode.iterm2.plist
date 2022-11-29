@@ -1459,25 +1459,25 @@
 			</array>
 			<key>Keyboard Map</key>
 			<dict>
-				<key>0x68-0x80000-0x4</key>
+				<key>0x6a-0x100000-0x26</key>
 				<dict>
 					<key>Action</key>
-					<integer>33</integer>
+					<integer>38</integer>
 					<key>Escaping</key>
 					<integer>2</integer>
 					<key>Text</key>
-					<string></string>
+					<string>&lt;M-j&gt;</string>
 					<key>Version</key>
 					<integer>2</integer>
 				</dict>
-				<key>0x6c-0x80000-0x25</key>
+				<key>0x6b-0x100000-0x28</key>
 				<dict>
 					<key>Action</key>
-					<integer>34</integer>
+					<integer>38</integer>
 					<key>Escaping</key>
 					<integer>2</integer>
 					<key>Text</key>
-					<string></string>
+					<string>&lt;M-k&gt;</string>
 					<key>Version</key>
 					<integer>2</integer>
 				</dict>

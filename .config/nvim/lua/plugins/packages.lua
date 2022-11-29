@@ -67,7 +67,6 @@ return packer.startup {
       },
       run = ':TSUpdate',
       config = function()
-        -- causing a weird error in 0.8
         require('plugins.treesitter')
       end,
     },
@@ -415,8 +414,12 @@ return packer.startup {
     },
 
     {
-      'https://github.com/zhimsel/vim-stay'
-    },
+      -- 'https://github.com/zhimsel/vim-stay'
+    }, -- remember cursor position
+
+    {
+      'https://github.com/farmergreg/vim-lastplace'
+    }, -- remember cursor position
 
     {
       "https://github.com/folke/todo-comments.nvim",
@@ -460,7 +463,7 @@ return packer.startup {
           vim.o.equalalways = false
           require('windows').setup()
        end
-    }
+    },
   },
 
   config = {

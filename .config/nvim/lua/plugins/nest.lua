@@ -42,11 +42,11 @@ nest.applyKeymaps {
 	-- { 'T', '<Plug>Sneak_T', options = { noremap = false } },
 
 	-- { 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>' },
-	{ 'gd', '<cmd>lua vim.lsp.buf.definitions()<cr>' },
+	-- { 'gd', '<cmd>lua vim.lsp.buf.definitions()<cr>' },
 	-- { 'K',  '<cmd>lua vim.lsp.buf.hover()<cr>' }, -- mapped in nvim-ufo function
 
 
-	{ 'gx', '<Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>' },
+	-- { 'gx', '<Cmd>call jobstart(["open", expand("<cfile>")], {"detach": v:true})<CR>' },
 
 	{ 'zJ', [[ <Cmd> lua go_next_closed_and_peek()<cr>]] },
 	{ 'zK', [[ <Cmd> lua go_previous_closed_and_peek()<cr>]] },
@@ -54,8 +54,13 @@ nest.applyKeymaps {
 
 	{ '<A-', {
 		{ 'i>', '<c-i>'},
-		{ 'j>', 'jjjj' },
-		{ 'k>', 'kkkk' },
+
+		{ 'j>', '<CMD>vertical resize -2<cr>', options = { noremap = false } },
+	  { 'k>', '<CMD>vertical resize +2<cr>', options = { noremap = false } },
+	  -- { 'k>', '<CMD>resize   +2<cr>', options = { noremap = false } },
+	  -- { 'j>', '<CMD>resize   -2<cr>', options = { noremap = false } },
+
+	  { 'w>', ':WindowsToggleAutowidth<cr><cr>' },
 	}},
 
 	{ '<leader>', {
@@ -93,13 +98,13 @@ nest.applyKeymaps {
 
 		{ 'g', '<Plug>SearchNormal', options = { noremap = false }, mode = 'n' },
 		{ 'g', '<Plug>SearchVisual', options = { noremap = false }, mode = 'v'},
-		{ 'gr', '<cmd>lua vim.lsp.buf.references()<cr>' },
+		-- { 'gr', '<cmd>lua vim.lsp.buf.references()<cr>' },
 
 		-- Toggle search result highlights
-		{ 'hl', ':set hlsearch! hlsearch?<cr><cr>'},
+		{ 's', ':set hlsearch! hlsearch?<cr><cr>'},
 
 		-- Toggle relative numbers on/off
-		{ 'ln', ':lua toggle_number_mode()<cr>' },
+		{ 'n', ':lua toggle_number_mode()<cr>' },
 
 		{ 'og', ':lua require("telescope.builtin").git_files()<cr>' },
 		{ 'op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>' },
@@ -120,14 +125,14 @@ nest.applyKeymaps {
 
 		{ 'y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>', mode = 'v'},
 
-		-- { 'z', [[ <Cmd> lua toggle_zoom()<CR>]] },
+		{ 'z', [[ <Cmd> lua toggle_zoom()<CR>]] },
 	}},
 
 	{ '<c-', {
-		{ 'h>', '<C-\\><C-n><C-w><C-h>' }, 
-		{ 'j>', '<C-\\><C-n><C-w><C-j>' },
-		{ 'k>', '<C-\\><C-n><C-w><C-k>' },
-		{ 'l>', '<C-\\><C-n><C-w><C-l>' },
+		{ 'h>', ':wincmd h<cr>' }, 
+		{ 'j>', ':wincmd j<cr>' },
+		{ 'k>', ':wincmd k<cr>' },
+		{ 'l>', ':wincmd l<cr>' },
 	}},
 }
 
