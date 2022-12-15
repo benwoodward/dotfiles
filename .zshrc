@@ -306,7 +306,7 @@ setopt extendedglob        # Enable extended wildcard options for globbing
 
 
 # Load asdf version manager
-. /usr/local/opt/asdf/asdf.sh
+. "$(brew --prefix asdf)/libexec/asdf.sh"
 
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"

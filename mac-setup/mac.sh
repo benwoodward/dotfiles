@@ -125,7 +125,7 @@ brew "libyaml" # should come after openssl
 brew "coreutils"
 
 # Databases
-brew "postgres", restart_service: :changed
+brew "postgresql", restart_service: :changed
 brew "asdf"
 
 # UI enhancements
@@ -156,7 +156,7 @@ add_or_update_asdf_plugin() {
 }
 
 # shellcheck disable=SC1090
-source "$(brew --prefix asdf)/asdf.sh"
+source "$(brew --prefix asdf)/libexec/asdf.sh"
 add_or_update_asdf_plugin "ruby" "https://github.com/asdf-vm/asdf-ruby.git"
 add_or_update_asdf_plugin "nodejs" "https://github.com/asdf-vm/asdf-nodejs.git"
 
