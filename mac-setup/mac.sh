@@ -134,6 +134,7 @@ brew "koekeishiya/formulae/skhd"
 cask "karabiner-elements"
 brew "blueutil"
 cask "hammerspoon"
+cask "qlcolorcode"
 EOF
 
 # fix_brew_permissions

@@ -276,7 +276,12 @@ return packer.startup {
 
     -- { 'https://github.com/jose-elias-alvarez/typescript.nvim' },
 
-    { 'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim' },
+    -- {
+    --   'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
+    --   config = function()
+    --     -- require'toggle_lsp_diagnostics'.init({ all = true, start_on = true })
+    --   end
+    -- }, -- broken as of 2023-02-21 
 
     { 'https://github.com/akinsho/toggleterm.nvim',
       config = function()

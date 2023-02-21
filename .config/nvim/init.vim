@@ -34,6 +34,10 @@ lsp.ensure_installed({
 
 lsp.setup()
 
+vim.diagnostic.config({
+  virtual_text = true,
+})
+
 local null_ls = require('null-ls')
 
 local null_opts = lsp.build_options('null-ls', {
@@ -44,7 +48,7 @@ local null_opts = lsp.build_options('null-ls', {
         group = augroup,
         buffer = bufnr,
         callback = function()
-          vim.lsp.buf.format({ bufnr = bufnr })
+          vim.lsp.buf.format({ bufnr = bufnr, async = async })
         end,
       })
     end
@@ -55,7 +59,6 @@ null_ls.setup({
   on_attach = null_opts.on_attach,
   sources = {
     null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.diagnostics.eslint,
   }
 })
 EOF
