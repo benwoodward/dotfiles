@@ -24,6 +24,8 @@ zcomet load changyuheng/fz
 zcomet compinit
 compaudit | xargs chmod g-w
 
+. /usr/local/opt/asdf/libexec/asdf.sh
+
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
 # Use lowercase name to avoid issues with `find-generic-password` not finding it
@@ -303,11 +305,6 @@ setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
 setopt nonomatch           # Makes globbing work
 setopt extendedglob        # Enable extended wildcard options for globbing
 
-
-
-# Load asdf version manager
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 
@@ -393,3 +390,8 @@ function tat {
     tmux new-session -s "$name"
   fi
 }
+
+PATH=$(pyenv root)/shims:$PATH
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

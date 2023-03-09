@@ -195,29 +195,29 @@ return packer.startup {
       end,
     },
 
-    {
-      'https://github.com/tzachar/cmp-tabnine',
-      run='./install.sh',
-      requires = { 
-        'https://github.com/hrsh7th/nvim-cmp',
-        'https://github.com/onsails/lspkind.nvim',
-      },
-      config = function()
-        require('cmp_tabnine.config').setup {
-          max_lines = 1000,
-          max_num_results = 20,
-          sort = true,
-          run_on_every_keystroke = true,
-          snippet_placeholder = '..',
-          ignored_file_types = { 
-            -- default is not to ignore
-            -- uncomment to ignore in lua:
-            -- lua = true
-          },
-          show_prediction_strength = false
-        }
-      end,
-    }, -- autocompletions
+    -- {
+    --   'https://github.com/tzachar/cmp-tabnine',
+    --   run='./install.sh',
+    --   requires = { 
+    --     'https://github.com/hrsh7th/nvim-cmp',
+    --     'https://github.com/onsails/lspkind.nvim',
+    --   },
+    --   config = function()
+    --     require('cmp_tabnine.config').setup {
+    --       max_lines = 1000,
+    --       max_num_results = 20,
+    --       sort = true,
+    --       run_on_every_keystroke = true,
+    --       snippet_placeholder = '..',
+    --       ignored_file_types = { 
+    --         -- default is not to ignore
+    --         -- uncomment to ignore in lua:
+    --         -- lua = true
+    --       },
+    --       show_prediction_strength = false
+    --     }
+    --   end,
+    -- }, -- autocompletions
 
     {
       'https://github.com/LionC/nest.nvim',
@@ -276,12 +276,12 @@ return packer.startup {
 
     -- { 'https://github.com/jose-elias-alvarez/typescript.nvim' },
 
-    -- {
-    --   'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim'
-    --   config = function()
-    --     -- require'toggle_lsp_diagnostics'.init({ all = true, start_on = true })
-    --   end
-    -- }, -- broken as of 2023-02-21 
+    {
+      'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim',
+      config = function()
+        require'toggle_lsp_diagnostics'.init({ all = true, start_on = true })
+      end
+    }, -- broken as of 2023-02-21 
 
     { 'https://github.com/akinsho/toggleterm.nvim',
       config = function()
@@ -358,7 +358,12 @@ return packer.startup {
         {'L3MON4D3/LuaSnip'},
         {'rafamadriz/friendly-snippets'},
       },
-    }
+    },
+
+    {
+      "nvim-telescope/telescope-file-browser.nvim",
+      requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+    },
   },
 
   config = {

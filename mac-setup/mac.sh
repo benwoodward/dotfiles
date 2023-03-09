@@ -116,6 +116,7 @@ brew "wget"
 brew "ffmpeg"
 brew "git-imerge"
 brew "ag"
+brew "pyenv"
 
 # Image manipulation
 brew "imagemagick"
