@@ -344,6 +344,7 @@ return packer.startup {
         {'neovim/nvim-lspconfig'},
         {'williamboman/mason.nvim'},
         {'williamboman/mason-lspconfig.nvim'},
+        {'jay-babu/mason-null-ls.nvim'},
         {'https://github.com/jose-elias-alvarez/null-ls.nvim'},
 
         -- Autocompletion

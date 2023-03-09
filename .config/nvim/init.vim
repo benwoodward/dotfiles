@@ -22,6 +22,17 @@ lua <<EOF
 local null_ls = require('null-ls')
 local lsp = require('lsp-zero')
 
+require("mason-null-ls").setup({
+  automatic_setup = true,
+})
+
+lsp.configure("tsserver", {
+  on_init = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
+  end
+})
+
 local function format_on_save(client, bufnr)
   if client.supports_method('textDocument/formatting') then
     vim.api.nvim_clear_autocmds({
@@ -32,7 +43,9 @@ local function format_on_save(client, bufnr)
       group = augroup,
       buffer = bufnr,
       callback = function()
-        vim.lsp.buf.format({ bufnr = bufnr })
+        vim.lsp.buf.format({
+          bufnr = bufnr,
+        })
       end,
     })
   end
@@ -40,7 +53,7 @@ end
 
 null_ls.setup({
   debug = false,
-  sources = null_sources,
+  sources = { null_ls.builtins.formatting.prettier },
   on_attach = format_on_save
 })
 
