@@ -344,11 +344,11 @@ return packer.startup {
         {'neovim/nvim-lspconfig'},
         {'williamboman/mason.nvim'},
         {'williamboman/mason-lspconfig.nvim'},
-        {'jay-babu/mason-null-ls.nvim'},
         {'https://github.com/jose-elias-alvarez/null-ls.nvim'},
 
         -- Autocompletion
         {'hrsh7th/nvim-cmp'},
+        {'https://github.com/onsails/lspkind.nvim'},
         {'hrsh7th/cmp-buffer'},
         {'hrsh7th/cmp-path'},
         {'saadparwaiz1/cmp_luasnip'},

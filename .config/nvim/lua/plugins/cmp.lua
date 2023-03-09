@@ -30,23 +30,20 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
-  mapping = {
-    -- ["<Tab>"] = cmp.mapping(function(fallback)
-    --   -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
-    --   if cmp.visible() then
-    --     local entry = cmp.get_selected_entry()
-    --     if not entry then
-    --       cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-    --     else
-    --       cmp.confirm()
-    --     end
-    --   else
-    --     fallback()
-    --   end
-    -- end, {"i","s","c",}),
-    ["<tab>"] = cmp.mapping({
-      i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
-    }),
+  mapping = cmp.mapping.preset.insert({
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
+      if cmp.visible() then
+        local entry = cmp.get_selected_entry()
+        if not entry then
+          cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+        else
+          cmp.confirm()
+        end
+      else
+        fallback()
+      end
+    end, {"i","s","c",}),
     ["<C-j>"] = cmp.mapping({
       i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
     }),
@@ -74,7 +71,7 @@ cmp.setup({
     ["<cr>"] = cmp.mapping({
       i = cmp.mapping.confirm({select = false}),
     }),
-  },
+  }),
   sources = {
     -- { name = "copilot" }, -- copilot is not quite there yet, and kinda buggy
     { name = 'cmp_tabnine' },
