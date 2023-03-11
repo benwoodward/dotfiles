@@ -5,6 +5,9 @@ local opt = vim.opt
 local g   = vim.g
 local wo  = vim.wo
 
+vim.cmd.colorscheme 'tokyonight'
+vim.opt.guifont = { "Hack Nerd Font Mono", ":h18" }
+
 g.smoothie_experimental_mappings = true
 -- g["sneak#label"] = 1
 -- g["sneak#use_ic_scs"] = 1
@@ -92,3 +95,7 @@ vim.g.fzf_layout = {
     height = 0.9,
   }
 }
+
+vim.diagnostic.config({
+  virtual_text = true,
+})
