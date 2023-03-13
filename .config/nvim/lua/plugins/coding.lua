@@ -12,7 +12,7 @@ return {
       {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
       -- Autocompletion
-      {'hrsh7th/nvim-cmp'},         -- Required
+      {'hrsh7th/nvim-cmp'}, -- Required
       {'hrsh7th/cmp-cmdline'},      -- Required
       {'hrsh7th/cmp-nvim-lsp'},     -- Required
       {'hrsh7th/cmp-buffer'},       -- Optional
@@ -88,6 +88,23 @@ return {
             luasnip.lsp_expand(args.body)
           end,
         },
+        formatting = {
+          format = require('lspkind').cmp_format({
+            mode = "symbol",
+            maxwidth = 50,
+            ellipsis_char = '...',
+            symbol_map = {
+              Codeium = "",
+              Copilot = "",
+            }
+          })
+        },
+        formatters = {
+          label = require("copilot_cmp.format").format_label_text,
+          -- insert_text = require("copilot_cmp.format").format_insert_text,
+          insert_text = require("copilot_cmp.format").remove_existing, -- experimental to remove exraneous chars
+          preview = require("copilot_cmp.format").deindent,
+        },
         mapping = cmp.mapping.preset.insert({
           ["<Tab>"] = cmp.mapping(function(fallback)
             -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
@@ -96,7 +113,7 @@ return {
               if not entry then
                 cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
               else
-                cmp.confirm()
+                cmp.confirm({behavior = cmp.ConfirmBehavior.Replace, select = false})
               end
             else
               fallback()
@@ -117,24 +134,16 @@ return {
           ["<c-l>"] = cmp.mapping({
             i = cmp.mapping.confirm({select = false}),
           }),
-          ["<c-l>"] = vim.schedule_wrap(function(fallback)
-            if luasnip.expand_or_jumpable() and has_words_before() then
-              luasnip.expand_or_jump()
-            elseif cmp.visible() and has_words_before() then
-              cmp.confirm({ select = true })
-            else
-              fallback()
-            end
-          end),
           ["<cr>"] = cmp.mapping({
-            i = cmp.mapping.confirm({select = false}),
+            i = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace, select = false}),
           }),
         }),
         sources = {
-          -- { name = "copilot" }, -- copilot is not quite there yet, and kinda buggy
-          { name = 'cmp_tabnine' },
+          { name = "copilot" },
+          { name = "codeium" },
+          -- { name = 'cmp_tabnine' },
           { name = "luasnip" },
-          -- { name = "nvim_lsp" },
+          { name = "nvim_lsp" },
           {
             name = "buffer",
             option = {
@@ -156,7 +165,25 @@ return {
             entries = { name = 'custom', selection_order = 'near_cursor' } 
           },
           ghost_text = true,
-        }
+        },
+        sorting = {
+          priority_weight = 2,
+          comparators = {
+            require("copilot_cmp.comparators").prioritize,
+
+            -- Below is the default comparitor list and order for nvim-cmp
+            cmp.config.compare.offset,
+            -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+            cmp.config.compare.exact,
+            cmp.config.compare.score,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.locality,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+          },
+        },
       })
 
       lsp.setup()
@@ -177,113 +204,34 @@ return {
   },
 
   -- snippets
-  {
-    "L3MON4D3/LuaSnip",
-    build = (not jit.os:find("Windows"))
-        and "echo -e 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp"
-      or nil,
-    dependencies = {
-      "rafamadriz/friendly-snippets",
-      config = function()
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end,
-    },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
-    -- stylua: ignore
-    keys = {
-      {
-        "<tab>",
-        function()
-          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-        end,
-        expr = true, silent = true, mode = "i",
-      },
-      { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
-      { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-    },
-  },
-
-  -- auto completion
-  {
-    "hrsh7th/nvim-cmp",
-    version = false, -- last release is way too old
-    event = "InsertEnter",
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-      "saadparwaiz1/cmp_luasnip",
-    },
-    opts = function()
-      local cmp = require("cmp")
-      return {
-        completion = {
-          completeopt = "menu,menuone,noinsert",
-        },
-        snippet = {
-          expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-          end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<Tab>"] = cmp.mapping(function(fallback)
-            -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
-            if cmp.visible() then
-              local entry = cmp.get_selected_entry()
-              if not entry then
-                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-              else
-                cmp.confirm()
-              end
-            else
-              fallback()
-            end
-          end, {"i","s","c",}),
-          ["<C-j>"] = cmp.mapping({
-            i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
-          }),
-          ["<s-tab>"] = cmp.mapping({
-            i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
-          }),
-          ["<C-k>"] = cmp.mapping({
-            i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
-          }),
-          ["<C-e>"] = cmp.mapping({
-            i = cmp.mapping.abort(),
-          }),
-          ["<c-l>"] = cmp.mapping({
-            i = cmp.mapping.confirm({select = false}),
-          }),
-          ["<c-l>"] = vim.schedule_wrap(function(fallback)
-            if luasnip.expand_or_jumpable() and has_words_before() then
-              luasnip.expand_or_jump()
-            elseif cmp.visible() and has_words_before() then
-              cmp.confirm({ select = true })
-            else
-              fallback()
-            end
-          end),
-          ["<cr>"] = cmp.mapping({
-            i = cmp.mapping.confirm({select = false}),
-          }),
-        }),
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "luasnip" },
-          { name = "buffer" },
-          { name = "path" },
-        }),
-        experimental = {
-          ghost_text = {
-            hl_group = "LspCodeLens",
-          },
-        },
-      }
-    end,
-  },
+  -- {
+  --   "L3MON4D3/LuaSnip",
+  --   build = (not jit.os:find("Windows"))
+  --       and "echo -e 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp"
+  --     or nil,
+  --   dependencies = {
+  --     "rafamadriz/friendly-snippets",
+  --     config = function()
+  --       require("luasnip.loaders.from_vscode").lazy_load()
+  --     end,
+  --   },
+  --   opts = {
+  --     history = true,
+  --     delete_check_events = "TextChanged",
+  --   },
+  --   -- stylua: ignore
+  --   keys = {
+  --     {
+  --       "<tab>",
+  --       function()
+  --         return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+  --       end,
+  --       expr = true, silent = true, mode = "i",
+  --     },
+  --     { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
+  --     { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+  --   },
+  -- },
 
   -- auto pairs
   -- {
@@ -349,31 +297,37 @@ return {
     end,
   },
 
-  -- better text-objects
+  -- copilot
   {
-    "echasnovski/mini.ai",
-    -- keys = {
-    --   { "a", mode = { "x", "o" } },
-    --   { "i", mode = { "x", "o" } },
-    -- },
-    event = "VeryLazy",
-    dependencies = { "nvim-treesitter-textobjects" },
-    opts = function()
-      local ai = require("mini.ai")
-      return {
-        n_lines = 500,
-        custom_textobjects = {
-          o = ai.gen_spec.treesitter({
-            a = { "@block.outer", "@conditional.outer", "@loop.outer" },
-            i = { "@block.inner", "@conditional.inner", "@loop.inner" },
-          }, {}),
-          f = ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }, {}),
-          c = ai.gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }, {}),
-        },
-      }
-    end,
+    "zbirenbaum/copilot-cmp",
+    dependencies = {"copilot.lua"},
+    opts = {},
     config = function(_, opts)
-      require("mini.ai").setup(opts)
+      local copilot_cmp = require("copilot_cmp")
+      copilot_cmp.setup(opts)
+      -- attach cmp source whenever copilot attaches
+      -- fixes lazy-loading issues with the copilot cmp source
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local buffer = args.buf
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          on_attach = function(client)
+            if client.name == "copilot" then
+              copilot_cmp._on_insert_enter()
+            end
+          end
+        end,
+      })
     end,
+  },
+
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    },
   },
 }

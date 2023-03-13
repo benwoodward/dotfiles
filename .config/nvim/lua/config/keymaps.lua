@@ -1,4 +1,5 @@
 local opts = { noremap = true, silent = true }
+local cmd = vim.cmd
 
 local function map(mode, lhs, rhs, opts)
   local keys = require("lazy.core.handler").handlers.keys
@@ -13,9 +14,6 @@ end
 
 map('n', '0', '^', opts)
 map('v', '0', '^', { noremap = false })
-
-map('n', ']t', ':lua require("todo-comments").jump_next()<cr>', opts)
-map('n', '[t', ':lua require("todo-comments").jump_prev()<cr>', opts)
 
 map('n', '<Left>', '<CMD>vertical resize +2<cr>', { noremap = false })
 map('n', '<Right>', '<CMD>vertical resize -2<cr>', { noremap = false })
@@ -58,3 +56,32 @@ map('n', '<c-h>', ':wincmd h<cr>', opts)
 map('n', '<c-j>', ':wincmd j<cr>', opts)
 map('n', '<c-k>', ':wincmd k<cr>', opts)
 map('n', '<c-l>', ':wincmd l<cr>', opts)
+
+function _G.load_prev_file()
+  cmd('b#')
+end
+
+function _G.toggle_number_mode()
+  wo.number = true
+  wo.relativenumber = not wo.relativenumber
+end
+
+function _G.toggle_zoom()
+  require("zen-mode").toggle({
+    window = {
+      width = .80,
+    }
+  })
+end
+
+function _G.go_previous_closed_and_peek()
+  require('ufo').goPreviousClosedFold()
+  require('ufo').peekFoldedLinesUnderCursor()
+  -- require("fold-preview").show_preview()
+end
+
+function _G.go_next_closed_and_peek()
+  require('ufo').goNextClosedFold()
+  require('ufo').peekFoldedLinesUnderCursor()
+  -- require("fold-preview").show_preview()
+end
