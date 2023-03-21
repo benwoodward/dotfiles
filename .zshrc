@@ -1,3 +1,5 @@
+export EDITOR="nvim"
+
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
   git clone https://github.com/agkozak/zcomet.git ${ZDOTDIR:-${HOME}}/.zcomet/bin
 fi
@@ -40,6 +42,7 @@ compaudit | xargs chmod g-w
 # export SPACES_ACCESS_KEY_ID=$(security find-generic-password -s 'spaces access key id' -w)
 # export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
 # export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
+export OPENAI_API_KEY=$(security find-generic-password -s 'openai-token' -w)
 
 # Personal aliases
 alias fk="fork"
@@ -355,9 +358,10 @@ bundle-id() {
 }
 
 edit-history() {
-    ${EDITOR} ${HISTORY_BASE}/$(realpath ${PWD})/history
+  ${EDITOR} ~/.zsh_history
 }
 zle -N edit-history
+bindkey '^h' edit-history
 
 # bindkey "^r" fzf-history-widget
 fzf-history-widget() {
@@ -390,8 +394,8 @@ function tat {
     tmux new-session -s "$name"
   fi
 }
-
-PATH=$(pyenv root)/shims:$PATH
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PYENV_ROOT="$(pyenv root)"
+export PATH="$PYENV_ROOT/shims:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi

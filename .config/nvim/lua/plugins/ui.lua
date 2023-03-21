@@ -200,4 +200,14 @@ return {
     end
   },
 
+  {
+    "https://github.com/folke/zen-mode.nvim",
+    config = function()
+      require("zen-mode").setup {
+        window = {
+          width = .85 -- width will be 85% of the editor width
+        }
+      }
+    end
+  }, -- center current buffer in editor using <leader>z
 }

@@ -143,7 +143,7 @@ return {
           { name = "codeium" },
           -- { name = 'cmp_tabnine' },
           { name = "luasnip" },
-          { name = "nvim_lsp" },
+          -- { name = "nvim_lsp" },
           {
             name = "buffer",
             option = {
@@ -330,4 +330,16 @@ return {
       panel = { enabled = false },
     },
   },
+
+  {
+    "jackMort/ChatGPT.nvim",
+      config = function()
+        -- require("chatgpt").setup({})
+      end,
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope.nvim"
+      }
+  }
 }
