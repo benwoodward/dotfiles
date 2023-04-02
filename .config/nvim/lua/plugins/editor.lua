@@ -24,12 +24,13 @@ return {
         dependencies = {
         {'https://github.com/tami5/sqlite.lua'}}},
         {'https://github.com/nvim-telescope/telescope-frecency.nvim'},
+        {"nvim-tree/nvim-web-devicons"},
       },
       cmd = "Telescope",
       version = false, -- telescope did only one release, so use HEAD for now
       keys = {
         {"<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer"},
-        {"<leader>/", require('telescope.builtin').live_grep, desc = "Find in Files (Grep)"},
+        -- {"<leader>/", require('telescope.builtin').live_grep, desc = "Find in Files (Grep)"},
         {"<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History"},
         {"<leader><space>", require('telescope.builtin').find_files, desc = "Find Files (root dir)"},
         -- find

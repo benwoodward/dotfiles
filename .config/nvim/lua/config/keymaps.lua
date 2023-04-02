@@ -1,5 +1,6 @@
 local opts = { noremap = true, silent = true }
 local cmd = vim.cmd
+local wo  = vim.wo
 
 local function map(mode, lhs, rhs, opts)
   local keys = require("lazy.core.handler").handlers.keys

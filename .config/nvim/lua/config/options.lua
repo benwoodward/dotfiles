@@ -6,7 +6,9 @@ local g   = vim.g
 local wo  = vim.wo
 
 vim.cmd.colorscheme 'tokyonight'
-vim.opt.guifont = { "Hack Nerd Font Mono", ":h18" }
+-- vim.opt.guifont = { "Hack Nerd Font Mono", ":h18" }
+vim.opt.guifont = "Hack Nerd Font Mono:h18"
+-- vim.opt.guifont = "iMWritingDuospace Nerd Font Mono:h18"
 
 g.smoothie_experimental_mappings = true
 g.fzf_history_dir = './.fzf-history'
@@ -14,6 +16,7 @@ g.vsnip_snippet_dir = os.getenv('HOME') .. '/.config/nvim/data/snippets'
 
 
 -- Global options {{{
+o.encoding      = 'utf8'
 o.formatoptions = o.formatoptions .. "cro" -- auto-comment next line after comment
 o.hidden        = true
 o.updatetime    = 800
