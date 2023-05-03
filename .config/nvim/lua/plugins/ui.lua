@@ -63,7 +63,10 @@ return {
     'https://github.com/NvChad/nvim-colorizer.lua',
     config = function()
       require("colorizer").setup {
-        filetypes = { "*" },
+        filetypes = {
+          '*'; -- Highlight all files, but customize some others.
+          cmp_docs = {always_update = true}
+        },
         user_default_options = {
           RGB = true, -- #RGB hex codes
           RRGGBB = true, -- #RRGGBB hex codes
@@ -82,6 +85,7 @@ return {
           -- parsers can contain values used in |user_default_options|
           sass = { enable = false, parsers = { css }, }, -- Enable sass colors
           virtualtext = "■",
+          always_update = true,
         },
         -- all the sub-options of filetypes apply to buftypes
         buftypes = {},

@@ -15,6 +15,15 @@ return {
   },
 
   {
+  "roobert/tailwindcss-colorizer-cmp.nvim",
+    config = function()
+      require("tailwindcss-colorizer-cmp").setup({
+        color_square_width = 2,
+      })
+    end
+  },
+
+  {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
     dependencies = {
@@ -84,6 +93,13 @@ return {
         )
       })
 
+      -- lsp.configure('unocss', {
+      --   filetypes = { 'svelte' },
+      --   root_dir = root_pattern(
+      --     'uno.config.ts'
+      --   )
+      -- })
+
       lsp.configure('svelte', {
         settings = {
           svelte = {
@@ -91,7 +107,7 @@ return {
               svelte = {
                 defaultScriptLanguage = 'ts',
                 compilerWarnings = {
-                  -- ["css-unused-selector"] = 'ignore',
+                  -- ["css-unused-selector"] = 'ignore',d
                   -- ["a11y-missing-attribute"] = 'ignore',
                   -- ["a11y-missing-content "] = 'ignore',
                   -- ["unused-export-let"] = 'ignore',
@@ -177,7 +193,7 @@ return {
               },
             },
             {name = "path"},
-            {name = "nvim_lsp"},
+            {name = "nvim_lsp", trigger_characters = { '-' }},
             -- {name = 'emmet-ls'},
           },
           experimental = {
@@ -206,6 +222,11 @@ return {
               cmp.config.compare.length,
               cmp.config.compare.order,
             },
+          },
+          performance = {
+            trigger_debounce_time = 500,
+            throttle = 550,
+            fetching_timeout = 80,
           },
         })
 
