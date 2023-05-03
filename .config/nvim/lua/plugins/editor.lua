@@ -30,9 +30,9 @@ return {
       version = false, -- telescope did only one release, so use HEAD for now
       keys = {
         {"<leader>,", "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer"},
-        -- {"<leader>/", require('telescope.builtin').live_grep, desc = "Find in Files (Grep)"},
+        {"<leader>/", require('telescope.builtin').live_grep, desc = "Find in Files (Grep)"},
         {"<leader>:", "<cmd>Telescope command_history<cr>", desc = "Command History"},
-        {"<leader><space>", require('telescope.builtin').find_files, desc = "Find Files (root dir)"},
+        -- {"<leader><space>", require('telescope.builtin').find_files, desc = "Find Files (root dir)"},
         -- find
         {"<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers"},
         {"<leader>ff", require('telescope.builtin').find_files, desc = "Find Files (root dir)"},
@@ -56,6 +56,8 @@ return {
         {"<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options"},
         {"<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume"},
         {"<leader>sw", require('telescope.builtin').grep_string, desc = "Word (root dir)"},
+        {"<leader>tw", "<cmd>Telescope tailiscope<cr>", desc = "Search Tailwind docs"},
+
         -- { "<leader>sW", require('telescope.builtin').grep_string({ cwd = false }), desc = "Word (cwd)" },
         -- {
         --   "<leader>ss",
@@ -377,6 +379,13 @@ return {
     {
       'junegunn/fzf',
       config = function()
+      end
+    },
+
+    {
+      'https://github.com/DanielVolchek/tailiscope.nvim',
+      config = function()
+        require('telescope').load_extension('tailiscope')
       end
     }
 }

@@ -13,10 +13,12 @@ return {
     {key='PageUp', mods='CTRL|SHIFT', action="DisableDefaultAssignment"},
     {key='PageDown', mods='CTRL|SHIFT', action="DisableDefaultAssignment"},
   },
-  font = wezterm.font_with_fallback({
-    "Hack Nerd Font Mono",
-  }),
+  font = wezterm.font "Hack Nerd Font Mono",
   font_rules = {
+    {
+      intensity = "Normal",
+      font = wezterm.font("Hack Nerd Font Mono", {weight="Regular"}),
+    },
     {
       italic = true,
       intensity = "Bold",
@@ -27,8 +29,15 @@ return {
       font = wezterm.font("Hack Nerd Font Mono", {weight="Bold"}),
     },
   },
-  font_antialias = "Subpixel",
   font_size = 17.0,
+  font_shaper = "Harfbuzz",
+  harfbuzz_features = {"calt=0", "clig=0", "liga=0"},
+  dpi = 96.0,
+  bold_brightens_ansi_colors = true,
+  freetype_load_flags = "DEFAULT",
+  freetype_render_target = "Normal",
+  front_end = "OpenGL",
+  prefer_egl = true,
   window_padding = {
     left = 10,
     right = 10,
@@ -38,8 +47,9 @@ return {
   window_decorations = 'RESIZE',
   window_close_confirmation = 'AlwaysPrompt',
   hide_tab_bar_if_only_one_tab = true,
+  initial_cols = 300,
+  initial_rows = 100,
   enable_tab_bar = false,
-  tab_close_confirmation = 'AlwaysPrompt',
   text_background_opacity = 1,
   color_scheme = 'tokyo-night-storm',
   color_schemes = {

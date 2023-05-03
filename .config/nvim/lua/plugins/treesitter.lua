@@ -18,7 +18,7 @@ return {
         auto_install = true,
 
         highlight = { enable = true },
-        indent = { enable = true, disable = { 'python' } },
+        indent = { enable = false, disable = { 'python' } },
         textsubjects = {
             enable = true,
             prev_selection = ',', -- (Optional) keymap to select the previous selection

@@ -1107,7 +1107,8 @@
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
                                             "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide"
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
                                         ],
                                         "file_paths": [
                                             "/usr/local/bin/neovide"
@@ -1139,7 +1140,8 @@
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
                                             "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide"
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
                                         ],
                                         "file_paths": [
                                             "/usr/local/bin/neovide"
@@ -1171,7 +1173,8 @@
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
                                             "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide"
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
                                         ],
                                         "file_paths": [
                                             "/usr/local/bin/neovide"
@@ -1203,7 +1206,8 @@
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
                                             "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide"
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
                                         ],
                                         "file_paths": [
                                             "/usr/local/bin/neovide"
@@ -1268,7 +1272,8 @@
                                     {
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm"
+                                            "^com.github.wez.wezterm",
+                                            "^net.kovidgoyal.kitty"
                                         ],
                                         "type": "frontmost_application_unless"
                                     },
@@ -1343,7 +1348,8 @@
                                         "bundle_identifiers": [
                                             "^com.googlecode.iterm2",
                                             "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide"
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
                                         ],
                                         "file_paths": [
                                             "/usr/local/bin/neovide"
@@ -1351,7 +1357,7 @@
                                         "type": "frontmost_application_if"
                                     }
                                 ],
-                                "description": "Disable Cmd+W in iTerm2",
+                                "description": "Disable Cmd+W in Terminals",
                                 "from": {
                                     "key_code": "w",
                                     "modifiers": {

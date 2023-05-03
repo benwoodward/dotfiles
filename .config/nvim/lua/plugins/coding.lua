@@ -1,8 +1,22 @@
 return {
+  {
+    'https://github.com/dmmulroy/tsc.nvim',
+    config = function()
+      require('tsc').setup()
+    end
+  },
+
+  {
+    'https://github.com/monaqa/dial.nvim'
+  },
+
+  {
+    'https://github.com/gbprod/substitute.nvim'
+  },
 
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
+    branch = 'v2.x',
     dependencies = {
       -- LSP Support
       {'onsails/lspkind.nvim'},
@@ -23,6 +37,7 @@ return {
       -- Snippets
       {'L3MON4D3/LuaSnip'}, -- Required
       {'rafamadriz/friendly-snippets'}, -- Optional
+      -- {'https://github.com/aca/emmet-ls'}, -- Optional
     },
     config = function()
       local null_ls = require('null-ls')
@@ -31,13 +46,6 @@ return {
       local luasnip = require("luasnip")
       local lspkind = require('lspkind')
 
-      lsp.configure("tsserver", {
-        on_init = function(client)
-          client.server_capabilities.documentFormattingProvider = false
-          client.server_capabilities.documentFormattingRangeProvider = false
-        end
-      })
-
       local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
       local lsp_format_on_save = function(bufnr)
         vim.api.nvim_clear_autocmds({group = augroup, buffer = bufnr})
@@ -45,7 +53,7 @@ return {
           group = augroup,
           buffer = bufnr,
           callback = function()
-            vim.lsp.buf.format()
+            vim.lsp.buf.format({timeout_ms = 2000})
             filter = function(client)
               return client.name == "null-ls"
             end
@@ -63,25 +71,54 @@ return {
 
       lsp.on_attach(function(client, bufnr)
         lsp_format_on_save(bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
       end)
 
-      lsp.ensure_installed({
-        'tsserver',
-        'eslint',
-        'svelte',
-        'html',
-        'cssls',
-        'emmet_ls',
+      local root_pattern = require('lspconfig.util').root_pattern
+
+      lsp.configure('tailwindcss', {
+        root_dir = root_pattern(
+          'tailwind.config.js',
+          'tailwind.config.cjs',
+          'tailwind.config.ts'
+        )
+      })
+
+      lsp.configure('svelte', {
+        settings = {
+          svelte = {
+            plugin = {
+              svelte = {
+                defaultScriptLanguage = 'ts',
+                compilerWarnings = {
+                  -- ["css-unused-selector"] = 'ignore',
+                  -- ["a11y-missing-attribute"] = 'ignore',
+                  -- ["a11y-missing-content "] = 'ignore',
+                  -- ["unused-export-let"] = 'ignore',
+                }
+              },
+              css = {
+                completions = {
+                  emmet = false,
+                },
+              },
+            }
+          },
+          emmet = {
+            showExpandedAbbreviation = 'never'
+          }
+        },
       })
 
       lsp.setup_nvim_cmp({
+        preselect = 'item',
         completion = {
           autocomplete = {
             cmp.TriggerEvent.TextChanged,
             cmp.TriggerEvent.InsertEnter,
           },
-          completeopt = "menuone,noinsert,noselect",
-          -- keyword_length = 0,
+          completeopt = 'menu,menuone,noinsert',
+          keyword_length = 0,
         },
         snippet = {
           expand = function(args)
@@ -105,44 +142,27 @@ return {
             preview = require("copilot_cmp.format").deindent,
           },
           mapping = cmp.mapping.preset.insert({
-            ["<Tab>"] = cmp.mapping(function(fallback)
-              -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
-              if cmp.visible() then
-                local entry = cmp.get_selected_entry()
-                if not entry then
-                  cmp.select_next_item({behavior = cmp.SelectBehavior.Select})
-                else
-                  cmp.confirm({behavior = cmp.ConfirmBehavior.Replace, select = false})
-                end
-              else
-                fallback()
-              end
-            end, {"i", "s", "c", }),
-            ["<C-j>"] = cmp.mapping({
+            ["<c-j>"] = cmp.mapping({
               i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
             }),
-            ["<s-tab>"] = cmp.mapping({
+            ["<c-k>"] = cmp.mapping({
               i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
             }),
-            ["<C-k>"] = cmp.mapping({
-              i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
-            }),
-            ["<C-e>"] = cmp.mapping({
+            ["<c-e>"] = cmp.mapping({
               i = cmp.mapping.abort(),
             }),
             ["<c-l>"] = cmp.mapping({
               i = cmp.mapping.confirm({select = false}),
             }),
-            ["<cr>"] = cmp.mapping({
+            ["<s-cr>"] = cmp.mapping({
               i = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace, select = false}),
             }),
           }),
           sources = {
-            {name = "copilot"},
+            {name = 'copilot'},
             {name = "codeium"},
             -- { name = 'cmp_tabnine' },
-            {name = "luasnip"},
-            -- { name = "nvim_lsp" },
+            -- {name = "luasnip"},
             {
               name = "buffer",
               option = {
@@ -157,6 +177,8 @@ return {
               },
             },
             {name = "path"},
+            {name = "nvim_lsp"},
+            -- {name = 'emmet-ls'},
           },
           experimental = {
             view = {
@@ -167,12 +189,15 @@ return {
           sorting = {
             priority_weight = 2,
             comparators = {
+              function(entry1, entry2)
+                if entry1:get_kind() == types.lsp.CompletionItemKind.Snippet then return false end
+                if entry2:get_kind() == types.lsp.CompletionItemKind.Snippet then return true end
+              end,
               require("copilot_cmp.comparators").prioritize,
-
-              -- Below is the default comparitor list and order for nvim-cmp
+              require("copilot_cmp.comparators").score,
               cmp.config.compare.offset,
-              -- cmp.config.compare.scopes, --this is commented in nvim-cmp too
               cmp.config.compare.exact,
+              -- -- cmp.config.compare.scopes,
               cmp.config.compare.score,
               cmp.config.compare.recently_used,
               cmp.config.compare.locality,
@@ -263,13 +288,13 @@ return {
       end,
       opts = {
         mappings = {
-          add = "gza", -- Add surrounding in Normal and Visual modes
-          delete = "gzd", -- Delete surrounding
-          find = "gzf", -- Find surrounding (to the right)
-          find_left = "gzF", -- Find surrounding (to the left)
-          highlight = "gzh", -- Highlight surrounding
-          replace = "gzr", -- Replace surrounding
-          update_n_lines = "gzn", -- Update `n_lines`
+          add = "za", -- Add surrounding in Normal and Visual modes
+          delete = "zd", -- Delete surrounding
+          find = "zf", -- Find surrounding (to the right)
+          find_left = "zF", -- Find surrounding (to the left)
+          highlight = "zh", -- Highlight surrounding
+          replace = "zr", -- Replace surrounding
+          update_n_lines = "zn", -- Update `n_lines`
         },
       },
       config = function(_, opts)
@@ -438,9 +463,10 @@ return {
         config = function()
           require("neotest").setup({
             adapters = {
-              require('neotest-vitest')
-            },
+            require('neotest-vitest')},
           })
         end
       },
     }
+
+   

@@ -5,7 +5,7 @@ local opt = vim.opt
 local g   = vim.g
 local wo  = vim.wo
 
-vim.cmd.colorscheme 'tokyonight'
+vim.cmd.colorscheme 'tokyonight-storm'
 -- vim.opt.guifont = { "Hack Nerd Font Mono", ":h18" }
 vim.opt.guifont = "Hack Nerd Font Mono:h18"
 -- vim.opt.guifont = "iMWritingDuospace Nerd Font Mono:h18"
@@ -41,7 +41,8 @@ o.backup        = false -- true
 o.splitbelow    = true -- split below instead of above
 o.splitright    = true -- split right instead of left
 o.undofile      = true
-o.textwidth     = 80 -- necessary for windows.nvim resizing to work on larger screens
+o.textwidth     = 95
+o.virtualedit   = ''
 
 opt.viewoptions = 'cursor,folds,slash,unix'
 

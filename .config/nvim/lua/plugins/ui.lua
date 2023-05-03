@@ -93,8 +93,6 @@ return {
 
   {'https://github.com/dstein64/nvim-scrollview'},
 
-  { 'https://github.com/psliwka/vim-smoothie' }, 
-
   { 'https://github.com/voldikss/vim-floaterm' }, -- used for ranger / lf
 
   {
@@ -155,7 +153,7 @@ return {
       -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
       vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
       vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-      vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds)
+      -- vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds)
       vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
       vim.keymap.set('n', 'K', function()
           local winid = require('ufo').peekFoldedLinesUnderCursor()
@@ -185,7 +183,7 @@ return {
       })
     end
   },
-
+ 
   { 
     "anuvyklack/windows.nvim",
     dependencies = {
@@ -201,6 +199,16 @@ return {
   },
 
   {
+    'mrjones2014/smart-splits.nvim',
+    config = function()
+      require('smart-splits').setup({
+        cursor_follows_swapped_bufs = true,
+        at_edge = 'stop',
+      })
+    end
+  },
+
+  {
     "https://github.com/folke/zen-mode.nvim",
     config = function()
       require("zen-mode").setup {
@@ -210,4 +218,65 @@ return {
       }
     end
   }, -- center current buffer in editor using <leader>z
+
+  { -- Git Blame plugin for Neovim written in Lua
+    'f-person/git-blame.nvim',
+    config = function()
+      vim.g.gitblame_enabled = 1
+      vim.g.gitblame_display_virtual_text = 1
+      vim.g.gitblame_ignored_filetypes = { 'gitcommit' }
+      vim.g.gitblame_message_when_not_committed = ' Not committed yet'
+      vim.g.gitblame_delay = 1000
+      vim.g.gitblame_message_template = '    <committer> (<date>) • <summary> '
+    end,
+  },
+
+  {
+    'https://github.com/kevinhwang91/nvim-hlslens',
+    config = function()
+      require('hlslens').setup()
+    end
+  },
+
+  {
+    'https://github.com/kevinhwang91/nvim-bqf'
+  },
+
+  -- {
+  --   'https://github.com/psliwka/vim-smoothie',
+  -- }
+  {
+    'https://github.com/karb94/neoscroll.nvim',
+    config = function()
+      local t = {}
+
+      t['<C-b>'] = {'scroll', {'-vim.api.nvim_win_get_height(0)', 'true', '100'}}
+      t['<PageUp>'] = {'scroll', {'-vim.api.nvim_win_get_height(0)', 'true', '100'}}
+      t['<C-f>'] = {'scroll', { 'vim.api.nvim_win_get_height(0)', 'true', '100'}}
+      t['<PageDown>'] = {'scroll', { 'vim.api.nvim_win_get_height(0)', 'true', '100'}}
+      t['gg']    = {'scroll', {'-1*vim.api.nvim_buf_line_count(0)', 'true', '1', '5', e}}
+      t['zt']    = {'zt', {'250'}}
+      t['zz']    = {'zz', {'250'}}
+      t['zb']    = {'zb', {'250'}}
+
+      require('neoscroll.config').set_mappings(t)
+
+      require('neoscroll').setup({
+        pre_hook = function()
+          vim.opt.eventignore:append({
+            'WinScrolled',
+            'CursorMoved',
+          })
+        end,
+        post_hook = function()
+          vim.opt.eventignore:remove({
+            'WinScrolled',
+            'CursorMoved',
+          })
+        end,
+      })
+    end
+  }
+
+
 }
