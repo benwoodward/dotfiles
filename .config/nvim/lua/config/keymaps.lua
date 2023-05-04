@@ -41,7 +41,7 @@ map('n', '<leader>ff', ':lua require("telescope.builtin").grep_string()<cr>', op
 map('n', '<leader>fr', ':FloatermNew ranger<cr>', opts)
 map('n', '<leader>g', '<Plug>SearchNormal', { noremap = false, silent = true }, 'n')
 map('v', '<leader>g', '<Plug>SearchVisual', { noremap = false, silent = true }, 'v')
-map('n', '<leader>s', ':set hlsearch! hlsearch?<cr><cr>', opts)
+map('n', '<leader>h', ':set hlsearch! hlsearch?<cr><cr>', opts)
 map('n', '<leader>n', ':lua toggle_number_mode()<cr>', opts)
 map('n', '<leader>og', ':lua require("telescope.builtin").git_files()<cr>', opts)
 map('n', '<leader>op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>', opts)
@@ -57,6 +57,9 @@ map('n', '<leader>fs', ':lua vim.lsp.buf.format({ timeout_ms = 2000 })<cr>:w<cr>
 map('n', '<leader>gu', ':GitBlameOpenCommitURL<cr>', opts)
 map('n', '<leader>gb', [[ <Cmd> lua toggle_gitblame_virtual_text()<CR>]], opts)
 map('n', 'G', [[<Cmd> lua maybe_smooth_scroll()<CR>]], opts)
+map('n', 'gM', ":lua require('treesj').toggle()<cr>", opts)
+map('n', 'gS', ":lua require('treesj').split()<cr>", opts)
+map('n', 'gJ', ":lua require('treesj').join()<cr>", opts)
 
 -- resizing splits
 -- these keymaps will also accept a range,

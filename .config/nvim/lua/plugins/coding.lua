@@ -15,7 +15,7 @@ return {
   },
 
   {
-  "roobert/tailwindcss-colorizer-cmp.nvim",
+    "roobert/tailwindcss-colorizer-cmp.nvim",
     config = function()
       require("tailwindcss-colorizer-cmp").setup({
         color_square_width = 2,
@@ -193,7 +193,7 @@ return {
               },
             },
             {name = "path"},
-            {name = "nvim_lsp", trigger_characters = { '-' }},
+            {name = "nvim_lsp", trigger_characters = { '-', ':', '/', }},
             -- {name = 'emmet-ls'},
           },
           experimental = {

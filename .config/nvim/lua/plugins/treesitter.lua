@@ -40,6 +40,53 @@ return {
     end,
   },
 
+  {
+    'https://github.com/nvim-treesitter/playground'
+  },
+
+  {
+    'Wansmer/treesj',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      local ts = require('vim.treesitter')
+
+      require('treesj').setup({
+        use_default_keymaps = false,
+        cursor_behavior = 'start',
+        max_join_length = 200,
+        langs = {
+          svelte = {
+            ['quoted_attribute_value'] = {
+              both = {
+                enable = function(tsn)
+                  return tsn:parent():type() == 'attribute'
+                end,
+              },
+              split = {
+                format_tree = function(tsj)
+                  local str = tsj:child('attribute_value')
+                  local words = vim.split(str:text(), ' ')
+                  tsj:remove_child('attribute_value')
+                  for i, word in ipairs(words) do
+                    tsj:create_child({ text = word }, i + 1)
+                  end
+                end,
+              },
+              join = {
+                format_tree = function(tsj)
+                  local str = tsj:child('attribute_value')
+                  local node_text = str:text()
+                  tsj:remove_child('attribute_value')
+                  tsj:create_child({ text = node_text }, 2)
+                end,
+              },
+            },
+          }
+        }
+      })
+    end,
+  },
+
   -- {
   --   "nvim-treesitter/nvim-treesitter-textobjects",
   --   init = function()
