@@ -1,7 +1,7 @@
 local opts = { noremap = true, silent = true }
-local cmd = vim.cmd
-local wo  = vim.wo
-local api = vim.api
+local cmd  = vim.cmd
+local wo   = vim.wo
+local api  = vim.api
 
 local function map(mode, lhs, rhs, opts)
   local keys = require("lazy.core.handler").handlers.keys
@@ -33,9 +33,12 @@ map('n', '<leader>.', ':Telescope find_files hidden=true<cr>', opts)
 map('n', '<leader>;', ':Telescope command_history<cr>', opts)
 map('n', '<leader>-', ':e $HOME/.config/nvim/init.lua<cr>', opts)
 -- map('n', '<leader>/', ':Ag!<cr>', opts)
-map('n', '<leader>b', ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>', opts)
+map('n', '<leader>b', ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>',
+  opts)
 map('n', '<leader>d', 'mQviwu`Q', opts)
 map('n', '<leader>e', ':lua find_files_gitdir()<cr>', opts)
+map('n', '<leader>/', ':lua live_grep_gitdir()<cr>', opts)
+map('n', '<leader>r', ':lua oldfiles_gitdir()<cr>', opts)
 map('n', '<leader>fc', '<ESC>/\v^[<=>]{7}( .*\\|$)<cr>', opts)
 map('n', '<leader>ff', ':lua require("telescope.builtin").grep_string()<cr>', opts)
 map('n', '<leader>fr', ':FloatermNew ranger<cr>', opts)
@@ -46,12 +49,12 @@ map('n', '<leader>n', ':lua toggle_number_mode()<cr>', opts)
 map('n', '<leader>og', ':lua require("telescope.builtin").git_files()<cr>', opts)
 map('n', '<leader>op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>', opts)
 map('n', '<leader>p', ':lua require("telescope").extensions.neoclip.default()<cr>', opts)
-map('n', '<leader>r', ':lua oldfiles_gitdir()<cr>', opts)
 map('n', '<leader>t', '<Plug>(toggle-lsp-diag-vtext)<cr>', opts)
 map('n', '<leader>u', 'mQviwU`Q', opts)
 map('n', '<leader>v', ':exe "vnew"<cr>:exe "setlocal buftype=nofile bufhidden=hide"<cr>', opts)
 map('n', '<leader>w', ':w<cr>', opts)
-map('v', '<leader>y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>', { noremap = false, silent = true })
+map('v', '<leader>y', ':<CR>:let @a=@" | execute "normal! vgvy" | let res=system("pbcopy", @") | let @"=@a<CR>',
+  { noremap = false, silent = true })
 map('n', '<leader>z', [[ <Cmd> lua toggle_zoom()<CR>]], opts)
 map('n', '<leader>fs', ':lua vim.lsp.buf.format({ timeout_ms = 2000 })<cr>:w<cr>', opts)
 map('n', '<leader>gu', ':GitBlameOpenCommitURL<cr>', opts)
@@ -82,14 +85,14 @@ vim.keymap.set('n', '<leader><leader>l', require('smart-splits').swap_buf_right)
 map('n', '<A-w>', ':WindowsToggleAutowidth<cr>', opts)
 
 -- dial
-vim.keymap.set("n", "<C-a>", require("dial.map").inc_normal(), {noremap = true})
-vim.keymap.set("n", "<C-x>", require("dial.map").dec_normal(), {noremap = true})
-vim.keymap.set("n", "g<C-a>", require("dial.map").inc_gnormal(), {noremap = true})
-vim.keymap.set("n", "g<C-x>", require("dial.map").dec_gnormal(), {noremap = true})
-vim.keymap.set("v", "<C-a>", require("dial.map").inc_visual(), {noremap = true})
-vim.keymap.set("v", "<C-x>", require("dial.map").dec_visual(), {noremap = true})
-vim.keymap.set("v", "g<C-a>",require("dial.map").inc_gvisual(), {noremap = true})
-vim.keymap.set("v", "g<C-x>",require("dial.map").dec_gvisual(), {noremap = true})
+vim.keymap.set("n", "<C-a>", require("dial.map").inc_normal(), { noremap = true })
+vim.keymap.set("n", "<C-x>", require("dial.map").dec_normal(), { noremap = true })
+vim.keymap.set("n", "g<C-a>", require("dial.map").inc_gnormal(), { noremap = true })
+vim.keymap.set("n", "g<C-x>", require("dial.map").dec_gnormal(), { noremap = true })
+vim.keymap.set("v", "<C-a>", require("dial.map").inc_visual(), { noremap = true })
+vim.keymap.set("v", "<C-x>", require("dial.map").dec_visual(), { noremap = true })
+vim.keymap.set("v", "g<C-a>", require("dial.map").inc_gvisual(), { noremap = true })
+vim.keymap.set("v", "g<C-x>", require("dial.map").dec_gvisual(), { noremap = true })
 
 -- substitute
 vim.keymap.set("n", "r", require('substitute').operator, { noremap = true })
@@ -98,13 +101,13 @@ vim.keymap.set("n", "R", require('substitute').eol, { noremap = true })
 vim.keymap.set("x", "r", require('substitute').visual, { noremap = true })
 
 -- hlslens
-local kopts = {noremap = true, silent = true}
+local kopts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap('n', 'n',
-    [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
-    kopts)
+  [[<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>]],
+  kopts)
 vim.api.nvim_set_keymap('n', 'N',
-    [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
-    kopts)
+  [[<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>]],
+  kopts)
 vim.api.nvim_set_keymap('n', '*', [[*<Cmd>lua require('hlslens').start()<CR>]], kopts)
 vim.api.nvim_set_keymap('n', '#', [[#<Cmd>lua require('hlslens').start()<CR>]], kopts)
 vim.api.nvim_set_keymap('n', 'g*', [[g*<Cmd>lua require('hlslens').start()<CR>]], kopts)
@@ -167,6 +170,17 @@ end
 
 local builtin = require "telescope.builtin"
 
+function _G.live_grep_gitdir()
+  local git_dir = get_git_dir()
+  if git_dir == "" then
+    builtin.live_grep()
+  else
+    builtin.live_grep {
+      cwd = git_dir,
+    }
+  end
+end
+
 function _G.find_files_gitdir()
   local git_dir = get_git_dir()
   if git_dir == "" then
@@ -188,3 +202,4 @@ function _G.oldfiles_gitdir()
     }
   end
 end
+

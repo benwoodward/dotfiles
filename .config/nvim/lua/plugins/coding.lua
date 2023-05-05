@@ -19,24 +19,24 @@ return {
     branch = 'v2.x',
     dependencies = {
       -- LSP Support
-      {'onsails/lspkind.nvim'},
-      {"jose-elias-alvarez/null-ls.nvim"},
-      {'neovim/nvim-lspconfig'}, -- Required
-      {'williamboman/mason.nvim'}, -- Optional
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
+      { 'onsails/lspkind.nvim' },
+      { "jose-elias-alvarez/null-ls.nvim" },
+      { 'neovim/nvim-lspconfig' },             -- Required
+      { 'williamboman/mason.nvim' },           -- Optional
+      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
       -- Autocompletion
-      {'hrsh7th/nvim-cmp'}, -- Required
-      {'hrsh7th/cmp-cmdline'}, -- Required
-      {'hrsh7th/cmp-nvim-lsp'}, -- Required
-      {'hrsh7th/cmp-buffer'}, -- Optional
-      {'hrsh7th/cmp-path'}, -- Optional
-      {'saadparwaiz1/cmp_luasnip'}, -- Optional
-      {'hrsh7th/cmp-nvim-lua'}, -- Optional
+      { 'hrsh7th/nvim-cmp' },         -- Required
+      { 'hrsh7th/cmp-cmdline' },      -- Required
+      { 'hrsh7th/cmp-nvim-lsp' },     -- Required
+      { 'hrsh7th/cmp-buffer' },       -- Optional
+      { 'hrsh7th/cmp-path' },         -- Optional
+      { 'saadparwaiz1/cmp_luasnip' }, -- Optional
+      { 'hrsh7th/cmp-nvim-lua' },     -- Optional
 
       -- Snippets
-      {'L3MON4D3/LuaSnip'}, -- Required
-      {'rafamadriz/friendly-snippets'}, -- Optional
+      { 'L3MON4D3/LuaSnip' },             -- Required
+      { 'rafamadriz/friendly-snippets' }, -- Optional
       -- {'https://github.com/aca/emmet-ls'}, -- Optional
     },
     config = function()
@@ -48,12 +48,12 @@ return {
 
       local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
       local lsp_format_on_save = function(bufnr)
-        vim.api.nvim_clear_autocmds({group = augroup, buffer = bufnr})
+        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
         vim.api.nvim_create_autocmd('BufWritePre', {
           group = augroup,
           buffer = bufnr,
           callback = function()
-            vim.lsp.buf.format({timeout_ms = 2000})
+            vim.lsp.buf.format({ timeout_ms = 2000 })
             filter = function(client)
               return client.name == "null-ls"
             end
@@ -63,7 +63,22 @@ return {
 
       null_ls.setup({
         debug = false,
-        sources = {null_ls.builtins.formatting.prettier},
+        sources = { null_ls.builtins.formatting.prettier.with({
+          filetypes = {
+            "javascript",
+            "typescript",
+            "css",
+            "scss",
+            "postcss",
+            "html",
+            "json",
+            "yaml",
+            "markdown",
+            "graphql",
+            "md",
+            "txt",
+          },
+        }), },
         on_attach = format_on_save
       })
 
@@ -83,13 +98,6 @@ return {
           'tailwind.config.ts'
         )
       })
-
-      -- lsp.configure('unocss', {
-      --   filetypes = { 'svelte' },
-      --   root_dir = root_pattern(
-      --     'uno.config.ts'
-      --   )
-      -- })
 
       lsp.configure('svelte', {
         settings = {
@@ -141,344 +149,345 @@ return {
               Codeium = "",
               Copilot = "",
             },
-          })},
-          formatters = {
-            label = require("copilot_cmp.format").format_label_text,
-            -- insert_text = require("copilot_cmp.format").format_insert_text,
-            insert_text = require("copilot_cmp.format").remove_existing, -- experimental to remove exraneous chars
-            preview = require("copilot_cmp.format").deindent,
-          },
-          mapping = cmp.mapping.preset.insert({
-            ["<c-j>"] = cmp.mapping({
-              i = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
-            }),
-            ["<c-k>"] = cmp.mapping({
-              i = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
-            }),
-            ["<c-e>"] = cmp.mapping({
-              i = cmp.mapping.abort(),
-            }),
-            ["<c-l>"] = cmp.mapping({
-              i = cmp.mapping.confirm({select = false}),
-            }),
-            ["<s-cr>"] = cmp.mapping({
-              i = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace, select = false}),
-            }),
+          })
+        },
+        formatters = {
+          label = require("copilot_cmp.format").format_label_text,
+          -- insert_text = require("copilot_cmp.format").format_insert_text,
+          insert_text = require("copilot_cmp.format").remove_existing, -- experimental to remove exraneous chars
+          preview = require("copilot_cmp.format").deindent,
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<c-j>"] = cmp.mapping({
+            i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
           }),
-          sources = {
-            {name = 'copilot'},
-            {name = "codeium"},
-            -- { name = 'cmp_tabnine' },
-            -- {name = "luasnip"},
-            {
-              name = "buffer",
-              option = {
-                -- complete from visible buffers
-                get_bufnrs = function()
-                  local bufs = {}
-                  for _, win in ipairs(vim.api.nvim_list_wins()) do
-                    bufs[vim.api.nvim_win_get_buf(win)] = true
-                  end
-                  return vim.tbl_keys(bufs)
-                end,
-              },
-            },
-            {name = "path"},
-            {name = "nvim_lsp", trigger_characters = { '-', ':', '/', }},
-            -- {name = 'emmet-ls'},
-          },
-          experimental = {
-            view = {
-              -- entries = true,
-            entries = {name = 'custom', selection_order = 'near_cursor'}},
-            ghost_text = true,
-          },
-          sorting = {
-            priority_weight = 2,
-            comparators = {
-              function(entry1, entry2)
-                if entry1:get_kind() == types.lsp.CompletionItemKind.Snippet then return false end
-                if entry2:get_kind() == types.lsp.CompletionItemKind.Snippet then return true end
+          ["<c-k>"] = cmp.mapping({
+            i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+          }),
+          ["<c-e>"] = cmp.mapping({
+            i = cmp.mapping.abort(),
+          }),
+          ["<c-l>"] = cmp.mapping({
+            i = cmp.mapping.confirm({ select = false }),
+          }),
+          ["<s-cr>"] = cmp.mapping({
+            i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+          }),
+        }),
+        sources = {
+          { name = 'copilot' },
+          { name = "codeium" },
+          -- { name = 'cmp_tabnine' },
+          -- {name = "luasnip"},
+          {
+            name = "buffer",
+            option = {
+              -- complete from visible buffers
+              get_bufnrs = function()
+                local bufs = {}
+                for _, win in ipairs(vim.api.nvim_list_wins()) do
+                  bufs[vim.api.nvim_win_get_buf(win)] = true
+                end
+                return vim.tbl_keys(bufs)
               end,
-              require("copilot_cmp.comparators").prioritize,
-              require("copilot_cmp.comparators").score,
-              cmp.config.compare.offset,
-              cmp.config.compare.exact,
-              -- -- cmp.config.compare.scopes,
-              cmp.config.compare.score,
-              cmp.config.compare.recently_used,
-              cmp.config.compare.locality,
-              cmp.config.compare.kind,
-              cmp.config.compare.sort_text,
-              cmp.config.compare.length,
-              cmp.config.compare.order,
             },
           },
-          performance = {
-            trigger_debounce_time = 500,
-            throttle = 550,
-            fetching_timeout = 80,
-          },
-        })
-
-        lsp.setup()
-        cmp.setup.cmdline(':', {
-          mapping = cmp.mapping.preset.cmdline(), -- important!
-          sources = {
-            {name = 'nvim_lua'},
-            {name = 'cmdline'},
-          },
-        })
-        cmp.setup.cmdline('/', {
-          mapping = cmp.mapping.preset.cmdline(), -- important!
-          sources = {
-            {name = 'buffer'},
-          },
-        })
-      end
-    },
-
-    -- snippets
-    -- {
-    --   "L3MON4D3/LuaSnip",
-    --   build = (not jit.os:find("Windows"))
-    --       and "echo -e 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp"
-    --     or nil,
-    --   dependencies = {
-    --     "rafamadriz/friendly-snippets",
-    --     config = function()
-    --       require("luasnip.loaders.from_vscode").lazy_load()
-    --     end,
-    --   },
-    --   opts = {
-    --     history = true,
-    --     delete_check_events = "TextChanged",
-    --   },
-    --   -- stylua: ignore
-    --   keys = {
-    --     {
-    --       "<tab>",
-    --       function()
-    --         return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-    --       end,
-    --       expr = true, silent = true, mode = "i",
-    --     },
-    --     { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
-    --     { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-    --   },
-    -- },
-
-    -- auto pairs
-    -- {
-    --   "echasnovski/mini.pairs",
-    --   event = "VeryLazy",
-    --   config = function(_, opts)
-    --     require("mini.pairs").setup(opts)
-    --   end,
-    -- },
-
-    -- surround
-    {
-      "echasnovski/mini.surround",
-      keys = function(_, keys)
-        -- Populate the keys based on the user's options
-        local plugin = require("lazy.core.config").spec.plugins["mini.surround"]
-        local opts = require("lazy.core.plugin").values(plugin, "opts", false)
-        local mappings = {
-          {opts.mappings.add, desc = "Add surrounding", mode = {"n", "v"}},
-          {opts.mappings.delete, desc = "Delete surrounding"},
-          {opts.mappings.find, desc = "Find right surrounding"},
-          {opts.mappings.find_left, desc = "Find left surrounding"},
-          {opts.mappings.highlight, desc = "Highlight surrounding"},
-          {opts.mappings.replace, desc = "Replace surrounding"},
-          {opts.mappings.update_n_lines, desc = "Update `MiniSurround.config.n_lines`"},
-        }
-        mappings = vim.tbl_filter(function(m)
-          return m[1] and #m[1] > 0
-        end, mappings)
-        return vim.list_extend(mappings, keys)
-      end,
-      opts = {
-        mappings = {
-          add = "za", -- Add surrounding in Normal and Visual modes
-          delete = "zd", -- Delete surrounding
-          find = "zf", -- Find surrounding (to the right)
-          find_left = "zF", -- Find surrounding (to the left)
-          highlight = "zh", -- Highlight surrounding
-          replace = "zr", -- Replace surrounding
-          update_n_lines = "zn", -- Update `n_lines`
+          { name = "path" },
+          { name = "nvim_lsp", trigger_characters = { '-', ':', '/', } },
+          -- {name = 'emmet-ls'},
         },
-      },
-      config = function(_, opts)
-        -- use gz mappings instead of s to prevent conflict with leap
-        require("mini.surround").setup(opts)
-      end,
-    },
-
-    -- comments
-    {"JoosepAlviste/nvim-ts-context-commentstring", lazy = true},
-    {
-      "echasnovski/mini.comment",
-      event = "VeryLazy",
-      opts = {
-        hooks = {
-          pre = function()
-            require("ts_context_commentstring.internal").update_commentstring({})
-          end,
+        experimental = {
+          view = {
+            -- entries = true,
+            entries = { name = 'custom', selection_order = 'near_cursor' }
+          },
+          ghost_text = true,
         },
-      },
-      config = function(_, opts)
-        require("mini.comment").setup(opts)
-      end,
-    },
+        sorting = {
+          priority_weight = 2,
+          comparators = {
+            function(entry1, entry2)
+              if entry1:get_kind() == types.lsp.CompletionItemKind.Snippet then return false end
+              if entry2:get_kind() == types.lsp.CompletionItemKind.Snippet then return true end
+            end,
+            require("copilot_cmp.comparators").prioritize,
+            require("copilot_cmp.comparators").score,
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            -- -- cmp.config.compare.scopes,
+            cmp.config.compare.score,
+            cmp.config.compare.recently_used,
+            cmp.config.compare.locality,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+          },
+        },
+        performance = {
+          trigger_debounce_time = 500,
+          throttle = 550,
+          fetching_timeout = 80,
+        },
+      })
 
-    -- copilot
-    {
-      "zbirenbaum/copilot-cmp",
-      dependencies = {"copilot.lua"},
-      opts = {},
-      config = function(_, opts)
-        local copilot_cmp = require("copilot_cmp")
-        copilot_cmp.setup(opts)
-        -- attach cmp source whenever copilot attaches
-        -- fixes lazy-loading issues with the copilot cmp source
-        vim.api.nvim_create_autocmd("LspAttach", {
-          callback = function(args)
-            local buffer = args.buf
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            on_attach = function(client)
-              if client.name == "copilot" then
-                copilot_cmp._on_insert_enter()
-              end
+      lsp.setup()
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(), -- important!
+        sources = {
+          { name = 'nvim_lua' },
+          { name = 'cmdline' },
+        },
+      })
+      cmp.setup.cmdline('/', {
+        mapping = cmp.mapping.preset.cmdline(), -- important!
+        sources = {
+          { name = 'buffer' },
+        },
+      })
+    end
+  },
+
+  -- snippets
+  -- {
+  --   "L3MON4D3/LuaSnip",
+  --   build = (not jit.os:find("Windows"))
+  --       and "echo -e 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp"
+  --     or nil,
+  --   dependencies = {
+  --     "rafamadriz/friendly-snippets",
+  --     config = function()
+  --       require("luasnip.loaders.from_vscode").lazy_load()
+  --     end,
+  --   },
+  --   opts = {
+  --     history = true,
+  --     delete_check_events = "TextChanged",
+  --   },
+  --   -- stylua: ignore
+  --   keys = {
+  --     {
+  --       "<tab>",
+  --       function()
+  --         return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+  --       end,
+  --       expr = true, silent = true, mode = "i",
+  --     },
+  --     { "<tab>", function() require("luasnip").jump(1) end, mode = "s" },
+  --     { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+  --   },
+  -- },
+
+  -- auto pairs
+  -- {
+  --   "echasnovski/mini.pairs",
+  --   event = "VeryLazy",
+  --   config = function(_, opts)
+  --     require("mini.pairs").setup(opts)
+  --   end,
+  -- },
+
+  -- surround
+  {
+    "echasnovski/mini.surround",
+    keys = function(_, keys)
+      -- Populate the keys based on the user's options
+      local plugin = require("lazy.core.config").spec.plugins["mini.surround"]
+      local opts = require("lazy.core.plugin").values(plugin, "opts", false)
+      local mappings = {
+        { opts.mappings.add,            desc = "Add surrounding",                     mode = { "n", "v" } },
+        { opts.mappings.delete,         desc = "Delete surrounding" },
+        { opts.mappings.find,           desc = "Find right surrounding" },
+        { opts.mappings.find_left,      desc = "Find left surrounding" },
+        { opts.mappings.highlight,      desc = "Highlight surrounding" },
+        { opts.mappings.replace,        desc = "Replace surrounding" },
+        { opts.mappings.update_n_lines, desc = "Update `MiniSurround.config.n_lines`" },
+      }
+      mappings = vim.tbl_filter(function(m)
+        return m[1] and #m[1] > 0
+      end, mappings)
+      return vim.list_extend(mappings, keys)
+    end,
+    opts = {
+      mappings = {
+        add = "za",            -- Add surrounding in Normal and Visual modes
+        delete = "zd",         -- Delete surrounding
+        find = "zf",           -- Find surrounding (to the right)
+        find_left = "zF",      -- Find surrounding (to the left)
+        highlight = "zh",      -- Highlight surrounding
+        replace = "zr",        -- Replace surrounding
+        update_n_lines = "zn", -- Update `n_lines`
+      },
+    },
+    config = function(_, opts)
+      -- use gz mappings instead of s to prevent conflict with leap
+      require("mini.surround").setup(opts)
+    end,
+  },
+
+  -- comments
+  { "JoosepAlviste/nvim-ts-context-commentstring", lazy = true },
+  {
+    "echasnovski/mini.comment",
+    event = "VeryLazy",
+    opts = {
+      hooks = {
+        pre = function()
+          require("ts_context_commentstring.internal").update_commentstring({})
+        end,
+      },
+    },
+    config = function(_, opts)
+      require("mini.comment").setup(opts)
+    end,
+  },
+
+  -- copilot
+  {
+    "zbirenbaum/copilot-cmp",
+    dependencies = { "copilot.lua" },
+    opts = {},
+    config = function(_, opts)
+      local copilot_cmp = require("copilot_cmp")
+      copilot_cmp.setup(opts)
+      -- attach cmp source whenever copilot attaches
+      -- fixes lazy-loading issues with the copilot cmp source
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local buffer = args.buf
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          on_attach = function(client)
+            if client.name == "copilot" then
+              copilot_cmp._on_insert_enter()
             end
-          end,
-        })
-      end,
-    },
+          end
+        end,
+      })
+    end,
+  },
 
-    {
-      "zbirenbaum/copilot.lua",
-      cmd = "Copilot",
-      build = ":Copilot auth",
-      opts = {
-        suggestion = {enabled = false},
-        panel = {enabled = false},
+  {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    build = ":Copilot auth",
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    },
+  },
+
+  {
+    "jackMort/ChatGPT.nvim",
+    config = function()
+      require("chatgpt").setup()
+    end,
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
+    }
+  },
+
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      'marilari88/neotest-vitest',
+    },
+    keys = {
+      {
+        "<leader>tp",
+        function()
+          require("neotest").run.run({ suite = true })
+        end,
+        desc = "[T]est [P]roject",
       },
-    },
-
-    {
-      "jackMort/ChatGPT.nvim",
-      config = function()
-        require("chatgpt").setup()
-      end,
-      dependencies = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope.nvim"
-      }},
 
       {
-        "nvim-neotest/neotest",
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-          "nvim-treesitter/nvim-treesitter",
-          "antoinemadec/FixCursorHold.nvim",
-          'marilari88/neotest-vitest',
-        },
-        keys = {
-          {
-            "<leader>tp",
-            function()
-              require("neotest").run.run({suite = true})
-            end,
-            desc = "[T]est [P]roject",
-          },
-
-          {
-            "<leader>ta",
-            function()
-              require("neotest").run.attach()
-            end,
-            desc = "[T]est - [A]ttach to current run",
-          },
-
-          {
-            "<leader>td",
-            function()
-              require("neotest").run.run({strategy = "dap"})
-            end,
-            desc = "[T]est - Run test with [d]ebugging",
-          },
-
-          {
-            "<leader>tf",
-            function()
-              require("neotest").run.run(vim.fn.expand("%"))
-            end,
-            desc = "[T]est [F]ile",
-          },
-
-          {
-            "<leader>to",
-            function()
-              require("neotest").output.open({enter = true})
-            end,
-            desc = "[T]est - Show [o]utput",
-          },
-
-          {
-            "<leader>ts",
-            function()
-              require("neotest").summary.toggle()
-            end,
-            desc = "[T]est - Open [s]ummary window",
-          },
-          {
-            "<leader>tS",
-            function()
-              require("neotest").run.stop()
-            end,
-            desc = "[T]est - [S]top current run",
-          },
-          {
-            "<leader>tt",
-            function()
-              require("neotest").run.run()
-            end,
-            desc = "[T]est - Run neares[t]",
-          },
-          {
-            "<leader>tT",
-            function()
-              require("neotest").run.run_last()
-            end,
-            desc = "[T]est - re-run las[t]",
-          },
-
-          -- `f/F` textobject is taken by `function` in LSP
-          {
-            "[x",
-            function()
-              require("neotest").jump.prev({status = "failed"})
-            end,
-            desc = "Jump to previous failed test",
-          },
-
-          {
-            "]x",
-            function()
-              require("neotest").jump.next({status = "failed"})
-            end,
-            desc = "Jump to next failed test",
-          },
-        },
-        config = function()
-          require("neotest").setup({
-            adapters = {
-            require('neotest-vitest')},
-          })
-        end
+        "<leader>ta",
+        function()
+          require("neotest").run.attach()
+        end,
+        desc = "[T]est - [A]ttach to current run",
       },
-    }
 
-   
+      {
+        "<leader>td",
+        function()
+          require("neotest").run.run({ strategy = "dap" })
+        end,
+        desc = "[T]est - Run test with [d]ebugging",
+      },
+
+      {
+        "<leader>tf",
+        function()
+          require("neotest").run.run(vim.fn.expand("%"))
+        end,
+        desc = "[T]est [F]ile",
+      },
+
+      {
+        "<leader>to",
+        function()
+          require("neotest").output.open({ enter = true })
+        end,
+        desc = "[T]est - Show [o]utput",
+      },
+
+      {
+        "<leader>ts",
+        function()
+          require("neotest").summary.toggle()
+        end,
+        desc = "[T]est - Open [s]ummary window",
+      },
+      {
+        "<leader>tS",
+        function()
+          require("neotest").run.stop()
+        end,
+        desc = "[T]est - [S]top current run",
+      },
+      {
+        "<leader>tt",
+        function()
+          require("neotest").run.run()
+        end,
+        desc = "[T]est - Run neares[t]",
+      },
+      {
+        "<leader>tT",
+        function()
+          require("neotest").run.run_last()
+        end,
+        desc = "[T]est - re-run las[t]",
+      },
+
+      -- `f/F` textobject is taken by `function` in LSP
+      {
+        "[x",
+        function()
+          require("neotest").jump.prev({ status = "failed" })
+        end,
+        desc = "Jump to previous failed test",
+      },
+
+      {
+        "]x",
+        function()
+          require("neotest").jump.next({ status = "failed" })
+        end,
+        desc = "Jump to next failed test",
+      },
+    },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require('neotest-vitest') },
+      })
+    end
+  },
+}
