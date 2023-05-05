@@ -65,7 +65,7 @@ return {
       require("colorizer").setup {
         filetypes = {
           '*'; -- Highlight all files, but customize some others.
-          cmp_docs = {always_update = true}
+          cmp_docs = {always_update = true}; -- necessary for highlighting tailwind colors in cmp menu
         },
         user_default_options = {
           RGB = true, -- #RGB hex codes
@@ -73,7 +73,7 @@ return {
           names = true, -- "Name" codes like Blue or blue
           RRGGBBAA = false, -- #RRGGBBAA hex codes
           AARRGGBB = false, -- 0xAARRGGBB hex codes
-          rgb_fn = false, -- CSS rgb() and rgba() functions
+          rgb_fn = true, -- CSS rgb() and rgba() functions
           hsl_fn = false, -- CSS hsl() and hsla() functions
           css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
           css_fn = false, -- Enable all CSS *functions*: rgb_fn, hsl_fn
@@ -85,7 +85,7 @@ return {
           -- parsers can contain values used in |user_default_options|
           sass = { enable = false, parsers = { css }, }, -- Enable sass colors
           virtualtext = "■",
-          always_update = true,
+          always_update = true, -- necessary for highlighting tailwind colors in cmp menu
         },
         -- all the sub-options of filetypes apply to buftypes
         buftypes = {},
@@ -246,9 +246,6 @@ return {
     'https://github.com/kevinhwang91/nvim-bqf'
   },
 
-  -- {
-  --   'https://github.com/psliwka/vim-smoothie',
-  -- }
   {
     'https://github.com/karb94/neoscroll.nvim',
     config = function()

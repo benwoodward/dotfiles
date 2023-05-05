@@ -35,7 +35,7 @@ map('n', '<leader>-', ':e $HOME/.config/nvim/init.lua<cr>', opts)
 -- map('n', '<leader>/', ':Ag!<cr>', opts)
 map('n', '<leader>b', ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>', opts)
 map('n', '<leader>d', 'mQviwu`Q', opts)
-map('n', '<leader>e', ':lua require("telescope.builtin").find_files()<cr>', opts)
+map('n', '<leader>e', ':lua find_files_gitdir()<cr>', opts)
 map('n', '<leader>fc', '<ESC>/\v^[<=>]{7}( .*\\|$)<cr>', opts)
 map('n', '<leader>ff', ':lua require("telescope.builtin").grep_string()<cr>', opts)
 map('n', '<leader>fr', ':FloatermNew ranger<cr>', opts)
@@ -46,7 +46,7 @@ map('n', '<leader>n', ':lua toggle_number_mode()<cr>', opts)
 map('n', '<leader>og', ':lua require("telescope.builtin").git_files()<cr>', opts)
 map('n', '<leader>op', ':lua require("telescope").extensions.project.project{display_type = "full"}<cr>', opts)
 map('n', '<leader>p', ':lua require("telescope").extensions.neoclip.default()<cr>', opts)
-map('n', '<leader>r', ':Telescope oldfiles<cr>', opts)
+map('n', '<leader>r', ':lua oldfiles_gitdir()<cr>', opts)
 map('n', '<leader>t', '<Plug>(toggle-lsp-diag-vtext)<cr>', opts)
 map('n', '<leader>u', 'mQviwU`Q', opts)
 map('n', '<leader>v', ':exe "vnew"<cr>:exe "setlocal buftype=nofile bufhidden=hide"<cr>', opts)
@@ -157,5 +157,34 @@ function _G.maybe_smooth_scroll()
     api.nvim_command('normal! G')
   else
     require('neoscroll').scroll(1 * buf_line_count, true, 1, 5)
+  end
+end
+
+function _G.get_git_dir()
+  local git_dir = vim.fn.trim(vim.fn.system "git rev-parse --show-toplevel")
+  return git_dir
+end
+
+local builtin = require "telescope.builtin"
+
+function _G.find_files_gitdir()
+  local git_dir = get_git_dir()
+  if git_dir == "" then
+    builtin.find_files()
+  else
+    builtin.find_files {
+      cwd = git_dir,
+    }
+  end
+end
+
+function _G.oldfiles_gitdir()
+  local git_dir = get_git_dir()
+  if git_dir == "" then
+    builtin.oldfiles()
+  else
+    builtin.oldfiles {
+      cwd = git_dir,
+    }
   end
 end

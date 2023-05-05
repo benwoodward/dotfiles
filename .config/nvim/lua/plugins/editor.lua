@@ -35,7 +35,6 @@ return {
         -- {"<leader><space>", require('telescope.builtin').find_files, desc = "Find Files (root dir)"},
         -- find
         {"<leader>fb", "<cmd>Telescope buffers<cr>", desc = "Buffers"},
-        {"<leader>ff", require('telescope.builtin').find_files, desc = "Find Files (root dir)"},
         {"<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent"},
         -- -- git
         {"<leader>gc", "<cmd>Telescope git_commits<CR>", desc = "commits"},
@@ -98,6 +97,11 @@ return {
       },
       opts = {
         defaults = {
+          pickers = {
+            oldfiles = {
+              cwd_only = true,
+            }
+          },
           prompt_prefix = " ",
           selection_caret = " ",
           mappings = {
@@ -107,12 +111,6 @@ return {
               end,
               ["<a-t>"] = function(...)
                 return require("trouble.providers.telescope").open_selected_with_trouble(...)
-              end,
-              ["<a-i>"] = function()
-                require('telescope.builtin').find_files({no_ignore = true})()
-              end,
-              ["<a-h>"] = function()
-                require('telescope.builtin').find_files({hidden = true})()
               end,
               ["<C-n>"] = function(...)
                 return require("telescope.actions").cycle_history_next(...)
@@ -387,5 +385,22 @@ return {
       config = function()
         require('telescope').load_extension('tailiscope')
       end
-    }
+    },
+
+    {
+      "chrisgrieser/nvim-recorder",
+      opts = {},
+      config = function()
+        require('recorder').setup({
+          	mapping = {
+          		startStopRecording = "q",
+          		playMacro = "<c-q>",
+          		switchSlot = "<leader>q",
+          		editMacro = "cq",
+          		yankMacro = "yq", -- also decodes it for turning macros to mappings
+          		addBreakPoint = "##", -- ⚠️ this should be a string you don't use in insert mode during a macro
+          	},
+        })
+      end
+    },
 }

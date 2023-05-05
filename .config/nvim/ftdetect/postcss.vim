@@ -1,0 +1,1 @@
+au BufRead,BufNewFile *.postcss setfiletype postcss
