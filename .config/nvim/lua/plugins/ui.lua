@@ -1,4 +1,11 @@
 return {
+  {
+    'andymass/vim-matchup',
+    config = function()
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+    end,
+  },
+
   -- better vim.ui
   {
     "stevearc/dressing.nvim",
@@ -57,56 +64,56 @@ return {
   { "nvim-tree/nvim-web-devicons", lazy = true },
 
   -- ui components
-  { "MunifTanjim/nui.nvim", lazy = true },
+  { "MunifTanjim/nui.nvim",        lazy = true },
 
   {
     'https://github.com/NvChad/nvim-colorizer.lua',
     config = function()
       require("colorizer").setup {
         filetypes = {
-          '*'; -- Highlight all files, but customize some others.
-          cmp_docs = {always_update = true}; -- necessary for highlighting tailwind colors in cmp menu
+          '*',                                 -- Highlight all files, but customize some others.
+          cmp_docs = { always_update = true }, -- necessary for highlighting tailwind colors in cmp menu
+          '!TelescopeResults',                 -- https://github.com/nvim-telescope/telescope.nvim/issues/2490#issuecomment-1616160620
         },
         user_default_options = {
-          RGB = true, -- #RGB hex codes
-          RRGGBB = true, -- #RRGGBB hex codes
-          names = true, -- "Name" codes like Blue or blue
-          RRGGBBAA = false, -- #RRGGBBAA hex codes
-          AARRGGBB = false, -- 0xAARRGGBB hex codes
-          rgb_fn = true, -- CSS rgb() and rgba() functions
-          hsl_fn = false, -- CSS hsl() and hsla() functions
-          css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-          css_fn = false, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          RGB = true,          -- #RGB hex codes
+          RRGGBB = true,       -- #RRGGBB hex codes
+          names = true,        -- "Name" codes like Blue or blue
+          RRGGBBAA = false,    -- #RRGGBBAA hex codes
+          AARRGGBB = false,    -- 0xAARRGGBB hex codes
+          rgb_fn = true,       -- CSS rgb() and rgba() functions
+          hsl_fn = false,      -- CSS hsl() and hsla() functions
+          css = false,         -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+          css_fn = false,      -- Enable all CSS *functions*: rgb_fn, hsl_fn
           -- Available modes for `mode`: foreground, background,  virtualtext
           mode = "background", -- Set the display mode.
           -- Available methods are false / true / "normal" / "lsp" / "both"
           -- True is same as normal
-          tailwind = true, -- Enable tailwind colors
+          tailwind = true,                               -- Enable tailwind colors
           -- parsers can contain values used in |user_default_options|
           sass = { enable = false, parsers = { css }, }, -- Enable sass colors
           virtualtext = "■",
-          always_update = true, -- necessary for highlighting tailwind colors in cmp menu
+          always_update = true,                          -- necessary for highlighting tailwind colors in cmp menu
         },
         -- all the sub-options of filetypes apply to buftypes
         buftypes = {},
-    }
+      }
     end,
-  }, 
+  },
 
-  {'https://github.com/mg979/vim-visual-multi'},
+  { 'https://github.com/mg979/vim-visual-multi' },
 
-  {'https://github.com/dstein64/nvim-scrollview'},
-
+  { 'https://github.com/dstein64/nvim-scrollview' },
   { 'https://github.com/voldikss/vim-floaterm' }, -- used for ranger / lf
 
   {
     'https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim',
     config = function()
-      require'toggle_lsp_diagnostics'.init({ all = true, start_on = true })
+      require 'toggle_lsp_diagnostics'.init({ all = true, start_on = true })
     end
   },
 
-  { 
+  {
     'https://github.com/akinsho/toggleterm.nvim',
     config = function()
       local status_ok, toggleterm = pcall(require, "toggleterm")
@@ -114,7 +121,7 @@ return {
         return
       end
       toggleterm.setup({
-        size = 10,
+        size = 20,
         open_mapping = [[<c-\>]],
         shading_factor = 2,
         direction = "float",
@@ -129,7 +136,7 @@ return {
 
 
       function _G.set_terminal_keymaps()
-        local opts = {noremap = true}
+        local opts = { noremap = true }
 
         if vim.fn.mapcheck("<Esc>", "t") ~= "" then
           vim.api.nvim_del_keymap("t", "<Esc>")
@@ -160,11 +167,11 @@ return {
       -- vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds)
       vim.keymap.set('n', 'zm', require('ufo').closeFoldsWith) -- closeAllFolds == closeFoldsWith(0)
       vim.keymap.set('n', 'K', function()
-          local winid = require('ufo').peekFoldedLinesUnderCursor()
-          if not winid then
-              -- choose one of coc.nvim and nvim lsp
-              vim.lsp.buf.hover()
-          end
+        local winid = require('ufo').peekFoldedLinesUnderCursor()
+        if not winid then
+          -- choose one of coc.nvim and nvim lsp
+          vim.lsp.buf.hover()
+        end
       end)
 
       -- Option 3: treesitter as a main provider instead
@@ -172,7 +179,7 @@ return {
       -- performance and stability are better than `foldmethod=nvim_treesitter#foldexpr()`
       require('ufo').setup({
         provider_selector = function(bufnr, filetype, buftype)
-          return {'treesitter', 'indent'}
+          return { 'treesitter', 'indent' }
         end,
         preview = {
           win_config = {
@@ -180,15 +187,15 @@ return {
             winhighlight = 'NormalFloat:FoldPreview,FloatBorder:FoldPreviewBorder'
           },
           mappings = {
-              scrollU = '<C-u>',
-              scrollD = '<C-d>'
+            scrollU = '<C-u>',
+            scrollD = '<C-d>'
           },
         }
       })
     end
   },
- 
-  { 
+
+  {
     "anuvyklack/windows.nvim",
     dependencies = {
       "anuvyklack/middleclass",
@@ -223,7 +230,8 @@ return {
     end
   }, -- center current buffer in editor using <leader>z
 
-  { -- Git Blame plugin for Neovim written in Lua
+  {
+    -- Git Blame plugin for Neovim written in Lua
     'f-person/git-blame.nvim',
     config = function()
       vim.g.gitblame_enabled = 1
@@ -247,37 +255,14 @@ return {
   },
 
   {
-    'https://github.com/karb94/neoscroll.nvim',
-    config = function()
-      local t = {}
+    'https://github.com/psliwka/vim-smoothie'
+  },
 
-      t['<C-b>'] = {'scroll', {'-vim.api.nvim_win_get_height(0)', 'true', '100'}}
-      t['<PageUp>'] = {'scroll', {'-vim.api.nvim_win_get_height(0)', 'true', '100'}}
-      t['<C-f>'] = {'scroll', { 'vim.api.nvim_win_get_height(0)', 'true', '100'}}
-      t['<PageDown>'] = {'scroll', { 'vim.api.nvim_win_get_height(0)', 'true', '100'}}
-      t['gg']    = {'scroll', {'-1*vim.api.nvim_buf_line_count(0)', 'true', '1', '5', e}}
-      t['zt']    = {'zt', {'250'}}
-      t['zz']    = {'zz', {'250'}}
-      t['zb']    = {'zb', {'250'}}
-
-      require('neoscroll.config').set_mappings(t)
-
-      require('neoscroll').setup({
-        pre_hook = function()
-          vim.opt.eventignore:append({
-            'WinScrolled',
-            'CursorMoved',
-          })
-        end,
-        post_hook = function()
-          vim.opt.eventignore:remove({
-            'WinScrolled',
-            'CursorMoved',
-          })
-        end,
-      })
-    end
-  }
-
+  -- {
+  --   'https://github.com/declancm/cinnamon.nvim',
+  --   config = function()
+  --     require('cinnamon').setup()
+  --   end
+  -- },
 
 }

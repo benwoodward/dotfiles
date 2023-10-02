@@ -26,16 +26,16 @@ return {
       { 'williamboman/mason-lspconfig.nvim' }, -- Optional
 
       -- Autocompletion
-      { 'hrsh7th/nvim-cmp' },         -- Required
-      { 'hrsh7th/cmp-cmdline' },      -- Required
-      { 'hrsh7th/cmp-nvim-lsp' },     -- Required
-      { 'hrsh7th/cmp-buffer' },       -- Optional
-      { 'hrsh7th/cmp-path' },         -- Optional
-      { 'saadparwaiz1/cmp_luasnip' }, -- Optional
-      { 'hrsh7th/cmp-nvim-lua' },     -- Optional
+      { 'hrsh7th/nvim-cmp' },     -- Required
+      { 'hrsh7th/cmp-cmdline' },  -- Required
+      { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+      { 'hrsh7th/cmp-buffer' },   -- Optional
+      { 'hrsh7th/cmp-path' },     -- Optional
+      -- { 'saadparwaiz1/cmp_luasnip' }, -- Optional
+      { 'hrsh7th/cmp-nvim-lua' }, -- Optional
 
       -- Snippets
-      { 'L3MON4D3/LuaSnip' },             -- Required
+      -- { 'L3MON4D3/LuaSnip' },             -- Required
       { 'rafamadriz/friendly-snippets' }, -- Optional
       -- {'https://github.com/aca/emmet-ls'}, -- Optional
     },
@@ -43,7 +43,7 @@ return {
       local null_ls = require('null-ls')
       local lsp = require('lsp-zero')
       local cmp = require("cmp")
-      local luasnip = require("luasnip")
+      -- local luasnip = require("luasnip")
       local lspkind = require('lspkind')
 
       local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
@@ -63,30 +63,54 @@ return {
 
       null_ls.setup({
         debug = false,
-        sources = { null_ls.builtins.formatting.prettier.with({
-          filetypes = {
-            "javascript",
-            "typescript",
-            "css",
-            "scss",
-            "postcss",
-            "html",
-            "json",
-            "yaml",
-            "markdown",
-            "graphql",
-            "md",
-            "txt",
-          },
-        }), },
+        sources = { null_ls.builtins.formatting.prettierd },
         on_attach = format_on_save
       })
 
       lsp.preset('recommended')
 
       lsp.on_attach(function(client, bufnr)
+        -- lsp.default_keymaps({
+        --   buffer = bufnr,
+        --   -- preserve_mappings = false,
+        --   omit = { 'gl' },
+        -- })
         lsp_format_on_save(bufnr)
         client.server_capabilities.semanticTokensProvider = nil
+
+        local map = function(mode, lhs, rhs)
+          local opts = { remap = false, buffer = bufnr }
+          vim.keymap.set(mode, lhs, rhs, opts)
+        end
+
+        -- LSP actions
+        --
+        -- map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>') -- using lspsage instead
+        --
+        -- Hover Doc
+        -- If there is no hover doc,
+        -- there will be a notification stating that
+        -- there is no information available.
+        -- To disable it just use ":Lspsaga hover_doc ++quiet"
+        -- Pressing the key twice will enter the hover window
+
+        map("n", "K", "<cmd>Lspsaga hover_doc<CR>")
+        map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+        map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+        map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+        map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+        map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+        map('n', '<leader>br', '<cmd>lua vim.lsp.buf.rename()<cr>')
+        map('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+        map('x', '<leader>rca', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
+
+        -- Diagnostics
+        -- map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>') -- using lspsaga instead
+        map('n', 'gl', '<cmd>Lspsaga show_line_diagnostics<cr>')
+        -- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+        -- map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+        map("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>")
+        map("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>")
       end)
 
       local root_pattern = require('lspconfig.util').root_pattern
@@ -135,11 +159,11 @@ return {
           completeopt = 'menu,menuone,noinsert',
           keyword_length = 0,
         },
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
+        -- snippet = {
+        --   expand = function(args)
+        --     luasnip.lsp_expand(args.body)
+        --   end,
+        -- },
         formatting = {
           format = require('lspkind').cmp_format({
             mode = "symbol",
@@ -165,7 +189,10 @@ return {
             i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
           }),
           ["<c-e>"] = cmp.mapping({
-            i = cmp.mapping.abort(),
+            i = cmp.mapping.scroll_docs(2),
+          }),
+          ["<c-y>"] = cmp.mapping({
+            i = cmp.mapping.scroll_docs(-2),
           }),
           ["<c-l>"] = cmp.mapping({
             i = cmp.mapping.confirm({ select = false }),
@@ -176,7 +203,6 @@ return {
         }),
         sources = {
           { name = 'copilot' },
-          { name = "codeium" },
           -- { name = 'cmp_tabnine' },
           -- {name = "luasnip"},
           {
@@ -289,41 +315,51 @@ return {
 
   -- surround
   {
-    "echasnovski/mini.surround",
-    keys = function(_, keys)
-      -- Populate the keys based on the user's options
-      local plugin = require("lazy.core.config").spec.plugins["mini.surround"]
-      local opts = require("lazy.core.plugin").values(plugin, "opts", false)
-      local mappings = {
-        { opts.mappings.add,            desc = "Add surrounding",                     mode = { "n", "v" } },
-        { opts.mappings.delete,         desc = "Delete surrounding" },
-        { opts.mappings.find,           desc = "Find right surrounding" },
-        { opts.mappings.find_left,      desc = "Find left surrounding" },
-        { opts.mappings.highlight,      desc = "Highlight surrounding" },
-        { opts.mappings.replace,        desc = "Replace surrounding" },
-        { opts.mappings.update_n_lines, desc = "Update `MiniSurround.config.n_lines`" },
-      }
-      mappings = vim.tbl_filter(function(m)
-        return m[1] and #m[1] > 0
-      end, mappings)
-      return vim.list_extend(mappings, keys)
-    end,
-    opts = {
-      mappings = {
-        add = "za",            -- Add surrounding in Normal and Visual modes
-        delete = "zd",         -- Delete surrounding
-        find = "zf",           -- Find surrounding (to the right)
-        find_left = "zF",      -- Find surrounding (to the left)
-        highlight = "zh",      -- Highlight surrounding
-        replace = "zr",        -- Replace surrounding
-        update_n_lines = "zn", -- Update `n_lines`
-      },
-    },
-    config = function(_, opts)
-      -- use gz mappings instead of s to prevent conflict with leap
-      require("mini.surround").setup(opts)
-    end,
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
   },
+  -- {
+  --   "echasnovski/mini.surround",
+  --   keys = function(_, keys)
+  --     -- Populate the keys based on the user's options
+  --     local plugin = require("lazy.core.config").spec.plugins["mini.surround"]
+  --     local opts = require("lazy.core.plugin").values(plugin, "opts", false)
+  --     local mappings = {
+  --       { opts.mappings.add,            desc = "Add surrounding",                     mode = { "n", "v" } },
+  --       { opts.mappings.delete,         desc = "Delete surrounding" },
+  --       { opts.mappings.find,           desc = "Find right surrounding" },
+  --       { opts.mappings.find_left,      desc = "Find left surrounding" },
+  --       { opts.mappings.highlight,      desc = "Highlight surrounding" },
+  --       { opts.mappings.replace,        desc = "Replace surrounding" },
+  --       { opts.mappings.update_n_lines, desc = "Update `MiniSurround.config.n_lines`" },
+  --     }
+  --     mappings = vim.tbl_filter(function(m)
+  --       return m[1] and #m[1] > 0
+  --     end, mappings)
+  --     return vim.list_extend(mappings, keys)
+  --   end,
+  --   opts = {
+  --     mappings = {
+  --       add = "ca",            -- Add surrounding in Normal and Visual modes
+  --       delete = "cd",         -- Delete surrounding
+  --       find = "cf",           -- Find surrounding (to the right)
+  --       find_left = "cF",      -- Find surrounding (to the left)
+  --       highlight = "ch",      -- Highlight surrounding
+  --       replace = "cr",        -- Replace surrounding
+  --       update_n_lines = "cn", -- Update `n_lines`
+  --     },
+  --   },
+  --   config = function(_, opts)
+  --     -- use gz mappings instead of s to prevent conflict with leap
+  --     require("mini.surround").setup(opts)
+  --   end,
+  -- },
 
   -- comments
   { "JoosepAlviste/nvim-ts-context-commentstring", lazy = true },
@@ -384,7 +420,6 @@ return {
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim"
     }
   },
 

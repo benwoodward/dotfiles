@@ -1,4 +1,231 @@
 return {
+  -- {
+  --   "m4xshen/hardtime.nvim",
+  --   event = "VeryLazy",
+  --   opts = {}
+  -- },
+
+  -- {
+  --   "folke/noice.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("noice").setup {
+  --       ignored_next_char = "[%w%.]",
+  --     }
+  --   end,
+  --   dependencies = {
+  --     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --     "MunifTanjim/nui.nvim",
+  --     -- OPTIONAL:
+  --     --   `nvim-notify` is only needed, if you want to use the notification view.
+  --     --   If not available, we use `mini` as the fallback
+  --     "rcarriga/nvim-notify",
+  --   }
+  -- },
+
+  {
+    "utilyre/barbecue.nvim",
+    name = "barbecue",
+    version = "*",
+    dependencies = {
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons", -- optional dependency
+    },
+    config = function()
+      require("barbecue").setup {
+        attach_navic = false, -- prevent barbecue from automatically attaching nvim-navic
+        show_modified = true,
+      }
+    end,
+  },
+
+  -- {
+  --   'nvimdev/lspsaga.nvim',
+  --   config = function()
+  --     require("lspsaga").setup({
+  --       symbol_in_winbar = {
+  --         enable = false,
+  --       },
+  --     })
+  --   end,
+  --   dependencies = {
+  --     { "nvim-tree/nvim-web-devicons" },
+  --     --Please make sure you install markdown and markdown_inline parser
+  --     { "nvim-treesitter/nvim-treesitter" }
+  --   }
+  -- },
+
+  -- {
+  --   "eckon/treesitter-current-functions",
+  --   dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-telescope/telescope.nvim" },
+  -- },
+
+  -- {
+  --   "https://github.com/mfussenegger/nvim-dap",
+  --   dependencies = {
+  --     { "mxsdev/nvim-dap-vscode-js" },
+  --     {
+  --       'https://github.com/rcarriga/nvim-dap-ui',
+  --       config = function()
+  --         require("dapui").setup()
+  --       end
+  --     },
+  --     {
+  --       "microsoft/vscode-js-debug",
+  --       build = "rm package-lock.json && npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+  --       config = function()
+  --         local function get_js_debug()
+  --           local path = vim.fn.stdpath "data"
+  --           return path .. "/lazy/vscode-js-debug"
+  --         end
+  --
+  --         require("dap-vscode-js").setup {
+  --           node_path = "node",
+  --           debugger_path = get_js_debug(),
+  --           adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
+  --         }
+  --
+  --         for _, language in ipairs { "typescript", "javascript" } do
+  --           require("dap").configurations[language] = {
+  --             {
+  --               type = "pwa-node",
+  --               request = "launch",
+  --               name = "Launch file",
+  --               program = "${file}",
+  --               cwd = "${workspaceFolder}",
+  --             },
+  --             {
+  --               type = "pwa-node",
+  --               request = "attach",
+  --               name = "Attach",
+  --               processId = require("dap.utils").pick_process,
+  --               cwd = "${workspaceFolder}",
+  --             },
+  --             {
+  --               type = "pwa-node",
+  --               request = "launch",
+  --               name = "Debug Vitest Tests",
+  --               -- trace = true, -- include debugger info
+  --               runtimeExecutable = "node",
+  --               runtimeArgs = {
+  --                 "./node_modules/vitest/vitest.mjs",
+  --                 "--threads",
+  --                 "false"
+  --               },
+  --               rootPath = "${workspaceFolder}",
+  --               cwd = "${workspaceFolder}",
+  --               console = "integratedTerminal",
+  --               internalConsoleOptions = "neverOpen",
+  --             },
+  --             {
+  --               type = "pwa-chrome",
+  --               name = "Attach - Remote Debugging",
+  --               request = "attach",
+  --               program = "${file}",
+  --               cwd = vim.fn.getcwd(),
+  --               sourceMaps = true,
+  --               protocol = "inspector",
+  --               port = 9222, -- Start Chrome google-chrome --remote-debugging-port=9222
+  --               webRoot = "${workspaceFolder}",
+  --             },
+  --             {
+  --               type = "pwa-chrome",
+  --               name = "Launch Chrome",
+  --               request = "launch",
+  --               url = "http://localhost:5173", -- This is for Vite. Change it to the framework you use
+  --               webRoot = "${workspaceFolder}",
+  --               userDataDir = "${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir",
+  --             },
+  --           }
+  --         end
+  --
+  --         for _, language in ipairs { "typescriptreact", "javascriptreact" } do
+  --           require("dap").configurations[language] = {
+  --             {
+  --               type = "pwa-chrome",
+  --               name = "Attach - Remote Debugging",
+  --               request = "attach",
+  --               program = "${file}",
+  --               cwd = vim.fn.getcwd(),
+  --               sourceMaps = true,
+  --               protocol = "inspector",
+  --               port = 9222, -- Start Chrome google-chrome --remote-debugging-port=9222
+  --               webRoot = "${workspaceFolder}",
+  --             },
+  --             {
+  --               type = "pwa-chrome",
+  --               name = "Launch Chrome",
+  --               request = "launch",
+  --               url = "http://localhost:5173", -- This is for Vite. Change it to the framework you use
+  --               webRoot = "${workspaceFolder}",
+  --               userDataDir = "${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir",
+  --             },
+  --           }
+  --         end
+  --       end,
+  --     },
+  --   },
+  -- },
+
+  -- {
+  --   'https://github.com/nvim-treesitter/nvim-treesitter-context',
+  --   config = function()
+  --     require 'treesitter-context'.setup {
+  --       enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+  --       max_lines = 0,            -- How many lines the window should span. Values <= 0 mean no limit.
+  --       min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+  --       line_numbers = true,
+  --       multiline_threshold = 20, -- Maximum number of lines to collapse for a single context line
+  --       trim_scope = 'outer',     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+  --       mode = 'cursor',          -- Line used to calculate context. Choices: 'cursor', 'topline'
+  --       -- Separator between context and content. Should be a single character string, like '-'.
+  --       -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+  --       separator = nil,
+  --       zindex = 20,     -- The Z-index of the context window
+  --       on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+  --     }
+  --   end,
+  -- },
+
+  -- {
+  --   'rmagatti/auto-session',
+  --   config = function()
+  --     require("auto-session").setup {
+  --       auto_session_enable_last_session = true,
+  --       bypass_session_save_file_types = nil, -- table: Bypass auto save when only buffer open is one of these file types
+  --       cwd_change_handling = {
+  --         -- table: Config for handling the DirChangePre and DirChanged autocmds, can be set to nil to disable altogether
+  --         restore_upcoming_session = true, -- boolean: restore session for upcoming cwd on cwd change
+  --         pre_cwd_changed_hook = nil,      -- function: This is called after auto_session code runs for the `DirChangedPre` autocmd
+  --         post_cwd_changed_hook = nil,     -- function: This is called after auto_session code runs for the `DirChanged` autocmd
+  --       },
+  --
+  --     }
+  --   end
+  -- },
+
+  {
+    "ggandor/leap.nvim",
+    keys = {
+      { "s",  mode = { "n", "x", "o" }, desc = "Leap forward to" },
+      { "S",  mode = { "n", "x", "o" }, desc = "Leap backward to" },
+      { "gs", mode = { "n", "x", "o" }, desc = "Leap from windows" },
+    },
+    config = function(_, opts)
+      local leap = require("leap")
+      for k, v in pairs(opts) do
+        leap.opts[k] = v
+      end
+      leap.add_default_mappings(true)
+      vim.keymap.del({ "x", "o" }, "x")
+      vim.keymap.del({ "x", "o" }, "X")
+    end,
+  },
+
+  -- search the web from neovim
+  {
+    'https://github.com/voldikss/vim-browser-search'
+  },
 
   -- Detect tabstop and shiftwidth automatically
   {
@@ -28,7 +255,7 @@ return {
       { "nvim-tree/nvim-web-devicons" },
     },
     cmd = "Telescope",
-    version = false, -- telescope did only one release, so use HEAD for now
+    version = "0.1.2", -- telescope did only one release, so use HEAD for now
     keys = {
       { "<leader>,",  "<cmd>Telescope buffers show_all_buffers=true<cr>", desc = "Switch Buffer" },
       { "<leader>:",  "<cmd>Telescope command_history<cr>",               desc = "Command History" },
@@ -53,46 +280,55 @@ return {
       { "<leader>sm", "<cmd>Telescope marks<cr>",                         desc = "Jump to Mark" },
       { "<leader>so", "<cmd>Telescope vim_options<cr>",                   desc = "Options" },
       { "<leader>sR", "<cmd>Telescope resume<cr>",                        desc = "Resume" },
-      { "<leader>sw", require('telescope.builtin').grep_string,           desc = "Word (root dir)" },
-      { "<leader>tw", "<cmd>Telescope tailiscope<cr>",                    desc = "Search Tailwind docs" },
+      { "<leader>sw", "<cmd>Telescope tailiscope<cr>",                    desc = "Search Tailwind docs" },
 
-      -- { "<leader>sW", require('telescope.builtin').grep_string({ cwd = false }), desc = "Word (cwd)" },
-      -- {
-      --   "<leader>ss",
-      --   require('telescope.builtin').lsp_document_symbols({
-      --     symbols = {
-      --       "Class",
-      --       "Function",
-      --       "Method",
-      --       "Constructor",
-      --       "Interface",
-      --       "Module",
-      --       "Struct",
-      --       "Trait",
-      --       "Field",
-      --       "Property",
-      --     },
-      --   }),
-      --   desc = "Goto Symbol",
-      -- },
-      -- {
-      --   "<leader>sS",
-      --   require('telescope.builtin').lsp_workspace_symbols({
-      --     symbols = {
-      --       "Class",
-      --       "Function",
-      --       "Method",
-      --       "Constructor",
-      --       "Interface",
-      --       "Module",
-      --       "Struct",
-      --       "Trait",
-      --       "Field",
-      --       "Property",
-      --     },
-      --   }),
-      --   desc = "Goto Symbol (Workspace)",
-      -- },
+      -- available types:
+      --
+      -- File
+      -- Module
+      -- Namespace
+      -- Package
+      -- Class
+      -- Method
+      -- Property
+      -- Field
+      -- Constructor
+      -- Enum
+      -- Interface
+      -- Function
+      -- Variable
+      -- Constant
+      -- String
+      -- Number
+      -- Boolean
+      -- Array
+      -- Object
+      -- Key
+      -- Null
+      -- EnumMember
+      -- Struct
+      -- Event
+      -- Operator
+      -- TypeParameter
+
+      {
+        "<leader>sv",
+        "<cmd>lua require('telescope.builtin').lsp_document_symbols({ symbols = { 'variable', 'constant', 'interface' } })<cr>",
+        desc =
+        "Search Document variables"
+      },
+      {
+        "<leader>ss",
+        "<cmd>Telescope lsp_document_symbols<cr>",
+        desc =
+        "Search Document Symbols"
+      },
+      {
+        "<leader>sS",
+        "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
+        desc =
+        "Search Workspace Symbols"
+      },
     },
     opts = {
       defaults = {
@@ -156,24 +392,6 @@ return {
       return ret
     end,
     opts = { labeled_modes = "nx" },
-  },
-
-  {
-    "ggandor/leap.nvim",
-    keys = {
-      { "s",  mode = { "n", "x", "o" }, desc = "Leap forward to" },
-      { "S",  mode = { "n", "x", "o" }, desc = "Leap backward to" },
-      { "gs", mode = { "n", "x", "o" }, desc = "Leap from windows" },
-    },
-    config = function(_, opts)
-      local leap = require("leap")
-      for k, v in pairs(opts) do
-        leap.opts[k] = v
-      end
-      leap.add_default_mappings(true)
-      vim.keymap.del({ "x", "o" }, "x")
-      vim.keymap.del({ "x", "o" }, "X")
-    end,
   },
 
   -- git signs
@@ -245,16 +463,6 @@ return {
     },
   },
 
-  -- buffer remove
-  {
-    "echasnovski/mini.bufremove",
-    -- stylua: ignore
-    keys = {
-      { "<leader>bd", function() require("mini.bufremove").delete(0, false) end, desc = "Delete Buffer" },
-      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end,  desc = "Delete Buffer (Force)" },
-    },
-  },
-
   -- better diagnostics list and others
   {
     "folke/trouble.nvim",
@@ -302,7 +510,7 @@ return {
       { "[t",         function() require("todo-comments").jump_prev() end, desc = "Previous todo comment" },
       { "<leader>xt", "<cmd>TodoTrouble<cr>",                              desc = "Todo (Trouble)" },
       { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",      desc = "Todo/Fix/Fixme (Trouble)" },
-      { "<leader>st", "<cmd>TodoTelescope<cr>",                            desc = "Todo" },
+      { "<leader>sT", "<cmd>TodoTelescope<cr>",                            desc = "Todo" },
     },
   },
 
@@ -355,17 +563,17 @@ return {
     }
   },
 
-  {
-    "jcdickinson/codeium.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("codeium").setup({})
-    end
-  },
+  -- {
+  --   "jcdickinson/codeium.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     "hrsh7th/nvim-cmp",
+  --   },
+  --   config = function()
+  --     require("codeium").setup({})
+  --   end
+  -- },
 
   { "tpope/vim-abolish" },
 
@@ -396,12 +604,12 @@ return {
     config = function()
       require('recorder').setup({
         mapping = {
-          startStopRecording = "q",
+          startStopRecording = "@",
           playMacro = "<c-q>",
           switchSlot = "<leader>q",
           editMacro = "cq",
           yankMacro = "yq",     -- also decodes it for turning macros to mappings
-          addBreakPoint = "##", -- ⚠️ this should be a string you don't use in insert mode during a macro
+          addBreakPoint = "@#", -- ⚠️ this should be a string you don't use in insert mode during a macro
         },
       })
     end

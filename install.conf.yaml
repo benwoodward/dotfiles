@@ -3,13 +3,13 @@
       create: true
       relink: true
 
-- clean: ['~']
+- clean: ["~"]
 
 - link:
     ~/.config/alacritty/alacritty.yml: .config/alacritty/alacritty.yml
     ~/.config/bat: .config/bat
     ~/.config/nvim:
-        path: .config/nvim
+      path: .config/nvim
     ~/.config/karabiner: .config/karabiner
     ~/.config/iterm2: .config/iterm2
     ~/.config/preview/preview.sh: .config/preview/preview.sh
@@ -24,13 +24,19 @@
     ~/.gitignore: .global_gitignore
     ~/.tmux.conf: .tmux.conf
     ~/Library/Preferences/com.mizage.Divvy.plist: Library/Preferences/com.mizage.Divvy.plist
+    ~/Library/LaunchAgents/com.Neovide.set-multigrid.plist: Library/LaunchAgents/com.Neovide.set-multigrid.plist
     ~/.p10k.zsh: .p10k.zsh
     ~/.skhdrc: .skhdrc
     ~/.zshrc: .zshrc
     ~/.zshrc.vimode: .zshrc.vimode
 
 - shell:
-    - ["git submodule update --init --recursive", Installing/updating submodules]
-    - ["git submodule foreach git pull origin master", Updating submodule contents]
+    - [
+        "git submodule update --init --recursive",
+        Installing/updating submodules,
+      ]
+    - [
+        "git submodule foreach git pull origin master",
+        Updating submodule contents,
+      ]
     - ["date > ~/.dotfiles_update", Logging last update]
-

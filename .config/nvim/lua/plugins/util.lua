@@ -13,18 +13,18 @@ return {
     'https://github.com/farmergreg/vim-lastplace'
   }, -- remember cursor position
 
-    {
-      'vladdoster/remember.nvim',
-      config = function()
-        require('remember')
-      end
-    },
+  {
+    'vladdoster/remember.nvim',
+    config = function()
+      require('remember')
+    end
+  },
 
   -- library used by other plugins
   { "nvim-lua/plenary.nvim", lazy = true },
 
   -- makes some plugins dot-repeatable like leap
-  { "tpope/vim-repeat", event = "VeryLazy" },
+  { "tpope/vim-repeat",      event = "VeryLazy" },
 
   { "wakatime/vim-wakatime" },
 }

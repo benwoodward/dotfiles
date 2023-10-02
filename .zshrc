@@ -43,6 +43,7 @@ compaudit | xargs chmod g-w
 # export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
 # export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
 export OPENAI_API_KEY=$(security find-generic-password -s 'openai-token' -w)
+export GITHUB_NPM_TOKEN=$(security find-generic-password -s 'github-npm-token' -w)
 
 # Personal aliases
 alias fk="fork"
@@ -399,3 +400,4 @@ export PATH="$PYENV_ROOT/shims:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
