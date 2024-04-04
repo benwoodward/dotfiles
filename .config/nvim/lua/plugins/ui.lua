@@ -6,66 +6,6 @@ return {
     end,
   },
 
-  -- better vim.ui
-  {
-    "stevearc/dressing.nvim",
-    lazy = true,
-    init = function()
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.ui.select = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim" } })
-        return vim.ui.select(...)
-      end
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.ui.input = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim" } })
-        return vim.ui.input(...)
-      end
-    end,
-  },
-
-  -- indent guides for Neovim
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    event = { "BufReadPost", "BufNewFile" },
-    opts = {
-      -- char = "▏",
-      char = "│",
-      filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
-      show_trailing_blankline_indent = false,
-      show_current_context = false,
-    },
-  },
-
-  -- active indent guide and indent text objects
-  {
-    "echasnovski/mini.indentscope",
-    version = false, -- wait till new 0.7.0 release to put it back on semver
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      -- symbol = "▏",
-      symbol = "│",
-      options = { try_as_border = true },
-    },
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy", "mason" },
-        callback = function()
-          vim.b.miniindentscope_disable = true
-        end,
-      })
-    end,
-    config = function(_, opts)
-      require("mini.indentscope").setup(opts)
-    end,
-  },
-
-  -- icons
-  { "nvim-tree/nvim-web-devicons", lazy = true },
-
-  -- ui components
-  { "MunifTanjim/nui.nvim",        lazy = true },
-
   {
     'https://github.com/NvChad/nvim-colorizer.lua',
     config = function()
@@ -113,39 +53,40 @@ return {
     end
   },
 
-  {
-    'https://github.com/akinsho/toggleterm.nvim',
-    config = function()
-      local status_ok, toggleterm = pcall(require, "toggleterm")
-      if not status_ok then
-        return
-      end
-      toggleterm.setup({
-        size = 20,
-        open_mapping = [[<c-\>]],
-        shading_factor = 2,
-        direction = "float",
-        float_opts = {
-          border = "curved",
-          highlights = {
-            border = "Normal",
-            background = "Normal",
-          },
-        },
-      })
-
-
-      function _G.set_terminal_keymaps()
-        local opts = { noremap = true }
-
-        if vim.fn.mapcheck("<Esc>", "t") ~= "" then
-          vim.api.nvim_del_keymap("t", "<Esc>")
-        end
-      end
-
-      vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
-    end
-  },
+  -- {
+  --   'https://github.com/akinsho/toggleterm.nvim',
+  --   version = "*",
+  --   config = function()
+  --     local status_ok, toggleterm = pcall(require, "toggleterm")
+  --     if not status_ok then
+  --       return
+  --     end
+  --     toggleterm.setup({
+  --       size = 20,
+  --       open_mapping = [[<c-\>]],
+  --       shading_factor = 2,
+  --       direction = "float",
+  --       float_opts = {
+  --         border = "curved",
+  --         highlights = {
+  --           border = "Normal",
+  --           background = "Normal",
+  --         },
+  --       },
+  --     })
+  --
+  --
+  --     function _G.set_terminal_keymaps()
+  --       local opts = { noremap = true }
+  --
+  --       if vim.fn.mapcheck("<Esc>", "t") ~= "" then
+  --         vim.api.nvim_del_keymap("t", "<Esc>")
+  --       end
+  --     end
+  --
+  --     vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+  --   end
+  -- },
 
   {
     'https://github.com/kevinhwang91/nvim-ufo',

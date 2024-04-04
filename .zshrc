@@ -1,3 +1,4 @@
+
 export EDITOR="nvim"
 
 if [[ ! -f ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh ]]; then
@@ -25,8 +26,6 @@ zcomet load changyuheng/fz
 # `compaudit | xargs chmod g-w`
 zcomet compinit
 compaudit | xargs chmod g-w
-
-. /usr/local/opt/asdf/libexec/asdf.sh
 
 # Read the API token from the macOS Keychain
 # To add: security add-generic-password -a "$USER" -s 'hub github token' -w 'TOKEN GOES HERE'
@@ -372,9 +371,6 @@ fzf-history-widget() {
 zle     -N   fzf-history-widget
 bindkey '^R' fzf-history-widget
 
-# recommended by brew doctor
-export PATH="/usr/local/bin:$PATH"
-
 function f_notifyme {
     LAST_EXIT_CODE=$?
     CMD=$(fc -ln -1)
@@ -401,3 +397,9 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
+# recommended by brew doctor
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+. /usr/local/opt/asdf/libexec/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
