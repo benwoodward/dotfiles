@@ -22,11 +22,13 @@
     ~/.ctags.d: .ctags.d
     ~/.gitconfig: .gitconfig
     ~/.gitignore: .global_gitignore
+    ~/.hammerspoon/init.lua: .hammerspoon/init.lua
     ~/.tmux.conf: .tmux.conf
     ~/Library/Preferences/com.mizage.Divvy.plist: Library/Preferences/com.mizage.Divvy.plist
     ~/Library/LaunchAgents/com.Neovide.set-multigrid.plist: Library/LaunchAgents/com.Neovide.set-multigrid.plist
+    ~/.local/bin/paste-image.sh: .local/bin/paste-image.sh
     ~/.p10k.zsh: .p10k.zsh
-    ~/.skhdrc: .skhdrc
+    ~/.config/skhd/skhdrc: .config/skhd/skhdrc
     ~/.zshrc: .zshrc
     ~/.zshrc.vimode: .zshrc.vimode
 

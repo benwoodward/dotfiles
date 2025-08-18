@@ -62,6 +62,7 @@ map("n", "<leader>op", ':lua require("telescope").extensions.project.project{dis
 map("n", "<leader>p", ':lua require("telescope").extensions.neoclip.default()<cr>', opts)
 map("n", "<leader>u", "mQviwU`Q", opts)
 map("n", "<leader>v", ':exe "vnew"<cr>:exe "setlocal buftype=nofile bufhidden=hide"<cr>', opts)
+map("n", "<leader>bh", ':exe "new"<cr>:exe "setlocal buftype=nofile bufhidden=hide"<cr>', opts)
 map("n", "<leader>w", ":w<cr>", opts)
 map(
   "v",
@@ -80,6 +81,9 @@ map("n", "gJ", ":lua require('treesj').join()<cr>", opts)
 map("n", "<leader>t", "<Plug>(toggle-lsp-diag-vtext)<cr>", opts)
 map("n", "<leader>fs", ":lua vim.lsp.buf.format({ timeout_ms = 2000 })<cr>:w<cr>", opts)
 map("n", "<leader>gt", ":lua vim.lsp.buf.type_definition()<cr>", opts)
+
+-- nvim-surround visual selection (S is used by leap)
+map("v", "<leader>s", "<Plug>(nvim-surround-visual)", { noremap = true, silent = true })
 
 -- lspsaga
 -- LSP finder - Find the symbol's definition
@@ -119,7 +123,7 @@ vim.keymap.set("n", "gt", "<cmd>Lspsaga peek_type_definition<CR>", opts)
 
 -- Show line diagnostics
 -- You can pass argument ++unfocus to
--- unfocus the show_line_diagnostics floating window
+-- unfocus the show_line_diagnostics floating window, show error
 vim.keymap.set("n", "gl", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
 
 -- Show buffer diagnostics
@@ -219,7 +223,8 @@ vim.keymap.set("n", "<leader><leader>j", require("smart-splits").swap_buf_down)
 vim.keymap.set("n", "<leader><leader>k", require("smart-splits").swap_buf_up)
 vim.keymap.set("n", "<leader><leader>l", require("smart-splits").swap_buf_right)
 
-map("n", "<A-w>", ":WindowsToggleAutowidth<cr>", opts)
+map("n", "<leader><space>", ":WindowsToggleAutowidth<cr>", opts)
+map("n", "<leader>ll", ":PrtChatNew<cr>", opts)
 
 -- dial
 vim.keymap.set("n", "<C-a>", require("dial.map").inc_normal(), { noremap = true })

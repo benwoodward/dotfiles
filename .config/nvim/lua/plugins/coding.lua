@@ -1,17 +1,17 @@
 return {
   {
-    'https://github.com/dmmulroy/tsc.nvim',
+    "https://github.com/dmmulroy/tsc.nvim",
     config = function()
-      require('tsc').setup()
-    end
+      require("tsc").setup()
+    end,
   },
 
   {
-    'https://github.com/monaqa/dial.nvim'
+    "https://github.com/monaqa/dial.nvim",
   },
 
   {
-    'https://github.com/gbprod/substitute.nvim'
+    "https://github.com/gbprod/substitute.nvim",
   },
 
   -- surround
@@ -23,7 +23,7 @@ return {
       require("nvim-surround").setup({
         -- Configuration here, or leave empty to use defaults
       })
-    end
+    end,
   },
 
   -- copilot
@@ -66,7 +66,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
-      'marilari88/neotest-vitest',
+      "marilari88/neotest-vitest",
     },
     keys = {
       {
@@ -158,8 +158,36 @@ return {
     config = function()
       require("neotest").setup({
         adapters = {
-          require('neotest-vitest') },
+          require("neotest-vitest"),
+        },
       })
-    end
+    end,
+  },
+
+  {
+    "frankroeder/parrot.nvim",
+    dependencies = { "fzf-lua" },
+    config = function()
+      require("parrot").setup({
+        providers = {
+          openai = {
+            api_key = { "/usr/bin/security", "find-generic-password", "-s openai-token", "-w" },
+          },
+          anthropic = {
+            api_key = { "/usr/bin/security", "find-generic-password", "-s anthropic-token", "-w" },
+          },
+        },
+      })
+    end,
+  },
+
+  {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      -- calling `setup` is optional for customization
+      require("fzf-lua").setup({})
+    end,
   },
 }

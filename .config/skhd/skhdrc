@@ -161,3 +161,4 @@ alt + cmd - j : yabai -m window --resize top:0:50
 # alt - p : yabai -m window --toggle sticky;\
 #           yabai -m window --toggle topmost;\
 #           yabai -m window --toggle pip
+

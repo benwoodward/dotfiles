@@ -10,9 +10,22 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
-# Advanced auto-completion
-source ~/.p10k.zsh
-zcomet load romkatv/powerlevel10k
+# disable stuff inside Cursor to prevent stalling
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  PROMPT='%n@%m:%~%# '
+  RPROMPT=''
+else
+  # Advanced auto-completion
+  source ~/.p10k.zsh
+  zcomet load romkatv/powerlevel10k
+
+  # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+  # Initialization code that may require console input (password prompts, [y/n]
+  # confirmations, etc.) must go above this block, everything else may go below.
+  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  fi
+fi
 
 # Command-line syntax highlighting
 # Must be AFTER after all calls to `compdef`, `zle -N` or `zle -C`.
@@ -43,6 +56,9 @@ compaudit | xargs chmod g-w
 # export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
 export OPENAI_API_KEY=$(security find-generic-password -s 'openai-token' -w)
 export GITHUB_NPM_TOKEN=$(security find-generic-password -s 'github-npm-token' -w)
+export ANTHROPIC_API_KEY=$(security find-generic-password -s 'anthropic-token' -w)
+export OPTINPUT_NEONDB_PASSWORD=$(security find-generic-password -s 'optinput-neondb-password' -w)
+export GOOGLE_CLOUD_PROJECT=$(security find-generic-password -s 'google-cloud-project' -w)
 
 # Personal aliases
 alias fk="fork"
@@ -53,6 +69,7 @@ alias ne="nvim '+call FzfFilePreview()' ."
 alias nl="nvim '+FloatermNew lf' ."
 alias nc='cd ~/.config/nvim; nvim'
 alias zc="nvim ~/.zshrc"
+alias kc="nvim ~/.config/kitty/kitty.conf"
 alias gc="cd; nvim ~/.gitconfig"
 alias rc="cd ~/.config/ranger; nvim ./rc.conf"
 alias reload="exec zsh"
@@ -64,6 +81,11 @@ alias lla='exa -la'
 alias llt='exa -T'
 alias llfu='exa -bghHliS --git'
 alias nd='npm run dev'
+alias delswap='rm -rf ~/.local/state/nvim/swap/*'
+alias showimg="viu"
+# alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude --dangerously-skip-permissions"
+alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
+alias cl="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
 
 # list recursive files, ordered by creation date
 alias lsr="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 | rev | cut -d ' ' -f 1,2,4,5 | rev"
@@ -155,15 +177,9 @@ WORDCHARS=$WORDCHARS:s:/-:
 # activate vi modes and display mode indicator in prompt
 source ~/.zshrc.vimode
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block, everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 TERM=xterm-256color
 ZSH_AUTOSUGGEST_STRATEGY=(history)
+HOMEBREW_NO_AUTO_UPDATE=1
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -357,6 +373,7 @@ bundle-id() {
   mdls -name kMDItemCFBundleIdentifier -raw "$(mdfind 'kMDItemContentType==com.apple.application-bundle&&kMDItemFSName=="'"$a"'"c' | head -n1)"
 }
 
+setopt HIST_IGNORE_SPACE # don't write to history any commands prefixed with a space
 edit-history() {
   ${EDITOR} ~/.zsh_history
 }
@@ -371,14 +388,6 @@ fzf-history-widget() {
 zle     -N   fzf-history-widget
 bindkey '^R' fzf-history-widget
 
-function f_notifyme {
-    LAST_EXIT_CODE=$?
-    CMD=$(fc -ln -1)
-    # No point in waiting for the command to complete
-    notify "$CMD" "$LAST_EXIT_CODE" &
-}
-export PS1='$(f_notifyme)'$PS1
-
 # tat: tmux attach
 function tat {
   name=$(basename `pwd` | sed -e 's/\.//g')
@@ -391,11 +400,6 @@ function tat {
     tmux new-session -s "$name"
   fi
 }
-export PYENV_ROOT="$(pyenv root)"
-export PATH="$PYENV_ROOT/shims:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
 
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
@@ -403,3 +407,9 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 . /usr/local/opt/asdf/libexec/asdf.sh
 export PATH="$HOME/.asdf/shims:$PATH"
+
+export PYENV_ROOT="$(pyenv root)"
+export PATH="$PYENV_ROOT/shims:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
