@@ -21,15 +21,15 @@ end
 
 -- Make floating window fill left-half of screen
 -- Original: ralt - left : yabai -m window --grid 1:2:0:0:1:1
-hs.hotkey.bind({ "alt" }, "left", function()
-	yabai({ "-m", "window", "--grid", "1:2:0:0:1:1" })
-end)
+-- hs.hotkey.bind({ "alt" }, "left", function()
+-- 	yabai({ "-m", "window", "--grid", "1:2:0:0:1:1" })
+-- end)
 
 -- Make floating window fill right-half of screen
 -- Original: ralt - right : yabai -m window --grid 1:2:1:0:1:1
-hs.hotkey.bind({ "alt" }, "right", function()
-	yabai({ "-m", "window", "--grid", "1:2:1:0:1:1" })
-end)
+-- hs.hotkey.bind({ "alt" }, "right", function()
+-- 	yabai({ "-m", "window", "--grid", "1:2:1:0:1:1" })
+-- end)
 
 -- Make window full-screen
 -- Original: cmd + shift - m : yabai -m window --grid 1:1:0:0:1:1
