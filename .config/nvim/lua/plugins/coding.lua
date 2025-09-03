@@ -10,10 +10,6 @@ return {
     "https://github.com/monaqa/dial.nvim",
   },
 
-  {
-    "https://github.com/gbprod/substitute.nvim",
-  },
-
   -- surround
   {
     "kylechui/nvim-surround",

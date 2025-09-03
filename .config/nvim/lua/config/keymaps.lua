@@ -236,12 +236,6 @@ vim.keymap.set("v", "<C-x>", require("dial.map").dec_visual(), { noremap = true 
 vim.keymap.set("v", "g<C-a>", require("dial.map").inc_gvisual(), { noremap = true })
 vim.keymap.set("v", "g<C-x>", require("dial.map").dec_gvisual(), { noremap = true })
 
--- substitute
-vim.keymap.set("n", "r", require("substitute").operator, { noremap = true })
-vim.keymap.set("n", "rr", require("substitute").line, { noremap = true })
-vim.keymap.set("n", "R", require("substitute").eol, { noremap = true })
-vim.keymap.set("x", "r", require("substitute").visual, { noremap = true })
-
 -- hlslens
 local kopts = { noremap = true, silent = true }
 -- vim.api.nvim_set_keymap('n', 'n',
