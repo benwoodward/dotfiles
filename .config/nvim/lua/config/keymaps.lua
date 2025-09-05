@@ -48,6 +48,8 @@ map(
 )
 map("n", "<leader>d", "mQviwu`Q", opts)
 map("n", "<leader>e", ":Telescope find_files<cr>", opts)
+-- find ALL files regardless of gitignore
+map("n", "<leader>a", ":Telescope find_files find_command=fd,--type,f,--hidden,--no-ignore<cr>", opts)
 map("n", "<leader>/", ":Telescope live_grep<cr>", opts)
 map("n", "<leader>r", ":lua oldfiles_gitdir()<cr>", opts)
 map("n", "<leader>fc", "<ESC>/\v^[<=>]{7}( .*\\|$)<cr>", opts)

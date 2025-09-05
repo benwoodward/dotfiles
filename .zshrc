@@ -7,8 +7,13 @@ fi
 
 source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
+
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
+fpath+=~/.zfunc # GelDB completions
 
 # disable stuff inside Cursor to prevent stalling
 if [[ "$TERM_PROGRAM" == "vscode" ]]; then
@@ -326,6 +331,7 @@ setopt extendedglob        # Enable extended wildcard options for globbing
 
 export PATH="$HOME/.bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
+export PATH="/Users/benwoodward/Library/Application Support/edgedb/bin:$PATH"
 
 FAST_HIGHLIGHT[git-cmsg-len]=72
 
