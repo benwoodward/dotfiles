@@ -79,7 +79,7 @@ alias gc="cd; nvim ~/.gitconfig"
 alias rc="cd ~/.config/ranger; nvim ./rc.conf"
 alias reload="exec zsh"
 alias g='git'
-alias ls='exa'
+alias ls='eza'
 alias ll='exa -l'
 alias lll='exa -l | less'
 alias lla='exa -la'
@@ -200,12 +200,12 @@ add-zsh-hook precmd tab_title
 # Theme for fzf
 export BAT_STYLE=changes,header,grid
 export FZF_PREVIEW_COMMAND='(bat --style=numbers,changes --color=always --wrap=never {})'
-export FZF_DEFAULT_COMMAND='rg --files --hidden --iglob "!.DS_Store" --iglob "!.git"'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/**" --glob "!.DS_Store"'
 export FZF_DEFAULT_OPTS="
   --color=fg:#c0caf5,bg:#1a1b26,hl:#bb9af7
   --color=fg+:#c0caf5,bg+:#1a1b26,hl+:#7dcfff
   --color=info:#7aa2f7,prompt:#7dcfff,pointer:#7dcfff
-  --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a'
+  --color=marker:#9ece6a,spinner:#9ece6a,header:#9ece6a
   --border
   --preview-window=right,70%
   --bind 'ctrl-j:down,ctrl-k:up,ctrl-u:preview-page-up,ctrl-y:preview-up+preview-up,ctrl-e:preview-down+preview-down+preview-down,ctrl-d:preview-page-down'
@@ -419,3 +419,5 @@ export PATH="$PYENV_ROOT/shims:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ -f "$(brew --prefix asdf)/libexec/asdf.sh" ]] && source "$(brew --prefix asdf)/libexec/asdf.sh"

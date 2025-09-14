@@ -6,13 +6,9 @@
 -- Efficient yabai helper function (faster than hs.execute)
 -- Based on recommendation from hammerspoon-yabai community
 function yabai(args)
-	hs.task
-		.new("/usr/local/bin/yabai", nil, function(ud, ...)
-			-- Optional: uncomment next line for debugging
-			-- print("yabai:", hs.inspect(table.pack(...)))
-			return true
-		end, args)
-		:start()
+  hs.task
+    .new("/opt/homebrew/bin/yabai", nil, function() return true end, args)
+    :start()
 end
 
 -- ############################################################### --
