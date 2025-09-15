@@ -411,8 +411,9 @@ function tat {
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 
-. /usr/local/opt/asdf/libexec/asdf.sh
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 export PATH="$HOME/.asdf/shims:$PATH"
+
 
 export PYENV_ROOT="$(pyenv root)"
 export PATH="$PYENV_ROOT/shims:$PATH"
