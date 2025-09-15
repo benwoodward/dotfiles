@@ -151,7 +151,6 @@
   required = true
   process = git-lfs filter-process
 [init]
-  templatedir = /Users/ben/.git-templates
   defaultBranch = main
 [fetch]
   ; templatedir = ~/.git_template
