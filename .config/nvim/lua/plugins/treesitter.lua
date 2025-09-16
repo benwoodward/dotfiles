@@ -10,6 +10,8 @@ return {
           node_decremental = ",",
         },
       },
+      highlight = { enable = true },
+      ensure_installed = { "svelte", "javascript", "typescript", "html", "css" }, -- Install Svelte parser
       matchup = { -- vim-matchup
         enable = true,
       },
