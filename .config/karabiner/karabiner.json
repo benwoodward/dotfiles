@@ -822,18 +822,6 @@
                         "description": "Change left_control+hjkl to arrow keys",
                         "manipulators": [
                             {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide",
-                                            "^net.kovidgoyal.kitty"
-                                        ],
-                                        "file_paths": ["/usr/local/bin/neovide"],
-                                        "type": "frontmost_application_unless"
-                                    }
-                                ],
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
@@ -845,18 +833,6 @@
                                 "type": "basic"
                             },
                             {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide",
-                                            "^net.kovidgoyal.kitty"
-                                        ],
-                                        "file_paths": ["/usr/local/bin/neovide"],
-                                        "type": "frontmost_application_unless"
-                                    }
-                                ],
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
@@ -868,18 +844,6 @@
                                 "type": "basic"
                             },
                             {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide",
-                                            "^net.kovidgoyal.kitty"
-                                        ],
-                                        "file_paths": ["/usr/local/bin/neovide"],
-                                        "type": "frontmost_application_unless"
-                                    }
-                                ],
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
@@ -891,18 +855,6 @@
                                 "type": "basic"
                             },
                             {
-                                "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide",
-                                            "^net.kovidgoyal.kitty"
-                                        ],
-                                        "file_paths": ["/usr/local/bin/neovide"],
-                                        "type": "frontmost_application_unless"
-                                    }
-                                ],
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
