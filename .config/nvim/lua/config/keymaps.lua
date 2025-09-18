@@ -36,9 +36,14 @@ map("n", "zd", "zb<c-e><c-e><c-e>", opts)
 map("n", "zJ", [[ <Cmd> lua go_next_closed_and_peek()<cr>]], opts)
 map("n", "zK", [[ <Cmd> lua go_previous_closed_and_peek()<cr>]], opts)
 map("n", "<leader>0", "0", opts)
+map("n", "<leader>-", ":e $HOME/.config/nvim/init.lua<cr>", opts)
+map("n", "<leader>d", "mQviwu`Q", opts)
+
+-- Telescope
+map("n", "<leader>gs", ":Telescope git_status<cr>", opts)
+map("n", "<leader>gc", ":Telescope git_commits<cr>", opts)
 map("n", "<leader>.", ":Telescope find_files hidden=true<cr>", opts)
 map("n", "<leader>;", ":Telescope command_history<cr>", opts)
-map("n", "<leader>-", ":e $HOME/.config/nvim/init.lua<cr>", opts)
 -- map('n', '<leader>/', ':Ag!<cr>', opts)
 map(
   "n",
@@ -46,14 +51,14 @@ map(
   ':lua require("telescope.builtin").buffers({ show_all_buffers=true, sort_lastused=true })<cr>',
   opts
 )
-map("n", "<leader>d", "mQviwu`Q", opts)
 map("n", "<leader>e", ":Telescope find_files<cr>", opts)
 -- find ALL files regardless of gitignore
 map("n", "<leader>a", ":Telescope find_files find_command=fd,--type,f,--hidden,--no-ignore<cr>", opts)
 map("n", "<leader>/", ":Telescope live_grep<cr>", opts)
 map("n", "<leader>r", ":lua oldfiles_gitdir()<cr>", opts)
-map("n", "<leader>fc", "<ESC>/\v^[<=>]{7}( .*\\|$)<cr>", opts)
 map("n", "<leader>ff", ':lua require("telescope.builtin").grep_string()<cr>', opts)
+
+map("n", "<leader>fc", "<ESC>/\v^[<=>]{7}( .*\\|$)<cr>", opts)
 map("n", "<leader>fr", ":FloatermNew ranger<cr>", opts)
 map("n", "<leader>g", "<Plug>SearchNormal", { noremap = false, silent = true }, "n")
 map("v", "<leader>g", "<Plug>SearchVisual", { noremap = false, silent = true }, "v")

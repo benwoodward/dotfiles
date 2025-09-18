@@ -91,6 +91,7 @@ alias showimg="viu"
 # alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude --dangerously-skip-permissions"
 alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
 alias cl="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
+alias co="codex --sandbox workspace-write --ask-for-approval untrusted"
 
 # list recursive files, ordered by creation date
 alias lsr="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 | rev | cut -d ' ' -f 1,2,4,5 | rev"
