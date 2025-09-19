@@ -4,41 +4,58 @@
         {
             "complex_modifications": {
                 "parameters": { "basic.simultaneous_threshold_milliseconds": 150 },
-                    "rules": [
+                "rules": [
                     {
                         "description": "Dia: map Ctrl-R → Alt-Q",
+                        "enabled": false,
                         "manipulators": [
                             {
-                            "type": "basic",
-                            "from": {
-                                "key_code": "r",
-                                "modifiers": { "mandatory": ["left_control"], "optional": ["any"] }
-                            },
-                            "to": [
-                                { "key_code": "q", "modifiers": ["option"] }
-                            ],
-                            "conditions": [
-                                {
-                                "type": "frontmost_application_if",
-                                "bundle_identifiers": ["^company\\.thebrowser\\.dia$"]
-                                }
-                            ]
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^company\\.thebrowser\\.dia$"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "r",
+                                    "modifiers": {
+                                        "mandatory": ["left_control"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "q",
+                                        "modifiers": ["option"]
+                                    }
+                                ],
+                                "type": "basic"
                             },
                             {
-                            "type": "basic",
-                            "from": {
-                                "key_code": "r",
-                                "modifiers": { "mandatory": ["right_control"], "optional": ["any"] }
-                            },
-                            "to": [
-                                { "key_code": "q", "modifiers": ["option"] }
-                            ],
-                            "conditions": [
-                                {
-                                "type": "frontmost_application_if",
-                                "bundle_identifiers": ["^company\\.thebrowser\\.dia$"]
-                                }
-                            ]
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^company\\.thebrowser\\.dia$"
+                                        ],
+                                        "type": "frontmost_application_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "r",
+                                    "modifiers": {
+                                        "mandatory": ["right_control"],
+                                        "optional": ["any"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "q",
+                                        "modifiers": ["option"]
+                                    }
+                                ],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -860,16 +877,7 @@
                         "manipulators": [
                             {
                                 "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide",
-                                            "^net.kovidgoyal.kitty"
-                                        ],
-                                        "file_paths": ["/usr/local/bin/neovide"],
-                                        "type": "frontmost_application_unless"
-                                    }
+                                    { "type": "variable_if", "name": "nvim_active", "value": 0 }
                                 ],
                                 "from": {
                                     "key_code": "h",
@@ -882,6 +890,9 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    { "type": "variable_if", "name": "nvim_active", "value": 0 }
+                                ],
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
@@ -893,6 +904,9 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    { "type": "variable_if", "name": "nvim_active", "value": 0 }
+                                ],
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
@@ -905,16 +919,7 @@
                             },
                             {
                                 "conditions": [
-                                    {
-                                        "bundle_identifiers": [
-                                            "^com.googlecode.iterm2",
-                                            "^com.github.wez.wezterm",
-                                            "^com.neovide.neovide",
-                                            "^net.kovidgoyal.kitty"
-                                        ],
-                                        "file_paths": ["/usr/local/bin/neovide"],
-                                        "type": "frontmost_application_unless"
-                                    }
+                                    { "type": "variable_if", "name": "nvim_active", "value": 0 }
                                 ],
                                 "from": {
                                     "key_code": "l",

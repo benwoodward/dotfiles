@@ -9,4 +9,9 @@ return {
   { "akinsho/bufferline.nvim", enabled = false },
   { "folke/which-key.nvim", enabled = false },
   { "gbprod/yanky.nvim", enabled = false },
+  {
+    "folke/snacks.nvim",
+    optional = true,
+    opts = { dashboard = { enabled = false } },
+  },
 }
