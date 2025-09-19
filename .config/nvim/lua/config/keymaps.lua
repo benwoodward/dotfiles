@@ -38,8 +38,10 @@ map("n", "zK", [[ <Cmd> lua go_previous_closed_and_peek()<cr>]], opts)
 map("n", "<leader>0", "0", opts)
 map("n", "<leader>-", ":e $HOME/.config/nvim/init.lua<cr>", opts)
 map("n", "<leader>d", "mQviwu`Q", opts)
+map("n", "<C-r>", ":redo<cr>", opts)
 
 -- Telescope
+map("n", "<leader>sk", ":Telescope keymaps<cr>", opts)
 map("n", "<leader>gs", ":Telescope git_status<cr>", opts)
 map("n", "<leader>gc", ":Telescope git_commits<cr>", opts)
 map("n", "<leader>.", ":Telescope find_files hidden=true<cr>", opts)

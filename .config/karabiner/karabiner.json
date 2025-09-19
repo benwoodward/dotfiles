@@ -4,7 +4,44 @@
         {
             "complex_modifications": {
                 "parameters": { "basic.simultaneous_threshold_milliseconds": 150 },
-                "rules": [
+                    "rules": [
+                    {
+                        "description": "Dia: map Ctrl-R → Alt-Q",
+                        "manipulators": [
+                            {
+                            "type": "basic",
+                            "from": {
+                                "key_code": "r",
+                                "modifiers": { "mandatory": ["left_control"], "optional": ["any"] }
+                            },
+                            "to": [
+                                { "key_code": "q", "modifiers": ["option"] }
+                            ],
+                            "conditions": [
+                                {
+                                "type": "frontmost_application_if",
+                                "bundle_identifiers": ["^company\\.thebrowser\\.dia$"]
+                                }
+                            ]
+                            },
+                            {
+                            "type": "basic",
+                            "from": {
+                                "key_code": "r",
+                                "modifiers": { "mandatory": ["right_control"], "optional": ["any"] }
+                            },
+                            "to": [
+                                { "key_code": "q", "modifiers": ["option"] }
+                            ],
+                            "conditions": [
+                                {
+                                "type": "frontmost_application_if",
+                                "bundle_identifiers": ["^company\\.thebrowser\\.dia$"]
+                                }
+                            ]
+                            }
+                        ]
+                    },
                     {
                         "description": "§/± → `/~ (built-in keyboard only)",
                         "manipulators": [
@@ -822,6 +859,18 @@
                         "description": "Change left_control+hjkl to arrow keys",
                         "manipulators": [
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
+                                        ],
+                                        "file_paths": ["/usr/local/bin/neovide"],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
@@ -855,6 +904,18 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [
+                                    {
+                                        "bundle_identifiers": [
+                                            "^com.googlecode.iterm2",
+                                            "^com.github.wez.wezterm",
+                                            "^com.neovide.neovide",
+                                            "^net.kovidgoyal.kitty"
+                                        ],
+                                        "file_paths": ["/usr/local/bin/neovide"],
+                                        "type": "frontmost_application_unless"
+                                    }
+                                ],
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
