@@ -18,6 +18,10 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 
+-- remove LazyVim's buffer mappings for H and L
+vim.keymap.del("n", "H")
+vim.keymap.del("n", "L")
+
 map("n", "<c-i>", "<c-i>", opts)
 map("n", "0", "^", opts)
 map("v", "0", "^", { noremap = false })
