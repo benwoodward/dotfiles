@@ -167,6 +167,7 @@ config.send_composed_key_when_right_alt_is_pressed = true
 
 -- Keys
 config.keys = {
+  { key = "F", mods = "CMD|SHIFT", action = wezterm.action.Search({ CaseInSensitiveString = "" }) },
   { key = ';', mods = 'CTRL', action = 'DisableDefaultAssignment' },
   { key = 't', mods = 'CMD', action = wezterm.action.SpawnTab('CurrentPaneDomain') },
   { key = 'w', mods = 'CMD|CTRL', action = wezterm.action.CloseCurrentTab { confirm = false } },
