@@ -38,7 +38,11 @@ zcomet load zdharma/fast-syntax-highlighting
 
 zcomet load zsh-users/zsh-autosuggestions
 zcomet load rupa/z
+
+export FZ_CMD=fz
+export FZ_NO_EDITOR=1     # belt-and-braces: never open $EDITOR from fz
 zcomet load changyuheng/fz
+
 
 # if this causes "Ignore insecure directories and continue" then run:
 # `compaudit | xargs chmod g-w`
@@ -75,6 +79,7 @@ alias nl="nvim '+FloatermNew lf' ."
 alias nc='cd ~/.config/nvim; nvim'
 alias zc="nvim ~/.zshrc"
 alias kc="nvim ~/.config/kitty/kitty.conf"
+alias wc="nvim ~/.config/wezterm/wezterm.lua"
 alias gc="cd; nvim ~/.gitconfig"
 alias rc="cd ~/.config/ranger; nvim ./rc.conf"
 alias reload="exec zsh"
@@ -91,7 +96,8 @@ alias showimg="viu"
 # alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude --dangerously-skip-permissions"
 alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
 alias cl="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
-alias co="codex --sandbox workspace-write --ask-for-approval on-request"
+# alias co="codex --sandbox workspace-write --ask-for-approval on-request --search --model=gpt-5-codex -c model_reasoning_effort="high" -c sandbox_workspace_write.network_access=true"
+alias co="codex --sandbox workspace-write --ask-for-approval on-request --search -c model_reasoning_effort="medium" -c sandbox_workspace_write.network_access=true"
 
 # list recursive files, ordered by creation date
 alias lsr="find . -type f -not \( -wholename './.git*' -prune \) -not \( -wholename './tags*' -prune \) -exec ls -lTU {} \; | sort -k 6 | rev | cut -d ' ' -f 1,2,4,5 | rev"
@@ -160,10 +166,6 @@ alias recent-files-recursive="find . -exec stat -f '%m%t%Sm %N' {} + | sort -n |
 # go to repo root
 alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
 
-alias b='bundle'
-alias bi='bundle install'
-alias be='b exec'
-
 # TODO This should show hidden directories also
 alias recent="mdls -name kMDItemFSName -name kMDItemDateAdded -raw * | \
 xargs -0 -I {} echo {} | \
@@ -172,8 +174,7 @@ sort"
 
 alias tag-gems='ctags --recurse . `bundle show --paths`'
 alias ssh='TERM=xterm-256color ssh'
-
-
+alias python=python3
 
 autoload -U select-word-style
 select-word-style bash
@@ -415,11 +416,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 export PATH="$HOME/.asdf/shims:$PATH"
 
-
-export PYENV_ROOT="$(pyenv root)"
-export PATH="$PYENV_ROOT/shims:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
 eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ -f "$(brew --prefix asdf)/libexec/asdf.sh" ]] && source "$(brew --prefix asdf)/libexec/asdf.sh"
+
+# include Gel CLI
+source "/Users/ben/Library/Application Support/edgedb/env"
