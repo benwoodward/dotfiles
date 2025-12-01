@@ -92,6 +92,9 @@ config.font = wezterm.font("Hack Nerd Font Mono", { weight = "Regular" })
 config.font_size = 16.0
 config.line_height = 1.10
 config.underline_thickness = 1.10
+config.freetype_load_target = "Light"
+config.freetype_load_flags = "NO_HINTING"
+config.front_end = "WebGpu"
 -- If you want ligatures off globally: config.harfbuzz_features = {"calt=0","clig=0","liga=0"}
 
 config.default_prog = { "/bin/zsh" }
@@ -148,6 +151,8 @@ config.colors = {
 -- Opacity
 config.window_background_opacity = 1.0
 config.text_background_opacity   = 1.0
+config.enable_wayland = false
+config.force_reverse_video_cursor = true
 
 -- Window / tabs
 config.window_decorations = "RESIZE"
@@ -184,7 +189,6 @@ config.keys = {
   { key = '9', mods = 'CMD', action = wezterm.action.ActivateTab(8) },
   { key = 'Enter', mods = 'SHIFT', action = wezterm.action.SendString("\n") },
   { key = '3', mods = 'ALT', action = wezterm.action.SendString("#") },
-  { key = 'v', mods = 'CTRL', action = wezterm.action.SendString("~/.local/bin/paste-image.sh\r") },
 }
 
 return config

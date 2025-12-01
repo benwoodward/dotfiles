@@ -11,7 +11,6 @@ source ${ZDOTDIR:-${HOME}}/.zcomet/bin/zcomet.zsh
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
-zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 fpath+=~/.zfunc # GelDB completions
 
@@ -66,8 +65,8 @@ compaudit | xargs chmod g-w
 export OPENAI_API_KEY=$(security find-generic-password -s 'openai-token' -w)
 export GITHUB_NPM_TOKEN=$(security find-generic-password -s 'github-npm-token' -w)
 export ANTHROPIC_API_KEY=$(security find-generic-password -s 'anthropic-token' -w)
-export OPTINPUT_NEONDB_PASSWORD=$(security find-generic-password -s 'optinput-neondb-password' -w)
-export GOOGLE_CLOUD_PROJECT=$(security find-generic-password -s 'google-cloud-project' -w)
+export SUNSAMA_EMAIL=$(security find-generic-password -s 'sunsama-email' -w)
+export SUNSAMA_PASSWORD=$(security find-generic-password -s 'sunsama-password' -w)
 
 # Personal aliases
 alias fk="fork"
@@ -421,3 +420,5 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # include Gel CLI
 source "/Users/ben/Library/Application Support/edgedb/env"
+
+export PATH="$HOME/.local/bin:$PATH"
