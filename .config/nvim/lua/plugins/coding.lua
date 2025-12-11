@@ -161,23 +161,6 @@ return {
   },
 
   {
-    "frankroeder/parrot.nvim",
-    dependencies = { "fzf-lua" },
-    config = function()
-      require("parrot").setup({
-        providers = {
-          openai = {
-            api_key = { "/usr/bin/security", "find-generic-password", "-s openai-token", "-w" },
-          },
-          anthropic = {
-            api_key = { "/usr/bin/security", "find-generic-password", "-s anthropic-token", "-w" },
-          },
-        },
-      })
-    end,
-  },
-
-  {
     "ibhagwan/fzf-lua",
     -- optional for icon support
     dependencies = { "nvim-tree/nvim-web-devicons" },

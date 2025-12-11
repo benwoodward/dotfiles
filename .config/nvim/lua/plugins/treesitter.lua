@@ -61,7 +61,7 @@ return {
   },
 
   {
-    "https://github.com/hiphish/rainbow-delimiters.nvim",
+    "hiphish/rainbow-delimiters.nvim",
     config = function()
       local rainbow_delimiters = require("rainbow-delimiters")
 
