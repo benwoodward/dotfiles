@@ -23,3 +23,5 @@ node_modules
 # Override for rg to exclude stuff from fzf results
 .ignore
 
+helix-notes.md
+helix-llm-docs/

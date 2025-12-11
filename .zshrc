@@ -422,3 +422,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 source "/Users/ben/Library/Application Support/edgedb/env"
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/ben/.antigravity/antigravity/bin:$PATH"
