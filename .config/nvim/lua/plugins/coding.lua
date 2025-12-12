@@ -164,6 +164,10 @@ return {
     "ibhagwan/fzf-lua",
     -- optional for icon support
     dependencies = { "nvim-tree/nvim-web-devicons" },
+    keys = {
+      -- disable LazyVim default <leader>fr to allow custom ranger mapping
+      { "<leader>fr", false },
+    },
     config = function()
       -- calling `setup` is optional for customization
       require("fzf-lua").setup({})
