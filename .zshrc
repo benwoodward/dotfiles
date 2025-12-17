@@ -425,3 +425,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # Added by Antigravity
 export PATH="/Users/ben/.antigravity/antigravity/bin:$PATH"
+
+# gw shell integration
+eval "$(gw shell-integration --show-script --shell=zsh)"
