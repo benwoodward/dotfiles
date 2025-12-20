@@ -25,3 +25,8 @@ node_modules
 
 helix-notes.md
 helix-llm-docs/
+
+# --- Claude Code ---------------------------------------------------------------
+.claude/
+CLAUDE.local.md
+

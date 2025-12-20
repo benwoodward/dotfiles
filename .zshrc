@@ -428,3 +428,5 @@ export PATH="/Users/ben/.antigravity/antigravity/bin:$PATH"
 
 # gw shell integration
 eval "$(gw shell-integration --show-script --shell=zsh)"
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi

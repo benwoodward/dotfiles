@@ -5,8 +5,7 @@
 local opt = vim.opt
 
 if vim.env.CONDUCTOR_WORKSPACE_PATH then
-  -- Use bar cursor since xterm.js can't render block cursor over text
-  vim.opt.guicursor = "n-v-c:ver25,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+  opt.cursorcolumn = true
 end
 
 opt.signcolumn = "no" -- prevent jumpiness while scrolling

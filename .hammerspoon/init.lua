@@ -62,59 +62,262 @@ hs.hotkey.bind({ "shift", "alt" }, "j", function()
 end)
 
 -- ############################################################### --
--- INCREASE WINDOW SIZE (expand outward)
+-- WINDOW RESIZING
+-- cmd+alt+key: move the edge in that direction
+-- cmd+alt+shift+key: move the opposite edge in that direction
 -- ############################################################### --
 
--- Increase window size left (expand left edge)
--- Original: shift + alt + cmd - h : yabai -m window --resize left:-50:0
-hs.hotkey.bind({ "shift", "alt", "cmd" }, "h", function()
+-- H: move left edge left / shift: move right edge left
+hs.hotkey.bind({ "alt", "cmd" }, "h", function()
 	yabai({ "-m", "window", "--resize", "left:-50:0" })
 end)
-
--- Increase window size right (expand right edge)
--- Original: shift + alt + cmd - l : yabai -m window --resize right:50:50
-hs.hotkey.bind({ "shift", "alt", "cmd" }, "l", function()
-	yabai({ "-m", "window", "--resize", "right:50:50" })
-end)
-
--- Increase window size up (expand top edge)
--- Original: shift + alt + cmd - k : yabai -m window --resize top:0:-50
-hs.hotkey.bind({ "shift", "alt", "cmd" }, "k", function()
-	yabai({ "-m", "window", "--resize", "top:0:-50" })
-end)
-
--- Increase window size down (expand bottom edge)
--- Original: shift + alt + cmd - j : yabai -m window --resize bottom:0:50
-hs.hotkey.bind({ "shift", "alt", "cmd" }, "j", function()
-	yabai({ "-m", "window", "--resize", "bottom:0:50" })
-end)
-
--- ############################################################### --
--- DECREASE WINDOW SIZE (shrink inward)
--- ############################################################### --
-
--- Decrease window size from right (shrink right edge)
--- Original: alt + cmd - l : yabai -m window --resize right:-50:0
-hs.hotkey.bind({ "alt", "cmd" }, "l", function()
+hs.hotkey.bind({ "shift", "alt", "cmd" }, "h", function()
 	yabai({ "-m", "window", "--resize", "right:-50:0" })
 end)
 
--- Decrease window size from left (shrink left edge)
--- Original: alt + cmd - h : yabai -m window --resize left:50:50
-hs.hotkey.bind({ "alt", "cmd" }, "h", function()
-	yabai({ "-m", "window", "--resize", "left:50:50" })
+-- L: move right edge right / shift: move left edge right
+hs.hotkey.bind({ "alt", "cmd" }, "l", function()
+	yabai({ "-m", "window", "--resize", "right:50:0" })
+end)
+hs.hotkey.bind({ "shift", "alt", "cmd" }, "l", function()
+	yabai({ "-m", "window", "--resize", "left:50:0" })
 end)
 
--- Decrease window size from bottom (shrink bottom edge)
--- Original: alt + cmd - k : yabai -m window --resize bottom:0:-50
+-- K: move top edge up / shift: move bottom edge up
 hs.hotkey.bind({ "alt", "cmd" }, "k", function()
+	yabai({ "-m", "window", "--resize", "top:0:-50" })
+end)
+hs.hotkey.bind({ "shift", "alt", "cmd" }, "k", function()
 	yabai({ "-m", "window", "--resize", "bottom:0:-50" })
 end)
 
--- Decrease window size from top (shrink top edge)
--- Original: alt + cmd - j : yabai -m window --resize top:0:50
+-- J: move bottom edge down / shift: move top edge down
 hs.hotkey.bind({ "alt", "cmd" }, "j", function()
+	yabai({ "-m", "window", "--resize", "bottom:0:50" })
+end)
+hs.hotkey.bind({ "shift", "alt", "cmd" }, "j", function()
 	yabai({ "-m", "window", "--resize", "top:0:50" })
+end)
+
+-- ############################################################### --
+-- HIGHLIGHT FOCUSED WINDOW WITH BORDER
+-- ############################################################### --
+
+local focusBorder = nil
+
+local function updateFocusBorder()
+	if focusBorder then
+		focusBorder:delete()
+		focusBorder = nil
+	end
+
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local app = win:application()
+	if not app or app:name() ~= "kitty" then return end
+
+	-- Only show border if app has more than 1 window
+	local windows = app:allWindows()
+	local visibleCount = 0
+	for _, w in ipairs(windows) do
+		if w:isStandard() and w:isVisible() then
+			visibleCount = visibleCount + 1
+		end
+	end
+	if visibleCount <= 1 then return end
+
+	local frame = win:frame()
+	local borderWidth = 4
+
+	focusBorder = hs.canvas.new(frame)
+	focusBorder:appendElements({
+		type = "rectangle",
+		action = "stroke",
+		strokeColor = { red = 1, green = 0.5, blue = 0, alpha = 1 },
+		strokeWidth = borderWidth,
+		roundedRectRadii = { xRadius = 10, yRadius = 10 },
+	})
+	focusBorder:level(hs.canvas.windowLevels.overlay)
+	focusBorder:show()
+end
+
+hs.window.filter.default:subscribe(hs.window.filter.windowFocused, updateFocusBorder)
+
+-- ############################################################### --
+-- WINDOW LABELS
+-- ############################################################### --
+
+local windowLabels = {}  -- window ID -> canvas
+local activeColor = { red = 1, green = 0.5, blue = 0, alpha = 1 }
+local inactiveColor = { white = 1, alpha = 1 }
+
+local function updateLabelPosition(winId)
+	local label = windowLabels[winId]
+	if not label then return end
+
+	local win = hs.window.get(winId)
+	if not win then
+		label:delete()
+		windowLabels[winId] = nil
+		return
+	end
+
+	local frame = win:frame()
+	local labelHeight = 16
+	label:frame({
+		x = frame.x,
+		y = frame.y - labelHeight,
+		w = frame.w,
+		h = labelHeight
+	})
+end
+
+local function updateLabelColors()
+	local focusedWin = hs.window.focusedWindow()
+	local focusedId = focusedWin and focusedWin:id() or nil
+
+	for winId, canvas in pairs(windowLabels) do
+		local color = (winId == focusedId) and activeColor or inactiveColor
+		canvas[1].textColor = color
+	end
+end
+
+local function createWindowLabel(win, name)
+	local winId = win:id()
+
+	-- Remove existing label if any
+	if windowLabels[winId] then
+		windowLabels[winId]:delete()
+	end
+
+	local frame = win:frame()
+	local labelHeight = 16
+	local focusedWin = hs.window.focusedWindow()
+	local isFocused = focusedWin and focusedWin:id() == winId
+
+	local canvas = hs.canvas.new({
+		x = frame.x,
+		y = frame.y - labelHeight,
+		w = frame.w,
+		h = labelHeight
+	})
+	canvas:appendElements({
+		type = "text",
+		text = name,
+		textColor = isFocused and activeColor or inactiveColor,
+		textAlignment = "center",
+		textSize = 12,
+		frame = { x = 0, y = 0, w = "100%", h = "100%" },
+	})
+	canvas:level(hs.canvas.windowLevels.overlay)
+	canvas:show()
+
+	windowLabels[winId] = canvas
+end
+
+-- Hotkey to add label to focused window (Cmd+Alt+N)
+hs.hotkey.bind({ "cmd", "alt" }, "n", function()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local button, text = hs.dialog.textPrompt("Window Label", "Enter a name for this window:", "", "OK", "Cancel")
+	if button == "OK" and text ~= "" then
+		createWindowLabel(win, text)
+	end
+end)
+
+-- Track window movements and destruction
+local labelWatcher = hs.window.filter.new():setDefaultFilter()
+labelWatcher:subscribe(hs.window.filter.windowMoved, function(win)
+	if win then updateLabelPosition(win:id()) end
+end)
+labelWatcher:subscribe(hs.window.filter.windowFocused, function(win)
+	updateLabelColors()
+end)
+labelWatcher:subscribe(hs.window.filter.windowDestroyed, function(win, appName, event)
+	-- Clean up any orphaned labels
+	for winId, canvas in pairs(windowLabels) do
+		if not hs.window.get(winId) then
+			canvas:delete()
+			windowLabels[winId] = nil
+		end
+	end
+end)
+
+-- ############################################################### --
+-- ARRANGE WINDOWS IN GRID
+-- ############################################################### --
+
+-- Arrange windows in two vertical halves (side by side)
+hs.hotkey.bind({ "cmd", "alt" }, "v", function()
+	local focusedWindow = hs.window.focusedWindow()
+	if not focusedWindow then return end
+
+	local app = focusedWindow:application()
+	local windows = app:allWindows()
+
+	local visibleWindows = {}
+	for _, win in ipairs(windows) do
+		if win:isStandard() and win:isVisible() then
+			table.insert(visibleWindows, win)
+		end
+	end
+
+	if #visibleWindows == 0 then return end
+
+	local screen = focusedWindow:screen()
+	local frame = screen:frame()
+	local gap = 1
+
+	local halfWidth = (frame.w - gap * 3) / 2
+
+	for i, win in ipairs(visibleWindows) do
+		if i > 2 then break end
+		local x = frame.x + gap + (i - 1) * (halfWidth + gap)
+		win:setFrame(hs.geometry.rect(x, frame.y + gap, halfWidth, frame.h - gap * 2))
+	end
+end)
+
+-- Arrange all windows of current application in a 2x2 grid with gaps
+hs.hotkey.bind({ "cmd", "alt" }, "g", function()
+	local focusedWindow = hs.window.focusedWindow()
+	if not focusedWindow then return end
+
+	local app = focusedWindow:application()
+	local windows = app:allWindows()
+
+	-- Filter to only visible, standard windows
+	local visibleWindows = {}
+	for _, win in ipairs(windows) do
+		if win:isStandard() and win:isVisible() then
+			table.insert(visibleWindows, win)
+		end
+	end
+
+	if #visibleWindows == 0 then return end
+
+	local screen = focusedWindow:screen()
+	local frame = screen:frame()
+
+	local gap = 1  -- Gap size in pixels
+	local cols = 2
+	local rows = 2
+
+	local cellWidth = (frame.w - gap * (cols + 1)) / cols
+	local cellHeight = (frame.h - gap * (rows + 1)) / rows
+
+	for i, win in ipairs(visibleWindows) do
+		if i > 4 then break end  -- Max 4 windows in 2x2 grid
+
+		local col = (i - 1) % cols
+		local row = math.floor((i - 1) / cols)
+
+		local x = frame.x + gap + col * (cellWidth + gap)
+		local y = frame.y + gap + row * (cellHeight + gap)
+
+		win:setFrame(hs.geometry.rect(x, y, cellWidth, cellHeight))
+	end
 end)
 
 -- ############################################################### --
