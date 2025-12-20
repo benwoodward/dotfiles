@@ -148,27 +148,35 @@ hs.window.filter.default:subscribe(hs.window.filter.windowFocused, updateFocusBo
 -- WINDOW LABELS
 -- ############################################################### --
 
-local windowLabels = {}  -- window ID -> canvas
+local windowLabels = {}  -- window ID -> { canvas, name }
 local activeColor = { red = 1, green = 0.5, blue = 0, alpha = 1 }
 local inactiveColor = { white = 1, alpha = 1 }
+local labelFontSize = 12
+local labelPadding = 8
+
+local function getLabelWidth(name)
+	local textSize = hs.drawing.getTextDrawingSize(name, { size = labelFontSize })
+	return textSize.w + labelPadding * 2
+end
 
 local function updateLabelPosition(winId)
-	local label = windowLabels[winId]
-	if not label then return end
+	local labelData = windowLabels[winId]
+	if not labelData then return end
 
 	local win = hs.window.get(winId)
 	if not win then
-		label:delete()
+		labelData.canvas:delete()
 		windowLabels[winId] = nil
 		return
 	end
 
 	local frame = win:frame()
-	local labelHeight = 16
-	label:frame({
-		x = frame.x,
-		y = frame.y - labelHeight,
-		w = frame.w,
+	local labelHeight = 18
+	local labelWidth = getLabelWidth(labelData.name)
+	labelData.canvas:frame({
+		x = frame.x + (frame.w - labelWidth) / 2,
+		y = frame.y,
+		w = labelWidth,
 		h = labelHeight
 	})
 end
@@ -177,9 +185,9 @@ local function updateLabelColors()
 	local focusedWin = hs.window.focusedWindow()
 	local focusedId = focusedWin and focusedWin:id() or nil
 
-	for winId, canvas in pairs(windowLabels) do
+	for winId, labelData in pairs(windowLabels) do
 		local color = (winId == focusedId) and activeColor or inactiveColor
-		canvas[1].textColor = color
+		labelData.canvas[2].textColor = color
 	end
 end
 
@@ -188,32 +196,38 @@ local function createWindowLabel(win, name)
 
 	-- Remove existing label if any
 	if windowLabels[winId] then
-		windowLabels[winId]:delete()
+		windowLabels[winId].canvas:delete()
 	end
 
 	local frame = win:frame()
-	local labelHeight = 16
+	local labelHeight = 18
+	local labelWidth = getLabelWidth(name)
 	local focusedWin = hs.window.focusedWindow()
 	local isFocused = focusedWin and focusedWin:id() == winId
 
 	local canvas = hs.canvas.new({
-		x = frame.x,
-		y = frame.y - labelHeight,
-		w = frame.w,
+		x = frame.x + (frame.w - labelWidth) / 2,
+		y = frame.y,
+		w = labelWidth,
 		h = labelHeight
 	})
 	canvas:appendElements({
+		type = "rectangle",
+		action = "fill",
+		fillColor = { red = 0, green = 0, blue = 0, alpha = 0.8 },
+		roundedRectRadii = { xRadius = 4, yRadius = 4 },
+	}, {
 		type = "text",
 		text = name,
 		textColor = isFocused and activeColor or inactiveColor,
 		textAlignment = "center",
-		textSize = 12,
-		frame = { x = 0, y = 0, w = "100%", h = "100%" },
+		textSize = labelFontSize,
+		frame = { x = 0, y = 2, w = "100%", h = "100%" },
 	})
 	canvas:level(hs.canvas.windowLevels.overlay)
 	canvas:show()
 
-	windowLabels[winId] = canvas
+	windowLabels[winId] = { canvas = canvas, name = name }
 end
 
 -- Hotkey to add label to focused window (Cmd+Alt+N)
@@ -224,6 +238,7 @@ hs.hotkey.bind({ "cmd", "alt" }, "n", function()
 	local button, text = hs.dialog.textPrompt("Window Label", "Enter a name for this window:", "", "OK", "Cancel")
 	if button == "OK" and text ~= "" then
 		createWindowLabel(win, text)
+		hs.alert.show("Label width: " .. getLabelWidth(text))  -- DEBUG
 	end
 end)
 
@@ -237,9 +252,9 @@ labelWatcher:subscribe(hs.window.filter.windowFocused, function(win)
 end)
 labelWatcher:subscribe(hs.window.filter.windowDestroyed, function(win, appName, event)
 	-- Clean up any orphaned labels
-	for winId, canvas in pairs(windowLabels) do
+	for winId, labelData in pairs(windowLabels) do
 		if not hs.window.get(winId) then
-			canvas:delete()
+			labelData.canvas:delete()
 			windowLabels[winId] = nil
 		end
 	end
