@@ -185,9 +185,18 @@ local function updateLabelColors()
 	local focusedWin = hs.window.focusedWindow()
 	local focusedId = focusedWin and focusedWin:id() or nil
 
+	-- Check if focused app is kitty
+	local app = focusedWin and focusedWin:application()
+	local isKittyFocused = app and app:name() == "kitty"
+
 	for winId, labelData in pairs(windowLabels) do
-		local color = (winId == focusedId) and activeColor or inactiveColor
-		labelData.canvas[2].textColor = color
+		if isKittyFocused then
+			labelData.canvas:show()
+			local color = (winId == focusedId) and activeColor or inactiveColor
+			labelData.canvas[2].textColor = color
+		else
+			labelData.canvas:hide()
+		end
 	end
 end
 
@@ -238,7 +247,6 @@ hs.hotkey.bind({ "cmd", "alt" }, "n", function()
 	local button, text = hs.dialog.textPrompt("Window Label", "Enter a name for this window:", "", "OK", "Cancel")
 	if button == "OK" and text ~= "" then
 		createWindowLabel(win, text)
-		hs.alert.show("Label width: " .. getLabelWidth(text))  -- DEBUG
 	end
 end)
 
