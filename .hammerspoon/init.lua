@@ -190,10 +190,9 @@ local function updateLabelColors()
 	local isKittyFocused = app and app:name() == "kitty"
 
 	for winId, labelData in pairs(windowLabels) do
-		if isKittyFocused then
+		if isKittyFocused and winId == focusedId then
 			labelData.canvas:show()
-			local color = (winId == focusedId) and activeColor or inactiveColor
-			labelData.canvas[2].textColor = color
+			labelData.canvas[2].textColor = activeColor
 		else
 			labelData.canvas:hide()
 		end
