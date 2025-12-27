@@ -3,6 +3,10 @@
 -- Converted from skhd configuration for window management
 -- ############################################################### --
 
+-- Forward declaration for focus border (used by window positioning hotkeys)
+local focusBorder = nil
+local updateFocusBorder  -- forward declaration
+
 -- Efficient yabai helper function (faster than hs.execute)
 -- Based on recommendation from hammerspoon-yabai community
 function yabai(args)
@@ -28,9 +32,40 @@ end
 -- end)
 
 -- Make window full-screen
--- Original: cmd + shift - m : yabai -m window --grid 1:1:0:0:1:1
 hs.hotkey.bind({ "cmd", "shift" }, "m", function()
-	yabai({ "-m", "window", "--grid", "1:1:0:0:1:1" })
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	if focusBorder then
+		focusBorder:delete()
+		focusBorder = nil
+	end
+
+	local screen = win:screen()
+	local screenFrame = screen:frame()
+	win:setFrame(screenFrame)
+
+	hs.timer.doAfter(0.3, function() updateFocusBorder() end)
+end)
+
+-- Center window at fixed width (1100px), full height
+hs.hotkey.bind({ "cmd", "alt" }, "c", function()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	if focusBorder then
+		focusBorder:delete()
+		focusBorder = nil
+	end
+
+	local screen = win:screen()
+	local screenFrame = screen:frame()
+	local fixedWidth = 1100
+
+	local x = screenFrame.x + (screenFrame.w - fixedWidth) / 2
+	win:setFrame(hs.geometry.rect(x, screenFrame.y, fixedWidth, screenFrame.h))
+
+	hs.timer.doAfter(0.3, function() updateFocusBorder() end)
 end)
 
 -- ############################################################### --
@@ -103,9 +138,7 @@ end)
 -- HIGHLIGHT FOCUSED WINDOW WITH BORDER
 -- ############################################################### --
 
-local focusBorder = nil
-
-local function updateFocusBorder()
+updateFocusBorder = function()
 	if focusBorder then
 		focusBorder:delete()
 		focusBorder = nil
@@ -142,7 +175,7 @@ local function updateFocusBorder()
 	focusBorder:show()
 end
 
-hs.window.filter.default:subscribe(hs.window.filter.windowFocused, updateFocusBorder)
+hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function() updateFocusBorder() end)
 
 -- ############################################################### --
 -- WINDOW LABELS
