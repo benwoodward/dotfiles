@@ -90,6 +90,14 @@ map("n", "gM", ":lua require('treesj').toggle()<cr>", opts)
 map("n", "gS", ":lua require('treesj').split()<cr>", opts)
 map("n", "gJ", ":lua require('treesj').join()<cr>", opts)
 
+-- Move lines up/down
+map("n", "<leader>j", ":m .+1<CR>==", opts)
+map("n", "<leader>k", ":m .-2<CR>==", opts)
+map("i", "<leader>j", "<Esc>:m .+1<CR>==gi", opts)
+map("i", "<leader>k", "<Esc>:m .-2<CR>==gi", opts)
+map("v", "<leader>j", ":m '>+1<CR>gv=gv", opts)
+map("v", "<leader>k", ":m '<-2<CR>gv=gv", opts)
+
 -- lsp stuff
 map("n", "<leader>t", "<Plug>(toggle-lsp-diag-vtext)<cr>", opts)
 map("n", "<leader>fs", ":lua vim.lsp.buf.format({ timeout_ms = 2000 })<cr>:w<cr>", opts)
