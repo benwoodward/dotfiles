@@ -380,6 +380,164 @@ bundle-id() {
   mdls -name kMDItemCFBundleIdentifier -raw "$(mdfind 'kMDItemContentType==com.apple.application-bundle&&kMDItemFSName=="'"$a"'"c' | head -n1)"
 }
 
+organize-photos() {
+    local target_dir="${1:-.}"
+    
+    # Safety check: don't run in a folder called "photos"
+    local abs_path=$(cd "$target_dir" 2>/dev/null && pwd)
+    local folder_name=$(basename "$abs_path")
+    if [[ "${folder_name:l}" == "photos" ]]; then
+        echo "Error: Refusing to run in a folder called 'Photos'."
+        echo "Run in a photo collection subfolder instead."
+        return 1
+    fi
+    
+    if ! command -v exiftool &> /dev/null; then
+        echo "Error: exiftool not installed. Run: brew install exiftool"
+        return 1
+    fi
+
+    echo "Organising photos in: $target_dir"
+    echo ""
+    
+    # Run exiftool, capture stderr (where errors go) to a file
+    local error_file=$(mktemp)
+    exiftool -r -d "%Y/%Y-%m/%Y-%m-%d" "-directory<DateTimeOriginal" "$target_dir" 2>"$error_file"
+    
+    # Show and filter for conflicts
+    cat "$error_file"
+    
+    local conflicts=$(grep "already exists" "$error_file")
+    
+    if [[ -z "$conflicts" ]]; then
+        echo ""
+        echo "✓ Done. No conflicts."
+        rm -f "$error_file"
+        return 0
+    fi
+    
+    echo ""
+    echo "Checking duplicates..."
+    echo ""
+    
+    local dups_file=$(mktemp)
+    local diff_file=$(mktemp)
+    
+    echo "$conflicts" | while IFS= read -r line; do
+        # Parse: Error: 'dest/path' already exists - ./source/path
+        local dest=$(echo "$line" | sed "s/Error: '\([^']*\)' already exists.*/\1/")
+        local src=$(echo "$line" | sed "s/.*already exists - //")
+        
+        local full_dest="${target_dir}/${dest}"
+        
+        if [[ -f "$src" && -f "$full_dest" ]]; then
+            local hash_src=$(md5 -q "$src")
+            local hash_dest=$(md5 -q "$full_dest")
+            
+            if [[ "$hash_src" == "$hash_dest" ]]; then
+                echo "  DUPLICATE: $src"
+                echo "$src" >> "$dups_file"
+            else
+                echo "  DIFFERENT: $src"
+                echo "$src" >> "$diff_file"
+            fi
+        else
+            echo "  NOT FOUND: $src or $full_dest"
+        fi
+    done
+    
+    # Handle duplicates
+    if [[ -s "$dups_file" ]]; then
+        local count=$(wc -l < "$dups_file" | tr -d ' ')
+        echo ""
+        echo "Found $count identical duplicates."
+        echo -n "Move to Trash? [y/N] "
+        read -r response
+        
+        if [[ "$response" =~ ^[Yy]$ ]]; then
+            while IFS= read -r f; do
+                trash "$f" && echo "  Trashed: $f"
+            done < "$dups_file"
+        fi
+    fi
+    
+    # Handle different files
+    if [[ -s "$diff_file" ]]; then
+        local count=$(wc -l < "$diff_file" | tr -d ' ')
+        echo ""
+        echo "Found $count files with same name but different content."
+        echo -n "Rename with suffix? [y/N] "
+        read -r response
+        
+        if [[ "$response" =~ ^[Yy]$ ]]; then
+            while IFS= read -r f; do
+                local dest_dir=$(exiftool -d "%Y/%Y-%m/%Y-%m-%d" -DateTimeOriginal -s3 "$f")
+                local filename=$(basename "$f")
+                local ext="${filename##*.}"
+                local name="${filename%.*}"
+                
+                local i=1
+                local new_name="${name}_${i}.${ext}"
+                while [[ -f "${target_dir}/${dest_dir}/${new_name}" ]]; do
+                    ((i++))
+                    new_name="${name}_${i}.${ext}"
+                done
+                
+                mv "$f" "${target_dir}/${dest_dir}/${new_name}" && echo "  Moved: $f -> ${new_name}"
+            done < "$diff_file"
+        fi
+    fi
+    
+    rm -f "$error_file" "$dups_file" "$diff_file"
+    echo ""
+    echo "✓ Done."
+}
+
+# creates EXIF created date from file modified date
+fix-camera-date() {
+    local target_dir="${1:-.}"
+    
+    if ! command -v exiftool &> /dev/null; then
+        echo "Error: exiftool not installed. Run: brew install exiftool"
+        return 1
+    fi
+    
+    echo "Fixing EXIF dates in: $target_dir"
+    echo ""
+    
+    local count=0
+    local skipped=0
+    
+    # Find all JPG files
+    for file in "$target_dir"/**/*.(jpg|JPG|jpeg|JPEG)(N); do
+        [[ -f "$file" ]] || continue
+        
+        # Check if DateTimeOriginal already exists
+        local existing=$(exiftool -s3 -DateTimeOriginal "$file" 2>/dev/null)
+        if [[ -n "$existing" ]]; then
+            echo "  SKIP (has EXIF date): $file"
+            ((skipped++))
+            continue
+        fi
+        
+        # Get FileModifyDate for display
+        local file_date=$(exiftool -s3 -d "%Y:%m:%d %H:%M:%S" -FileModifyDate "$file" 2>/dev/null)
+        
+        # Copy FileModifyDate to DateTimeOriginal
+        exiftool -P -overwrite_original "-exif:DateTimeOriginal<FileModifyDate" "$file" 2>/dev/null
+        
+        if [[ $? -eq 0 ]]; then
+            echo "  OK: $file  ($file_date)"
+            ((count++))
+        else
+            echo "  ERROR: $file"
+        fi
+    done
+    
+    echo ""
+    echo "✓ Done. Updated: $count, Skipped: $skipped"
+}
+
 setopt HIST_IGNORE_SPACE # don't write to history any commands prefixed with a space
 edit-history() {
   ${EDITOR} ~/.zsh_history
