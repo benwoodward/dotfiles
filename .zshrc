@@ -569,6 +569,7 @@ function tat {
 # recommended by brew doctor
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 export PATH="$HOME/.asdf/shims:$PATH"
