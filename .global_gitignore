@@ -20,6 +20,9 @@ node_modules
 .fzf-history
 .fzf_history
 
+.nvimlog
+.wrangler
+
 # Override for rg to exclude stuff from fzf results
 .ignore
 

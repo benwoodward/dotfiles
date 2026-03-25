@@ -62,11 +62,9 @@ compaudit | xargs chmod g-w
 # export SPACES_ACCESS_KEY_ID=$(security find-generic-password -s 'spaces access key id' -w)
 # export SPACES_SECRET_ACCESS_KEY=$(security find-generic-password -s 'spaces access secret' -w)
 # export APPSIGNAL_API_KEY=$(security find-generic-password -s 'appsignal api key' -w)
-export OPENAI_API_KEY=$(security find-generic-password -s 'openai-token' -w)
-export GITHUB_NPM_TOKEN=$(security find-generic-password -s 'github-npm-token' -w)
-export ANTHROPIC_API_KEY=$(security find-generic-password -s 'anthropic-token' -w)
-export SUNSAMA_EMAIL=$(security find-generic-password -s 'sunsama-email' -w)
-export SUNSAMA_PASSWORD=$(security find-generic-password -s 'sunsama-password' -w)
+# export GITHUB_NPM_TOKEN=$(security find-generic-password -s 'github-npm-token' -w)
+# export SUNSAMA_EMAIL=$(security find-generic-password -s 'sunsama-email' -w)
+# export SUNSAMA_PASSWORD=$(security find-generic-password -s 'sunsama-password' -w)
 
 # Personal aliases
 alias fk="fork"
@@ -93,8 +91,13 @@ alias nd='npm run dev'
 alias delswap='rm -rf ~/.local/state/nvim/swap/*'
 alias showimg="viu"
 # alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude --dangerously-skip-permissions"
-alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
-alias cl="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
+# alias claude="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
+# alias cl="CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 claude"
+# alias cl='security find-generic-password -s "Claude Code-credentials" -w > ~/.claude/.credentials.json 2>/dev/null; chmod 600 ~/.claude/.credentials.json 2>/dev/null; GIT_CONFIG_GLOBAL=~/dotfiles/.gitconfig CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 cco --safe --add-dir ~/.local/bin --add-dir ~/.local/share/claude --add-dir ~/dotfiles --add-dir ~/.asdf'
+export AGENT_BROWSER_AUTO_CONNECT=1
+# alias cl='security find-generic-password -s "Claude Code-credentials" -w > ~/.claude/.credentials.json 2>/dev/null; chmod 600 ~/.claude/.credentials.json 2>/dev/null; GIT_CONFIG_GLOBAL=~/dotfiles/.gitconfig CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1 ENABLE_BACKGROUND_TASKS=1 cco --add-dir ~/.local/bin --add-dir ~/.local/share/claude --add-dir ~/dotfiles --add-dir ~/.asdf'
+alias cl='security find-generic-password -s "Claude Code-credentials" -w > ~/.claude/.credentials.json 2>/dev/null; chmod 600 ~/.claude/.credentials.json 2>/dev/null; GIT_CONFIG_GLOBAL=~/dotfiles/.gitconfig ENABLE_BACKGROUND_TASKS=1 cco --chrome --add-dir ~/.local/bin --add-dir ~/.local/share/claude --add-dir ~/dotfiles --add-dir ~/.asdf'
+
 # alias co="codex --sandbox workspace-write --ask-for-approval on-request --search --model=gpt-5-codex -c model_reasoning_effort="high" -c sandbox_workspace_write.network_access=true"
 alias co="codex --sandbox workspace-write --ask-for-approval on-request --search -c model_reasoning_effort="medium" -c sandbox_workspace_write.network_access=true"
 
@@ -589,3 +592,11 @@ export PATH="/Users/ben/.antigravity/antigravity/bin:$PATH"
 eval "$(gw shell-integration --show-script --shell=zsh)"
 
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# pnpm
+export PNPM_HOME="/Users/ben/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
